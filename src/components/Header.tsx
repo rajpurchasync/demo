@@ -46,7 +46,7 @@ const Header = () => {
           items: [
             { label: "🏪 Marketplace", href: "/marketplace" },
             {
-              label: "🔍 Smart Procurement Assistant",
+              label: "🔍 Purchasync SRM",
               href: "/smart-sourcing-tools",
             },
             // { label: "📋 Procurement", href: "/procurement-solutions" },
@@ -93,23 +93,23 @@ const Header = () => {
           title: "",
           items: [
             {
-              label: "📈 Marketing",
+              label: "📈 Business Development",
               description:
                 "Accelerate your business with targeted marketing campaigns",
               href: "/sales-solutions",
             },
           ],
         },
-        {
-          title: "",
-          items: [
-            {
-              label: "💻 B2B Online Sales",
-              description: "Grow you sales with complete B2B sales ecosystem",
-              href: "/integration-solutions",
-            },
-          ],
-        },
+        // {
+        //   title: "",
+        //   items: [
+        //     {
+        //       label: "💻 B2B Online Sales",
+        //       description: "Grow you sales with complete B2B sales ecosystem",
+        //       href: "/integration-solutions",
+        //     },
+        //   ],
+        // },
       ],
     },
     resources: {
@@ -444,14 +444,19 @@ const Header = () => {
       {activeDropdown &&
         megaMenus[activeDropdown as keyof typeof megaMenus] && (
           <div
-            className="hidden xl:block fixed top-[105px] left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4"
+            className={`hidden xl:block fixed top-[105px] left-1/2 transform -translate-x-1/2 z-50 w-full ${
+              activeDropdown === "solutions" ? "max-w-[600px]" : "max-w-max"
+            } px-4`}
             onMouseEnter={() => setActiveDropdown(activeDropdown)}
             onMouseLeave={handleMouseLeave}
           >
             <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-0 mt-1">
               <div
                 className={`grid gap-0 ${
-                  activeDropdown === "resources" ? "grid-cols-2" : "grid-cols-3"
+                  activeDropdown === "resources" ||
+                  activeDropdown === "solutions"
+                    ? "grid-cols-2"
+                    : "grid-cols-3"
                 } h-full`}
               >
                 {megaMenus[

@@ -623,7 +623,7 @@ const BuyerLogin = () => {
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        className="min-h-4 min-2-4  rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
                       <span className="ml-2 text-sm text-gray-600">
                         Remember me

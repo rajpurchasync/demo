@@ -85,11 +85,11 @@ const Hero = () => {
   const content = {
     buyers: {
       title: "The smart",
-      subtitle: "procurement assistant",
-      highlight: "for hospitality",
+      subtitle: "procurement workspace",
+      highlight: "for hospitality and food service",
       description:
         "Make your procurement process 10x faster. Connect with top hospitality suppliers, request proposals, compare instantly and close deals faster - all with real time updates and communcation.",
-      ctaText: "Sign up Now!",
+      ctaText: "Sign up Now",
       features: [
         {
           icon: Search,
@@ -117,7 +117,7 @@ const Hero = () => {
     sellers: {
       title: "The powerful",
       subtitle: "sales channel",
-      highlight: "for hospitality vendors",
+      highlight: "for hospitality suppliers and providers",
       description:
         "Grow your sales online up to 30%. Build your online store,  get discovered by hospitality buyers, get matched on RFQs and respond to proposals request faster.",
       ctaText: "Start Selling!",
@@ -232,7 +232,7 @@ const Hero = () => {
             </div>
           </div>
 
-          <h1 className="text-[34px] md:text-4xl lg:text-5xl xl:text-7xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-2">
+          <h1 className="text-[34px] md:text-4xl lg:text-5xl xl:text-[52px] font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-2">
             {currentContent.title}
             <br className="block md:hidden" />{" "}
             <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
@@ -251,7 +251,7 @@ const Hero = () => {
               <div className="flex   items-center justify-center md:justify-center gap-4">
                 <button
                   onClick={() => handleSignupClick(activeTab)}
-                  className="w-[45%] group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 shadow-lg hover:shadow-xl relative overflow-hidden text-sm sm:text-base font-semibold md:w-max sm:w-auto justify-center"
+                  className="grow md:grow-0 md:max-w-max max-w-[50%] w-[45%] group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 shadow-lg hover:shadow-xl relative overflow-hidden text-sm sm:text-base font-semibold md:w-max sm:w-auto justify-center"
                 >
                   {/* Shimmer effect on hover */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
@@ -491,11 +491,11 @@ const Hero = () => {
                     {/* Logo */}
                     <div className="p-6 border-b border-gray-200">
                       <div className="flex items-center space-x-3">
-                        <div className="hidden md:flex w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg  items-center justify-center">
+                        {/* <div className="hidden md:flex w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg  items-center justify-center">
                           <span className="text-white font-bold text-sm">
                             P
                           </span>
-                        </div>
+                        </div> */}
                         <span className="text-xl font-bold text-gray-900">
                           Purchasync
                         </span>

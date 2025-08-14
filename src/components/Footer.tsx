@@ -75,25 +75,25 @@ const Footer = () => {
             </h3>
             <div className="space-y-2 sm:space-y-3">
               <a
-                href="/"
+                href="/marketplace"
                 className="block text-gray-400 hover:text-blue-300 transition-colors duration-200 text-sm sm:text-base"
               >
                 Marketplace
               </a>
               <a
-                href="/"
+                href="/become-a-bayer"
                 className="block text-gray-400 hover:text-blue-300 transition-colors duration-200 text-sm sm:text-base"
               >
                 Become a Buyer
               </a>
               <a
-                href="/"
+                href="/become-a-seller"
                 className="block text-gray-400 hover:text-blue-300 transition-colors duration-200 text-sm sm:text-base"
               >
                 Become a Seller
               </a>
               <a
-                href="/"
+                href="/book-demo"
                 className="block text-gray-400 hover:text-blue-300 transition-colors duration-200 text-sm sm:text-base"
               >
                 Become a Partner
@@ -107,7 +107,7 @@ const Footer = () => {
             </h3>
             <div className="space-y-2 sm:space-y-3">
               <a
-                href="#"
+                href="/about-us"
                 className="block text-gray-400 hover:text-blue-300 transition-colors duration-200 text-sm sm:text-base"
               >
                 About Us
@@ -116,13 +116,13 @@ const Footer = () => {
                 href="#"
                 className="block text-gray-400 hover:text-blue-300 transition-colors duration-200 text-sm sm:text-base"
               >
-                Careers
+                Pricing (soon)
               </a>
               <a
-                href="#"
+                href="/learn"
                 className="block text-gray-400 hover:text-blue-300 transition-colors duration-200 text-sm sm:text-base"
               >
-                Blog
+                Learn
               </a>
               <a
                 href="/contact-us"

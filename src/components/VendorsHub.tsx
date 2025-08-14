@@ -29,6 +29,7 @@ import {
   Bell,
   Settings,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const VendorsHub = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -141,7 +142,7 @@ const VendorsHub = () => {
       status: "coming-soon",
     },
   ];
-
+  const router = useNavigate();
   const demoContent = {
     storefront: {
       title: "Branded Storefront Demo",
@@ -418,7 +419,7 @@ const VendorsHub = () => {
   return (
     <>
       {/* Mobile Sticky CTA */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50 shadow-lg">
+      {/* <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50 shadow-lg">
         <div className="flex space-x-3">
           <button className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-4 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 font-semibold text-sm flex items-center justify-center space-x-2">
             <Store className="w-4 h-4" />
@@ -429,7 +430,7 @@ const VendorsHub = () => {
             <span>Demo</span>
           </button>
         </div>
-      </div>
+      </div> */}
 
       <div className="min-h-screen bg-gray-50 pt-20 sm:pt-24 lg:pt-28 relative overflow-hidden">
         {/* Enhanced Mouse follower effect */}
@@ -458,48 +459,49 @@ const VendorsHub = () => {
         </div>
 
         {/* Hero Section with Enhanced Design */}
-        <section className="relative py-12 sm:py-16 lg:py-20 overflow-hidden scroll-reveal !pb-0">
+        <section className="relative py-8 lg:py-20 overflow-hidden scroll-reveal !pb-0">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-12 sm:mb-16">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-6 sm:mb-8 leading-tight">
-                Grow your business online with
-                <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent block mt-1 sm:mt-2">
+                Everything you need to succeed and
+                <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent  mt-1 sm:mt-2">
                   {" "}
-                  smart platform built for hospitality
-                </span>
+                  grow your business online
+                </span>{" "}
+                <br className="md:hidden block" /> in hospitality
               </h1>
               <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-4xl mx-auto mb-8 sm:mb-10 leading-relaxed px-4 sm:px-0">
-                Everything you need to succeed as a hospitality vendor. From
-                branded storefronts to AI-powered assistance, we provide tools
-                that help you{" "}
-                <span className="font-semibold text-blue-600">
-                  connect with buyers
-                </span>{" "}
-                and
-                <span className="font-semibold text-purple-600">
-                  {" "}
-                  grow your revenue
-                </span>
-                .
+                Build your store, get qualified leads, submit proposals directly
+                to
+                <br className="hidden md:block" /> hospitality buyers and grow
+                your revenue.
               </p>
 
               {/* Enhanced CTA Buttons */}
-              <div className="flex flex-row items-center justify-center gap-4 sm:gap-6 mb-8 sm:mb-12">
-                <button className="group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4  py-4 sm:py-5 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl font-bold text-base sm:text-lg flex items-center space-x-2 sm:space-x-3 relative overflow-hidden w-full sm:w-auto justify-center">
-                  {/* Enhanced shimmer effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                  <Store className="hidden md:block w-5 h-5 sm:w-6 sm:h-6" />
+              <div className="flex   items-center justify-center md:justify-center gap-4">
+                <button
+                  onClick={() => router("/become-a-seller")}
+                  className="grow md:grow-0 md:max-w-max max-w-[50%] w-[45%] group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 shadow-lg hover:shadow-xl relative overflow-hidden text-sm sm:text-base font-semibold md:w-max sm:w-auto justify-center"
+                >
+                  {/* Shimmer effect on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                   <span>Start Selling</span>
-                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform duration-300" />
+                  <div className="relative">
+                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 group-hover:opacity-0 transition-all duration-200" />
+                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 absolute top-0 left-0 -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200" />
+                  </div>
                 </button>
-                <button className="group border-2 border-blue-500 text-blue-600 px-8 sm:px-10 py-4 sm:py-5 rounded-full hover:bg-blue-50 hover:border-blue-600 transition-all duration-300 font-bold text-base sm:text-lg flex items-center space-x-2 sm:space-x-3 backdrop-blur-sm bg-white/90 shadow-lg hover:shadow-xl w-full sm:w-auto justify-center">
-                  {/* <Play className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform duration-200" /> */}
+
+                <button
+                  onClick={() => router("/book-demo")}
+                  className="w-max group flex items-center space-x-2 text-gray-700 hover:text-purple-600 transition-colors duration-200 text-sm sm:text-base font-medium"
+                >
                   <span>Book a Demo</span>
                 </button>
               </div>
 
               {/* Success Indicators */}
-              <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 lg:gap-8 text-xs sm:text-sm text-gray-600">
+              {/* <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 lg:gap-8 text-xs sm:text-sm text-gray-600">
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
                   <span className="font-medium">Start free</span>
@@ -512,7 +514,7 @@ const VendorsHub = () => {
                   <Users className="w-4 h-4 sm:w-5 sm:h-5 text-purple-500" />
                   <span className="font-medium">Submit Proposals</span>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </section>
@@ -535,9 +537,9 @@ const VendorsHub = () => {
                   {/* Logo */}
                   <div className="p-6 border-b border-gray-200">
                     <div className="flex items-center space-x-3">
-                      <div className="hidden md:flex w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg  items-center justify-center">
+                      {/* <div className="hidden md:flex w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg  items-center justify-center">
                         <span className="text-white font-bold text-sm">P</span>
-                      </div>
+                      </div> */}
                       <span className="text-xl font-bold text-gray-900">
                         Purchasync
                       </span>

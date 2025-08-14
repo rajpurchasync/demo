@@ -300,7 +300,7 @@ const SellerLogin = () => {
 
       default:
         return (
-          <div className="min-h-screen bg-gradient-to-br from-purple-100 via-blue-50 to-indigo-100 flex pt-16 lg:pt-20">
+          <div className="w-full min-h-screen bg-gradient-to-br from-purple-100 via-blue-50 to-indigo-100 flex pt-0 md:pt-16 lg:pt-20">
             {/* Left Side - Seller Messaging */}
             <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
               {/* Background Pattern */}
@@ -875,7 +875,7 @@ const SellerLogin = () => {
                           <label className="flex items-center">
                             <input
                               type="checkbox"
-                              className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                              className="min-h-4 min-2-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
                             />
                             <span className="ml-2 text-sm text-gray-600">
                               Remember me

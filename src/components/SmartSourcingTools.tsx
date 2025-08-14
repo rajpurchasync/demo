@@ -28,6 +28,7 @@ import {
   Bot,
   Megaphone,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const SmartSourcingTools = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -50,7 +51,7 @@ const SmartSourcingTools = () => {
 
     return () => observer.disconnect();
   }, []);
-
+  const router = useNavigate();
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
@@ -205,16 +206,25 @@ const SmartSourcingTools = () => {
               </span> */}
             </p>
 
-            <div className="flex flex-row items-center justify-center gap-3 sm:gap-4 ">
-              <button className="w-[45%] group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold flex items-center space-x-2 relative overflow-hidden md:w-max sm:w-auto max-w-xs sm:max-w-none">
-                {/* Shimmer effect */}
+            <div className="flex   items-center justify-center md:justify-center gap-4">
+              <button
+                onClick={() => router("/become-a-seller")}
+                className="grow md:grow-0 md:max-w-max max-w-[50%] w-[45%] group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 shadow-lg hover:shadow-xl relative overflow-hidden text-sm sm:text-base font-semibold md:w-max sm:w-auto justify-center"
+              >
+                {/* Shimmer effect on hover */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                <span className="text-sm sm:text-base">Get Started</span>
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-200" />
+                <span>Start Selling</span>
+                <div className="relative">
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 group-hover:opacity-0 transition-all duration-200" />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 absolute top-0 left-0 -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200" />
+                </div>
               </button>
-              <button className="w-[45%] group border-2 border-blue-500 text-blue-600 px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:bg-blue-50 transition-all duration-300 font-semibold flex items-center space-x-2 backdrop-blur-sm bg-white/80 md:w-max sm:w-auto max-w-xs sm:max-w-none">
-                {/* <Play className="w-3 h-3 sm:w-4 sm:h-4" /> */}
-                <span className="text-sm sm:text-base">Book a Demo</span>
+
+              <button
+                onClick={() => router("/book-demo")}
+                className="w-max group flex items-center space-x-2 text-gray-700 hover:text-purple-600 transition-colors duration-200 text-sm sm:text-base font-medium"
+              >
+                <span>Book a Demo</span>
               </button>
             </div>
             {/* Trust Indicators */}
@@ -858,7 +868,10 @@ const SmartSourcingTools = () => {
                 </div>
               </div>
 
-              <button className="w-max group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold flex items-center space-x-2 relative overflow-hidden w-full sm:w-auto justify-center">
+              <button
+                onClick={() => router("/rfq-creation")}
+                className="w-max group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold flex items-center space-x-2 relative overflow-hidden w-full sm:w-auto justify-center"
+              >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                 <span className="text-sm sm:text-base">
                   Create Your First RFQ
@@ -1019,7 +1032,10 @@ const SmartSourcingTools = () => {
                 </div>
               </div> */}
 
-              <button className="w-max group bg-gradient-to-r from-purple-500 to-blue-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-full hover:from-purple-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold flex items-center space-x-2 relative overflow-hidden w-full sm:w-auto justify-center">
+              <button
+                onClick={() => router("/marketplace")}
+                className="w-max group bg-gradient-to-r from-purple-500 to-blue-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-full hover:from-purple-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold flex items-center space-x-2 relative overflow-hidden w-full sm:w-auto justify-center"
+              >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                 <span className="text-sm sm:text-base">
                   Explore Marketplace
@@ -1169,7 +1185,10 @@ const SmartSourcingTools = () => {
                 </div>
               </div>
 
-              <button className="w-max group bg-gradient-to-r from-green-500 to-blue-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-full hover:from-green-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold flex items-center space-x-2 relative overflow-hidden  sm:w-auto justify-center">
+              <button
+                onClick={() => router("/become-a-buyer")}
+                className="w-max group bg-gradient-to-r from-green-500 to-blue-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-full hover:from-green-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold flex items-center space-x-2 relative overflow-hidden  sm:w-auto justify-center"
+              >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                 <span className="text-sm sm:text-base">
                   Start Managing Vendors

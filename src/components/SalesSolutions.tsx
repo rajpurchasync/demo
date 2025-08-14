@@ -119,9 +119,9 @@ const SalesSolutions = () => {
   ];
   const router = useNavigate();
   return (
-    <div className="min-h-screen bg-gray-50 pt-28">
+    <div className="min-h-screen bg-gray-50 pt-16 md:pt-28">
       {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 relative overflow-hidden">
+      <section className="py-10 md:py-16 bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-green-200/30 to-emerald-200/30 rounded-full blur-xl animate-pulse"></div>
           <div
@@ -131,37 +131,43 @@ const SalesSolutions = () => {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-12">
+          <div className="text-center  mb-2 md:mb-12">
             <div className="inline-block bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
               Business Development Solutions
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Accelerate Your
+              Looking to sell your
               <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
                 {" "}
-                Hospitality Sales
+                hospitality product or services
               </span>{" "}
-              in the Middle East
+              in the Middle East?
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Comprehensive sales and marketing solutions designed to help
-              hospitality suppliers grow their business
+              Connect with us today and consult with our experts for tailored
+              solutions to grow your business in hospitality and food service
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button
-                onClick={() => router("/become-a-seller")}
-                className="group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold flex items-center space-x-2"
-              >
-                <span>Start Growing</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
-              </button>
+            <div className="flex   items-center justify-center md:justify-center gap-4">
               <button
                 onClick={() => router("/book-demo")}
-                className="border-2 border-blue-500 text-blue-600 px-8 py-4 rounded-full hover:bg-blue-50 transition-all duration-300 font-semibold"
+                className="grow md:grow-0 md:max-w-max max-w-[50%] w-[45%] group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 shadow-lg hover:shadow-xl relative overflow-hidden text-sm sm:text-base font-semibold md:w-max sm:w-auto justify-center"
               >
-                Book a Consultation
+                {/* Shimmer effect on hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                <span>Book a demo</span>
+                <div className="relative">
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 group-hover:opacity-0 transition-all duration-200" />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 absolute top-0 left-0 -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200" />
+                </div>
               </button>
+
+              {/* <button
+                onClick={() => router("/book-demo")}
+                className="w-max group flex items-center space-x-2 text-gray-700 hover:text-purple-600 transition-colors duration-200 text-sm sm:text-base font-medium"
+              >
+                <span>Go to marketplace</span>
+              </button> */}
             </div>
           </div>
         </div>
@@ -170,7 +176,7 @@ const SalesSolutions = () => {
       {/* Solutions Grid */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center  mb-2 md:mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
               Our Sales Support Solutions
             </h2>
@@ -184,7 +190,7 @@ const SalesSolutions = () => {
             {solutions.map((solution, index) => (
               <div
                 key={index}
-                className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+                className="flex flex-col items-center md:items-start bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
               >
                 <div
                   className={`w-16 h-16 bg-gradient-to-br ${solution.color} rounded-2xl flex items-center justify-center mb-6 shadow-lg`}
@@ -194,7 +200,9 @@ const SalesSolutions = () => {
                 <h3 className="text-xl font-bold text-gray-900 mb-4">
                   {solution.title}
                 </h3>
-                <p className="text-gray-600 mb-6">{solution.description}</p>
+                <p className="text-gray-600 mb-6 text-center md:text-left">
+                  {solution.description}
+                </p>
                 <div className="space-y-3">
                   {solution.features.map((feature, idx) => (
                     <div key={idx} className="flex items-center space-x-3">
@@ -212,7 +220,7 @@ const SalesSolutions = () => {
       {/* Services Detail */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center  mb-2 md:mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
               Detailed Services
             </h2>
@@ -222,7 +230,7 @@ const SalesSolutions = () => {
             {services.map((service, index) => (
               <div
                 key={index}
-                className="bg-white rounded-xl p-6 shadow-sm border border-gray-100"
+                className="flex flex-col items-center md:items-start bg-white rounded-xl p-6 shadow-sm border border-gray-100"
               >
                 <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center mb-4">
                   <service.icon className="w-6 h-6 text-white" />
@@ -230,7 +238,9 @@ const SalesSolutions = () => {
                 <h3 className="text-lg font-bold text-gray-900 mb-2">
                   {service.title}
                 </h3>
-                <p className="text-gray-600 mb-4">{service.description}</p>
+                <p className="text-gray-600 mb-4 text-center md:text-left">
+                  {service.description}
+                </p>
                 <div className="space-y-2">
                   {service.features.map((feature, idx) => (
                     <div key={idx} className="flex items-center space-x-2">
@@ -248,7 +258,7 @@ const SalesSolutions = () => {
       {/* Benefits Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center  mb-2 md:mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
               Why Us
             </h2>

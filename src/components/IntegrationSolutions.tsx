@@ -99,9 +99,9 @@ const IntegrationSolutions = () => {
   const router = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-28">
+    <div className="min-h-screen bg-gray-50 pt-16 md:pt-28">
       {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 relative overflow-hidden">
+      <section className="py-6 bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-200/30 to-purple-200/30 rounded-full blur-xl animate-pulse"></div>
           <div
@@ -111,7 +111,7 @@ const IntegrationSolutions = () => {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-12">
+          <div className="text-center md-6 md:mb-12">
             <div className="inline-block bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
               Integration Solutions
             </div>
@@ -144,7 +144,7 @@ const IntegrationSolutions = () => {
       </section>
 
       {/* Integration Types */}
-      <section className="py-16 bg-white">
+      <section className="py-10 md:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-2">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
@@ -160,7 +160,7 @@ const IntegrationSolutions = () => {
             {integrations.map((integration, index) => (
               <div
                 key={index}
-                className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+                className="flex flex-col items-center md:items-start bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
               >
                 <div
                   className={`w-16 h-16 bg-gradient-to-br ${integration.color} rounded-2xl flex items-center justify-center mb-6 shadow-lg`}
@@ -170,7 +170,9 @@ const IntegrationSolutions = () => {
                 <h3 className="text-xl font-bold text-gray-900 mb-4">
                   {integration.title}
                 </h3>
-                <p className="text-gray-600 mb-6">{integration.description}</p>
+                <p className="text-center md:text-left text-gray-600 mb-6">
+                  {integration.description}
+                </p>
                 <div className="space-y-3">
                   {integration.features.map((feature, idx) => (
                     <div key={idx} className="flex items-center space-x-3">
@@ -188,7 +190,7 @@ const IntegrationSolutions = () => {
       {/* Supported Platforms */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-2 md:mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
               Supported Platforms
             </h2>
@@ -223,8 +225,11 @@ const IntegrationSolutions = () => {
             <p className="text-gray-600 mb-4">
               Need integration with other platforms?
             </p>
-            <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 font-semibold">
-              Contact for Others
+            <button
+              onClick={() => router("/contact-us")}
+              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 font-semibold"
+            >
+              Contact us
             </button>
           </div>
         </div>
@@ -233,7 +238,7 @@ const IntegrationSolutions = () => {
       {/* Benefits */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-6 md:mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
               Integration Benefits
             </h2>
@@ -265,7 +270,10 @@ const IntegrationSolutions = () => {
             Our integration experts will help you connect your systems
             seamlessly
           </p>
-          <button className="bg-white text-blue-600 px-8 py-4 rounded-full hover:bg-gray-100 transition-all duration-300 font-semibold shadow-lg">
+          <button
+            onClick={() => router("/contact-us")}
+            className="bg-white text-blue-600 px-8 py-4 rounded-full hover:bg-gray-100 transition-all duration-300 font-semibold shadow-lg"
+          >
             Contact Integration Team
           </button>
         </div>

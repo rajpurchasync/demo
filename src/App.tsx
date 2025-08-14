@@ -185,6 +185,7 @@ function App() {
             path="/rfq-creation"
             element={
               <>
+                <Header />
                 <RFQCreationFlow />
               </>
             }

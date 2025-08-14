@@ -160,12 +160,14 @@ const Marketplace = () => {
             <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
               {/* Logo */}
               <div className="flex items-center space-x-2 flex-shrink-0 w-full sm:w-auto justify-between">
-                <div className="flex items-center space-x-2">
-                  <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-indigo-600" />
-                  <span className="text-base sm:text-lg lg:text-xl font-bold text-gray-900">
-                    Purchasync
-                  </span>
-                </div>
+                <a href="/">
+                  <div className="flex items-center space-x-2">
+                    <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-indigo-600" />
+                    <span className="text-base sm:text-lg lg:text-xl font-bold text-gray-900">
+                      Purchasync
+                    </span>
+                  </div>
+                </a>
 
                 {/* Mobile User Menu */}
                 <div className="flex sm:hidden items-center space-x-3">

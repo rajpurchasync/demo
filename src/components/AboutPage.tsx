@@ -135,7 +135,7 @@ const AboutPage = () => {
               driving growth.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+            <div className="flex flex-row items-center justify-center gap-4 mt-8">
               <button
                 onClick={() => router("/marketplace")}
                 className="group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold flex items-center space-x-2"

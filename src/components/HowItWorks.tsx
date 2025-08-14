@@ -9,6 +9,7 @@ import {
   Eye,
   TrendingUp,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const HowItWorks = ({
   defaultPage,
@@ -18,7 +19,7 @@ const HowItWorks = ({
   const [activeTab, setActiveTab] = useState<"buyers" | "sellers">(
     defaultPage ? defaultPage : "buyers"
   );
-
+  const router = useNavigate();
   const content = {
     buyers: {
       steps: [
@@ -95,12 +96,12 @@ const HowItWorks = ({
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 md:mb-6 px-2">
             How It Works
           </h2>
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto mb-6 sm:mb-8 md:mb-10 px-4">
+          <p className="hidden md:block text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto mb-6 sm:mb-8 md:mb-10 px-4">
             Simple steps to streamline procurement and sales processes
           </p>
 
           {!defaultPage && (
-            <div className="inline-flex items-center bg-white rounded-full p-1 shadow-lg w-full max-w-sm sm:max-w-none sm:w-auto">
+            <div className=" inline-flex items-center bg-white rounded-full p-1 shadow-lg w-[60%] max-w-sm sm:max-w-none sm:w-auto">
               <button
                 onClick={() => setActiveTab("buyers")}
                 className={`flex-1 sm:flex-none px-3 sm:px-4 md:px-6 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${
@@ -126,8 +127,8 @@ const HowItWorks = ({
         </div>
 
         <div className="text-center mb-8 sm:mb-12">
-          <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 md:mb-8 px-2">
-            {currentContent.title}
+          <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 md:mb-8 px-2">
+            {currentContent?.title}
           </h3>
         </div>
 
@@ -166,9 +167,12 @@ const HowItWorks = ({
         </div>
 
         <div className="text-center mt-8 sm:mt-12">
-          <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl w-full sm:w-auto max-w-xs sm:max-w-none">
+          <button
+            onClick={() => router("/become-a-seller")}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl w-full  max-w-[60%] md:max-w-max "
+          >
             <span className="font-semibold text-sm sm:text-base">
-              Get Started Today
+              Start Selling Now
             </span>
           </button>
         </div>

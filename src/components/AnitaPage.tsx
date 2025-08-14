@@ -15,13 +15,14 @@ import {
   Package,
   Bell,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const AnitaPage = () => {
   const [emailInput, setEmailInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [showReply, setShowReply] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-
+  const router = useNavigate();
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -231,7 +232,7 @@ const AnitaPage = () => {
                   <img
                     src="/Untitled design (1).png"
                     alt="Anita AI Sales Agent Chatbot"
-                    className="w-48 h-auto sm:w-64 lg:w-80 xl:w-96 transition-all duration-300"
+                    className="w-[300px] h-auto  lg:w-80 xl:w-96 transition-all duration-300"
                   />
                   {/* Hover overlay */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -941,7 +942,7 @@ const AnitaPage = () => {
                     Before Anita
                   </h3>
                   <p className="text-sm sm:text-base text-gray-700">
-                    Manual sales and support processes
+                    Slow responses. Missed opportunities. Overwhelmed staff.
                   </p>
                 </div>
 
@@ -967,11 +968,11 @@ const AnitaPage = () => {
                   ))}
                 </div>
 
-                <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 right-3 sm:right-6 text-center">
+                {/* <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 right-3 sm:right-6 text-center">
                   <p className="text-red-600 font-medium text-sm sm:text-base">
-                    Slow responses. Missed opportunities. Overwhelmed staff.
+                    Manual sales and support processes
                   </p>
-                </div>
+                </div> */}
               </div>
 
               {/* After Card */}
@@ -1041,7 +1042,10 @@ const AnitaPage = () => {
 
             {/* CTA */}
             <div className="text-center">
-              <button className="group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 sm:px-12 py-3 sm:py-4 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold text-base sm:text-lg flex items-center space-x-2 sm:space-x-3 mx-auto">
+              <button
+                onClick={() => router("/become-a-seller")}
+                className="group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 sm:px-12 py-3 sm:py-4 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold text-base sm:text-lg flex items-center space-x-2 sm:space-x-3 mx-auto"
+              >
                 <span>Hire Anita Now</span>
                 <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform duration-200" />
               </button>
