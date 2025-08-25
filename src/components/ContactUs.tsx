@@ -120,7 +120,7 @@ const ContactUs = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 flex pt-16 lg:pt-20">
       {/* Left Side - Buyer Messaging */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden px-10">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-200/30 via-indigo-200/20 to-purple-200/30"></div>
 
@@ -137,18 +137,15 @@ const ContactUs = () => {
           ></div>
         </div>
 
-        <div className="relative z-10 flex flex-col  px-12 py-16">
+        <div className="relative z-10 flex flex-col  px-16 py-16">
           {/* Main Message */}
           <div className="mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-[46px] font-bold text-gray-900 mb-6 leading-tight">
               <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
                 {" "}
-                Contact Us
+                Get in touch with us.
               </span>{" "}
               <br />
-              <span className="text-lg">
-                Get in touch with our team for any inquiries or support <br />
-              </span>
             </h1>
 
             <div className="space-y-4">

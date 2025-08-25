@@ -39,96 +39,146 @@ const Header = () => {
   };
 
   const megaMenus = {
-    product: {
+    buyers: {
       sections: [
         {
-          title: "For Buyers",
           items: [
-            { label: "🏪 Marketplace", href: "/marketplace" },
             {
-              label: "🔍 Purchasync SRM",
+              label: "🔍 Smart Sourcing Platform",
               href: "/smart-sourcing-tools",
             },
+            { label: "🏪 Marketplace", href: "/marketplace" },
+
             // { label: "📋 Procurement", href: "/procurement-solutions" },
           ],
         },
+      ],
+    },
+    sellers: {
+      sections: [
         {
-          title: "For Sellers",
           items: [
-            { label: "🛒 Online Store", href: "/vendors-hub" },
-            { label: "🤖 AI Sales Agent", href: "/anita" },
+            { label: "🛒 Sales Platform", href: "/vendors-hub" },
+            { label: "🏪 Marketplace", href: "/marketplace" },
+            // { label: "🤖 AI Sales Agent", href: "/anita" },
+
             // { label: "📈 Business Development", href: "/sales-solutions" },
           ],
         },
-        {
-          title: "Integration",
-          items: [
-            {
-              label: "📋 Procurement",
-              href: "/integration-solutions",
-            },
-            {
-              label: "🏢 CRM, Sales & E-com",
-              href: "/integration-solutions",
-            },
-            // { label: "🛒 E-commerce", href: "/integration-solutions" },
-          ],
-        },
       ],
     },
-    solutions: {
-      sections: [
-        {
-          title: "",
-          items: [
-            {
-              label: "🏢 Procurement",
-              description:
-                "End-to-end procurement solutions for hotels & restaurants",
-              href: "/procurement-solutions",
-            },
-          ],
-        },
-        {
-          title: "",
-          items: [
-            {
-              label: "📈 Business Development",
-              description:
-                "Accelerate your business with targeted marketing campaigns",
-              href: "/sales-solutions",
-            },
-          ],
-        },
-        // {
-        //   title: "",
-        //   items: [
-        //     {
-        //       label: "💻 B2B Online Sales",
-        //       description: "Grow you sales with complete B2B sales ecosystem",
-        //       href: "/integration-solutions",
-        //     },
-        //   ],
-        // },
-      ],
-    },
+    // product: {
+    //   sections: [
+    //     {
+    //       title: "For Buyers",
+    //       items: [
+    //         { label: "🏪 Marketplace", href: "/marketplace" },
+    //         {
+    //           label: "🔍 Purchasync SRM",
+    //           href: "/smart-sourcing-tools",
+    //         },
+    //         // { label: "📋 Procurement", href: "/procurement-solutions" },
+    //       ],
+    //     },
+    //     {
+    //       title: "For Sellers",
+    //       items: [
+    //         { label: "🛒 Online Store", href: "/vendors-hub" },
+    //         { label: "🤖 AI Sales Agent", href: "/anita" },
+    //         // { label: "📈 Business Development", href: "/sales-solutions" },
+    //       ],
+    //     },
+    //     {
+    //       title: "Integration",
+    //       items: [
+    //         {
+    //           label: "📋 Procurement",
+    //           href: "/integration-solutions",
+    //         },
+    //         {
+    //           label: "🏢 CRM, Sales & E-com",
+    //           href: "/integration-solutions",
+    //         },
+    //         // { label: "🛒 E-commerce", href: "/integration-solutions" },
+    //       ],
+    //     },
+    //   ],
+    // },
+    // solutions: {
+    //   sections: [
+    //     {
+    //       title: "",
+    //       items: [
+    //         {
+    //           label: "🏢 Procurement",
+
+    //           href: "/procurement-solutions",
+    //         },
+    //         {
+    //           label: "📈 Business Development",
+
+    //           href: "/sales-solutions",
+    //         },
+    //         {
+    //           label: "🔗 Integration",
+
+    //           href: "/integration-solutions",
+    //         },
+    //       ],
+    //     },
+    //     // {
+    //     //   title: "",
+    //     //   items: [
+    //     //     {
+    //     //       label: "📈 Business Development",
+    //     //       description:
+    //     //         "Accelerate your business with targeted marketing campaigns",
+    //     //       href: "/sales-solutions",
+    //     //     },
+    //     //   ],
+    //     // },
+    //     // {
+    //     //   title: "",
+    //     //   items: [
+    //     //     {
+    //     //       label: "🔗 Integration",
+    //     //       description:
+    //     //         "Seamlessly connect with existing tools and platforms",
+    //     //       href: "/integration-solutions",
+    //     //     },
+    //     //   ],
+    //     // },
+    //     // {
+    //     //   title: "",
+    //     //   items: [
+    //     //     {
+    //     //       label: "💻 B2B Online Sales",
+    //     //       description: "Grow you sales with complete B2B sales ecosystem",
+    //     //       href: "/integration-solutions",
+    //     //     },
+    //     //   ],
+    //     // },
+    //   ],
+    // },
     resources: {
       sections: [
         {
-          title: "Discovery",
+          // title: "Discovery",
           items: [
-            { label: "📚 User Guides (Soon)", href: "#" },
+            // { label: "📚 User Guides (Soon)", href: "#" },
             { label: "📝 Blogs", href: "/learn" },
+            { label: "🏢 About us", href: "/about-us" },
+            { label: "📞 Contact us", href: "/contact-us" },
             // { label: "🎥 Demos (soon)", href: "#" },
           ],
         },
-        {
-          title: "About",
-          items: [
-            { label: "🏢 About us", href: "/about-us" },
-            { label: "📞 Contact us", href: "/contact-us" },
-          ],
-        },
+        // {
+        //   title: "About",
+        //   items: [
+        //     { label: "🏢 About us", href: "/about-us" },
+        //     { label: "📞 Contact us", href: "/contact-us" },
+        //   ],
+        // },
       ],
     },
   };
@@ -180,6 +230,34 @@ const Header = () => {
                 {/* Product Dropdown */}
                 <div
                   className="relative"
+                  onClick={() => router("/smart-sourcing-tools")}
+                  // onMouseEnter={() => handleMouseEnter("buyers")}
+                >
+                  <button className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 transition-colors duration-200 font-medium py-2">
+                    <span>For Buyers</span>
+                    {/* <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        activeDropdown === "buyers" ? "rotate-180" : ""
+                      }`}
+                    /> */}
+                  </button>
+                </div>
+                <div
+                  className="relative"
+                  // onMouseEnter={() => handleMouseEnter("sellers")}
+                  onClick={() => router("/vendors-hub")}
+                >
+                  <button className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 transition-colors duration-200 font-medium py-2">
+                    <span>For Sellers</span>
+                    {/* <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        activeDropdown === "sellers" ? "rotate-180" : ""
+                      }`}
+                    /> */}
+                  </button>
+                </div>
+                {/* <div
+                  className="relative"
                   onMouseEnter={() => handleMouseEnter("product")}
                 >
                   <button className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 transition-colors duration-200 font-medium py-2">
@@ -190,10 +268,10 @@ const Header = () => {
                       }`}
                     />
                   </button>
-                </div>
+                </div> */}
 
                 {/* Solutions Dropdown */}
-                <div
+                {/* <div
                   className="relative"
                   onMouseEnter={() => handleMouseEnter("solutions")}
                 >
@@ -205,7 +283,7 @@ const Header = () => {
                       }`}
                     />
                   </button>
-                </div>
+                </div> */}
 
                 {/* Resources Dropdown */}
                 <div
@@ -221,14 +299,14 @@ const Header = () => {
                     />
                   </button>
                 </div>
-
-                {/* Pricing */}
-                <button className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 transition-colors duration-200 font-medium py-2">
-                  <span>Pricing</span>
-                  <span className="bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full text-xs font-medium">
-                    (beta)
-                  </span>
-                </button>
+                <div className="px-3 sm:px-4 py-2">
+                  <button className="flex items-center space-x-2 text-gray-700 hover:text-indigo-600 transition-colors duration-200 font-medium">
+                    <span>Pricing</span>
+                    <span className="bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full text-xs font-medium">
+                      (beta)
+                    </span>
+                  </button>
+                </div>
               </nav>
             </div>
 
@@ -445,7 +523,7 @@ const Header = () => {
         megaMenus[activeDropdown as keyof typeof megaMenus] && (
           <div
             className={`hidden xl:block fixed top-[105px] left-1/2 transform -translate-x-1/2 z-50 w-full ${
-              activeDropdown === "solutions" ? "max-w-[600px]" : "max-w-max"
+              activeDropdown === "solutions" ? "max-w-[700px]" : "max-w-max"
             } px-4`}
             onMouseEnter={() => setActiveDropdown(activeDropdown)}
             onMouseLeave={handleMouseLeave}
@@ -455,7 +533,7 @@ const Header = () => {
                 className={`grid gap-0 ${
                   activeDropdown === "resources" ||
                   activeDropdown === "solutions"
-                    ? "grid-cols-2"
+                    ? "grid-cols-3"
                     : "grid-cols-3"
                 } h-full`}
               >
@@ -466,7 +544,7 @@ const Header = () => {
                     key={index}
                     className="p-6 space-y-4 border-r border-gray-100 last:border-r-0"
                   >
-                    {activeDropdown !== "solutions" && (
+                    {activeDropdown !== "solutions" && section.title && (
                       <h3 className="text-base font-bold text-gray-900 mb-4">
                         {section.title}
                       </h3>

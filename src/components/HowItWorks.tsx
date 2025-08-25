@@ -172,7 +172,7 @@ const HowItWorks = ({
             className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl w-full  max-w-[60%] md:max-w-max "
           >
             <span className="font-semibold text-sm sm:text-base">
-              Start Selling Now
+              {activeTab === "buyers" ? "Sign Up Now" : "Start Selling Now"}
             </span>
           </button>
         </div>

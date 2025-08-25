@@ -115,74 +115,19 @@ const BookDemo = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 flex pt-16 lg:pt-20">
+    <div className="justify-center min-h-screen bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 flex pt-16 lg:pt-20">
       {/* Left Side - Buyer Messaging */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-200/30 via-indigo-200/20 to-purple-200/30"></div>
-
-        {/* Floating Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-300/20 to-indigo-300/20 rounded-full blur-xl animate-pulse"></div>
-          <div
-            className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-indigo-300/30 to-purple-300/30 rounded-full blur-lg animate-pulse"
-            style={{ animationDelay: "1s" }}
-          ></div>
-          <div
-            className="absolute bottom-32 left-1/4 w-40 h-40 bg-gradient-to-br from-blue-200/15 to-indigo-200/15 rounded-full blur-2xl animate-pulse"
-            style={{ animationDelay: "2s" }}
-          ></div>
-        </div>
-
-        <div className="relative z-10 flex flex-col  px-12 py-16">
-          {/* Main Message */}
-          <div className="mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-6 leading-tight">
-              See Purchasync in Action <br />
-              <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-                {" "}
-                Book a Demo
-              </span>
-            </h1>
-            <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <Building2 className="w-5 h-5 text-blue-600 mt-1" />
-                <div>
-                  <h3 className="text-[18px] font-semibold">Company</h3>
-                  <p className="text-gray-600">Purchasync Global FZE</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-blue-600 mt-1" />
-                <div>
-                  <h3 className="text-[18px] font-semibold">Address</h3>
-                  <p className="text-gray-600">Dubai, United Arab Emirates</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Mail className="w-5 h-5 text-blue-600 mt-1" />
-                <div>
-                  <h3 className="text-[18px] font-semibold">Email</h3>
-                  <p className="text-gray-600">admin@purchasync.com</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Phone className="w-5 h-5 text-blue-600 mt-1" />
-                <div>
-                  <h3 className="text-[18px] font-semibold">Phone</h3>
-                  <p className="text-gray-600">+971502398215</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Right Side - Login Form */}
-      <div className="w-full lg:w-1/2 flex justify-center px-8 py-16">
+      <div className="w-full lg:w-1/2 flex justify-center px-8 py-10">
         <div className="w-full max-w-md space-y-6">
           {/* Registration Form */}
-
+          <h1 className="text-center text-4xl font-bold text-gray-900 mb-6 leading-tight">
+            <span className="text-center  bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+              {" "}
+              Book a Demo
+            </span>
+          </h1>
           <div className="space-y-6">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-3">

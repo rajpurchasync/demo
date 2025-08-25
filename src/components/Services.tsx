@@ -4,19 +4,20 @@ import { ShoppingCart, Search, Briefcase, TrendingUp } from "lucide-react";
 const Services = () => {
   const services = [
     {
-      icon: ShoppingCart,
-      title: "E-commerce Solution",
-      description:
-        "Complete online B2B sales requirement for hospitality suppliers and service providers.",
-      features: ["Online Storefront", "Promotions", "Product Showcase"],
-    },
-    {
       icon: Search,
       title: "E-sourcing Tools",
       description:
         "Advaance RFQ system, notifications, vendor management and instant comparisons.",
       features: ["Supplier Discovery", "RFQ Management", "Proposal Comparison"],
     },
+    {
+      icon: ShoppingCart,
+      title: "Sales Platform",
+      description:
+        "Complete online B2B sales requirement for hospitality suppliers and service providers.",
+      features: ["Online Storefront", "Promotions", "Product Showcase"],
+    },
+
     {
       icon: Briefcase,
       title: "Procurement Services",

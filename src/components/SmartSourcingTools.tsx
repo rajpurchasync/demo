@@ -29,6 +29,8 @@ import {
   Megaphone,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import BeforeAfter from "./BeforeAfter";
+import HowItWorks from "./HowItWorks";
 
 const SmartSourcingTools = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -175,12 +177,12 @@ const SmartSourcingTools = () => {
         <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-8 sm:py-12 relative z-10">
           <div className="text-center">
             {/* Badge */}
-            <div className="inline-flex items-center space-x-2 bg-white/90 backdrop-blur-sm text-blue-600 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium mb-4 sm:mb-6 shadow-lg border border-blue-100">
-              <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span>Smart Procurement Tool</span>
+            <div className="inline-flex items-center space-x-2 bg-blue-100 backdrop-blur-sm text-blue-600 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium mb-4 sm:mb-6 shadow-lg border border-blue-100">
+              <span>Smart Sourcing Hub</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
+            <h1 className="text-[34px] md:text-[52px] font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-2">
               <span className="relative">
+                {/* Streamline procurement, connect with suppliers, and collaborate seamlessly across your team */}
                 Your complete
                 <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent block sm:inline">
                   {" "}
@@ -192,23 +194,14 @@ const SmartSourcingTools = () => {
               for hospitality and food service
             </h1>
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-4xl mx-auto mb-6 sm:mb-8 leading-relaxed px-4 sm:px-0">
-              <span className="font-semibold text-gray-900">
-                Save upto 70% of your time
-              </span>{" "}
-              with AI-powered RFQ tool, smart vendor matching, and instant
-              proposal comparisons.{" "}
-              {isMobile
-                ? ""
-                : "Manage all your supplier details in one comprehensive system"}
-              {/* <span className="text-blue-600 font-medium block sm:inline mt-1 sm:mt-0">
-                {" "}
-                Join 500+ hotels already saving millions.
-              </span> */}
+              One platform to manage RFQs, compare proposals, track approvals,
+              and coordinate internally and with trusted vendors - all in a
+              single workspace
             </p>
 
             <div className="flex   items-center justify-center md:justify-center gap-4">
               <button
-                onClick={() => router("/become-a-seller")}
+                onClick={() => router("/login")}
                 className="grow md:grow-0 md:max-w-max max-w-[50%] w-[45%] group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 shadow-lg hover:shadow-xl relative overflow-hidden text-sm sm:text-base font-semibold md:w-max sm:w-auto justify-center"
               >
                 {/* Shimmer effect on hover */}
@@ -795,7 +788,7 @@ const SmartSourcingTools = () => {
           </div>
         </div>
       </div>
-
+      <BeforeAfter />
       {/* Feature Section 1: Smart RFQ */}
       <section className="py-8 sm:py-12 lg:py-20 bg-white scroll-reveal relative overflow-hidden">
         {/* Background Pattern */}
@@ -1326,6 +1319,7 @@ const SmartSourcingTools = () => {
           </div>
         </div>
       </section>
+      <HowItWorks defaultPage="buyers" />
     </div>
   );
 };

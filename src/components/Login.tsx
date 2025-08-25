@@ -424,9 +424,7 @@ const Login = () => {
                   Welcome!
                 </h2>
                 <p className="text-gray-600">
-                  {isLogin
-                    ? "Sign in to your buyer account"
-                    : "Create your buyer account"}
+                  Sign in to your Purchasync account
                 </p>
               </div>
 

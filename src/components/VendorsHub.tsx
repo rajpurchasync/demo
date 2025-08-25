@@ -462,7 +462,7 @@ const VendorsHub = () => {
         <section className="relative py-8 lg:py-20 overflow-hidden scroll-reveal !pb-0">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-12 sm:mb-16">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-6 sm:mb-8 leading-tight">
+              <h1 className="text-[34px] md:text-[52px] font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-2">
                 Everything you need to succeed and
                 <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent  mt-1 sm:mt-2">
                   {" "}

@@ -81,13 +81,13 @@ const Footer = () => {
                 Marketplace
               </a>
               <a
-                href="/become-a-bayer"
+                href="/login"
                 className="block text-gray-400 hover:text-blue-300 transition-colors duration-200 text-sm sm:text-base"
               >
                 Become a Buyer
               </a>
               <a
-                href="/become-a-seller"
+                href="/login"
                 className="block text-gray-400 hover:text-blue-300 transition-colors duration-200 text-sm sm:text-base"
               >
                 Become a Seller
