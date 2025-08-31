@@ -307,49 +307,6 @@ const Marketplace = () => {
 
           {/* Main Content */}
           <div className="lg:col-span-2 order-1 lg:order-2">
-            {/* Action Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
-              {/* Find Top Suppliers */}
-              <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
-                <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
-                  </div>
-                  <h3 className="text-base sm:text-lg font-bold text-gray-900">
-                    Find Top Suppliers
-                  </h3>
-                </div>
-                <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 leading-relaxed">
-                  Search and connect with top hospitality suppliers and service
-                  providers
-                </p>
-                <button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 flex items-center justify-center space-x-2 font-medium text-sm sm:text-base">
-                  <span>Search Now</span>
-                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
-                </button>
-              </div>
-
-              {/* Request for Quotations */}
-              <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
-                <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                    <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
-                  </div>
-                  <h3 className="text-base sm:text-lg font-bold text-gray-900">
-                    Request for Quotations
-                  </h3>
-                </div>
-                <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 leading-relaxed">
-                  Create RFQ and get matched with global and local vendors for
-                  proposals
-                </p>
-                <button className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 flex items-center justify-center space-x-2 font-medium text-sm sm:text-base">
-                  <span>Create RFQ</span>
-                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
-                </button>
-              </div>
-            </div>
-
             {/* Sustainable Solutions Banner */}
             <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg sm:rounded-xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 text-white relative overflow-hidden">
               <div className="absolute inset-0 bg-black/10"></div>

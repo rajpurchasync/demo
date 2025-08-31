@@ -5,7 +5,7 @@ import Home from "./components/Home";
 import AboutPage from "./components/AboutPage";
 import SellerLogin from "./components/SellerLogin";
 import BuyerLogin from "./components/BuyerLogin";
-import SellerDashboard from "./components/SellerDashboard";
+
 import Marketplace from "./components/Marketplace";
 import AnitaPage from "./components/AnitaPage";
 import SmartSourcingTools from "./components/SmartSourcingTools";
@@ -19,9 +19,12 @@ import SellerPage from "./components/SellerPage";
 import HowItWorks from "./components/HowItWorks";
 import ContactUs from "./components/ContactUs";
 import BookDemo from "./components/BookDemo";
-import Login from "./components/Login";
+// import Login from "./components/Login";
 import BuyerDashboard from "./components/BuyerDashboard";
 import RFQCreationFlow from "./components/Buyer/RFQCreation/RFQCreationFlow";
+import MainLogin from "./components/OnBoarding/login";
+import SellerDashboard from "./components/Seller/SellerDashboard";
+import MobileDashboardBuyer from "./components/Buyer/Dashboard/MobileBuyerdashboard";
 
 function App() {
   return (
@@ -77,7 +80,16 @@ function App() {
             element={
               <>
                 <Header />
-                <Login />
+                <MainLogin page="login" />
+              </>
+            }
+          />
+          <Route
+            path="/sign-up"
+            element={
+              <>
+                <Header />
+                <MainLogin page="signup" />
               </>
             }
           />
@@ -85,7 +97,12 @@ function App() {
             path="/buyer-dashboard"
             element={
               <>
-                <BuyerDashboard />
+                <div className="hidden md:block">
+                  <BuyerDashboard />
+                </div>
+                <div className="md:hidden">
+                  <MobileDashboardBuyer />
+                </div>
               </>
             }
           />

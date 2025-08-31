@@ -237,7 +237,7 @@ const Hero = () => {
             {/* <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" /> */}
             <span>Hospitality Collaboration Simplified</span>
           </div>
-          <h1 className="text-[34px] md:text-[52px] font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-2">
+          <h1 className="text-[34px] md:text-[60px] font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-2">
             The smart
             <br className="block md:hidden" />{" "}
             <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
@@ -254,7 +254,7 @@ const Hero = () => {
             marketplace.
           </p>
 
-          <div className="mb-8 sm:mb-12 lg:mb-16 flex flex-col gap-8 md:gap-5">
+          <div className="mb-8 sm:mb-8 flex flex-col gap-8 md:gap-5">
             {!showEmailInput && !showExpandedForm ? (
               <div className="flex   items-center justify-center md:justify-center gap-4">
                 <button
