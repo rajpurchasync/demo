@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { Tabs } from "../UI/Tabs";
 import { NotificationCard } from "../Cards/NotificationCard";
-import { ToDoCard } from "../Cards/ToDoCard";
 import { mockNotifications, mockToDos } from "../types/purchasync";
 
 type Screen = "home" | "suppliers" | "rfqs" | "todos" | "profile";
@@ -82,11 +81,6 @@ export function HomeScreen({
       id: "notifications",
       label: "Notifications",
       count: mockNotifications.filter((n) => !n.isRead).length,
-    },
-    {
-      id: "todos",
-      label: "To-Dos",
-      count: mockToDos.filter((t) => t.status !== "completed").length,
     },
   ];
 
@@ -231,27 +225,13 @@ export function HomeScreen({
           <div className="flex flex-col bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-3">
             <div className="text-xl font-bold text-blue-700 mb-1">2</div>
             <div className="text-xs font-medium text-black">
-              RFQs Pending Today
+              Pending Tasks Today
             </div>
           </div>
           <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-xl p-3">
             <div className="text-xl font-bold text-purple-700 mb-1">5</div>
             <div className="text-xs font-medium text-black">
-              RFQs Due This Week
-            </div>
-          </div>
-          <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl p-2">
-            <div className="flex flex-col ">
-              <div className="text-lg font-bold text-green-700">6</div>
-              <div className="text-xs font-medium text-black">Due Today</div>
-            </div>
-          </div>
-          <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-xl p-2">
-            <div className="flex flex-col ">
-              <div className="text-lg font-bold text-orange-700">12</div>
-              <div className="text-xs font-medium text-black">
-                Due This Week
-              </div>
+              Pending Tasks This Week
             </div>
           </div>
         </div>
@@ -314,78 +294,6 @@ export function HomeScreen({
         )}
 
         {/* To-Dos Tab */}
-        {activeTab === "todos" && (
-          <div className="mt-4 space-y-3">
-            {/* Filters */}
-            <div className="flex items-center space-x-1">
-              <Filter className="w-3 h-3 text-gray-500" />
-              <div className="flex space-x-1 overflow-x-auto">
-                {[
-                  { id: "all", label: "All" },
-                  { id: "due-today", label: "Due Today" },
-                  { id: "due-this-week", label: "Due This Week" },
-                  { id: "earliest-due", label: "Earliest Due" },
-                ].map((filter) => (
-                  <button
-                    key={filter.id}
-                    onClick={() => setTodoFilter(filter.id)}
-                    className={`px-2 py-1 rounded-full text-xs font-normal transition-colors whitespace-nowrap ${
-                      todoFilter === filter.id
-                        ? "bg-purple-100 text-purple-700 border border-purple-200"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200"
-                    }`}
-                  >
-                    {filter.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {filteredToDos.length > 0 ? (
-              filteredToDos.slice(0, 3).map((todo) => (
-                <div key={todo.id} className="relative">
-                  <ToDoCard
-                    todo={todo}
-                    onClick={() => console.log("Open todo:", todo.id)}
-                  />
-                  {/* Urgency Indicator */}
-                  {(() => {
-                    const indicator = getTaskUrgencyIndicator(todo);
-                    return indicator ? (
-                      <div className="absolute top-3 right-3 flex items-center space-x-1">
-                        <div
-                          className={`w-2 h-2 rounded-full ${indicator.color}`}
-                        ></div>
-                      </div>
-                    ) : null;
-                  })()}
-                </div>
-              ))
-            ) : (
-              <div className="text-center py-8 text-gray-500">
-                <div className="w-12 h-12 mx-auto mb-3 opacity-30">
-                  <svg
-                    viewBox="0 0 100 100"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                  >
-                    <rect x="25" y="25" width="50" height="50" rx="8" />
-                    <path d="M35 50l8 8 16-16" />
-                  </svg>
-                </div>
-                <p className="text-xs text-gray-500">
-                  No tasks match your current filter
-                </p>
-              </div>
-            )}
-            {filteredToDos.length > 3 && (
-              <button className="w-full mt-3 py-2 text-purple-600 font-medium hover:text-purple-700 transition-colors rounded-lg hover:bg-purple-50 text-sm">
-                View all tasks
-              </button>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );

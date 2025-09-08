@@ -16,7 +16,7 @@ function App({ sidebarCollapsed }: any) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
+    }, 300);
     return () => clearTimeout(timer);
   }, []);
 
@@ -39,7 +39,7 @@ function App({ sidebarCollapsed }: any) {
       className={`
       transition-all duration-300 ease-in-out
       ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
-      pt-4 lg:pt-8 px-4 lg:px-8 pb-8 min-h-screen bg-gray-50
+      pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
     `}
     >
       {currentView === "listing" && (

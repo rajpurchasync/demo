@@ -1,7 +1,19 @@
-import React, { useState } from 'react';
-import { User, Phone, Mail, Lock, Eye, EyeOff, Camera, Save, Shield, Check, X } from 'lucide-react';
-import ProfileEditForm from './ProfileEditForm';
-import PasswordResetForm from './PasswordResetForm';
+import React, { useState } from "react";
+import {
+  User,
+  Phone,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  Camera,
+  Save,
+  Shield,
+  Check,
+  X,
+} from "lucide-react";
+import ProfileEditForm from "./ProfileEditForm";
+import PasswordResetForm from "./PasswordResetForm";
 
 interface ProfileData {
   firstName: string;
@@ -16,30 +28,32 @@ interface ProfileManagementProps {
   sidebarCollapsed: boolean;
 }
 
-const ProfileManagement: React.FC<ProfileManagementProps> = ({ sidebarCollapsed }) => {
+const ProfileManagement: React.FC<ProfileManagementProps> = ({
+  sidebarCollapsed,
+}) => {
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
   const [isPasswordFormOpen, setIsPasswordFormOpen] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
 
   const [profileData, setProfileData] = useState<ProfileData>({
-    firstName: 'John',
-    lastName: 'Buyer',
-    email: 'john.buyer@techcorp.com',
-    phoneNumber: '555-0123',
-    countryCode: '+1',
-    profilePicture: undefined
+    firstName: "John",
+    lastName: "Buyer",
+    email: "john.buyer@techcorp.com",
+    phoneNumber: "555-0123",
+    countryCode: "+1",
+    profilePicture: undefined,
   });
 
   const handleSaveProfile = (updatedData: ProfileData) => {
     setProfileData(updatedData);
     setIsEditFormOpen(false);
-    showSuccess('Profile updated successfully!');
+    showSuccess("Profile updated successfully!");
   };
 
   const handlePasswordReset = () => {
     setIsPasswordFormOpen(false);
-    showSuccess('Password updated successfully!');
+    showSuccess("Password updated successfully!");
   };
 
   const showSuccess = (message: string) => {
@@ -49,11 +63,13 @@ const ProfileManagement: React.FC<ProfileManagementProps> = ({ sidebarCollapsed 
   };
 
   return (
-    <main className={`
+    <main
+      className={`
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-60'}
-      pt-4 lg:pt-8 px-4 lg:px-8 pb-8 min-h-screen bg-gray-50
-    `}>
+      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      pb-8 min-h-screen bg-gray-50
+    `}
+    >
       {/* Success Message */}
       {showSuccessMessage && (
         <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2 animate-slide-in">
@@ -66,16 +82,22 @@ const ProfileManagement: React.FC<ProfileManagementProps> = ({ sidebarCollapsed 
       <div className="mb-8 mt-12 lg:mt-0">
         <div className="flex items-center space-x-3 mb-2">
           <User className="text-blue-600" size={28} />
-          <h1 className="text-2xl lg:text-3xl font-medium text-gray-900">My Profile</h1>
+          <h1 className="text-2xl lg:text-3xl font-medium text-gray-900">
+            My Profile
+          </h1>
         </div>
-        <p className="text-gray-600">Manage your personal information and account settings</p>
+        <p className="text-gray-600">
+          Manage your personal information and account settings
+        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Profile Information Card */}
         <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-medium text-gray-900">Personal Information</h2>
+            <h2 className="text-lg font-medium text-gray-900">
+              Personal Information
+            </h2>
             <button
               onClick={() => setIsEditFormOpen(true)}
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -90,14 +112,15 @@ const ProfileManagement: React.FC<ProfileManagementProps> = ({ sidebarCollapsed 
             <div className="relative">
               <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
                 {profileData.profilePicture ? (
-                  <img 
-                    src={profileData.profilePicture} 
-                    alt="Profile" 
+                  <img
+                    src={profileData.profilePicture}
+                    alt="Profile"
                     className="w-full h-full rounded-full object-cover"
                   />
                 ) : (
                   <span className="text-white font-bold text-2xl">
-                    {profileData.firstName[0]}{profileData.lastName[0]}
+                    {profileData.firstName[0]}
+                    {profileData.lastName[0]}
                   </span>
                 )}
               </div>
@@ -117,31 +140,45 @@ const ProfileManagement: React.FC<ProfileManagementProps> = ({ sidebarCollapsed 
           {/* Profile Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">First Name</label>
+              <label className="block text-sm font-medium text-gray-600 mb-2">
+                First Name
+              </label>
               <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                 <User size={16} className="text-gray-400" />
-                <span className="text-gray-900 font-medium">{profileData.firstName}</span>
-              </div>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">Last Name</label>
-              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                <User size={16} className="text-gray-400" />
-                <span className="text-gray-900 font-medium">{profileData.lastName}</span>
+                <span className="text-gray-900 font-medium">
+                  {profileData.firstName}
+                </span>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">Email Address</label>
+              <label className="block text-sm font-medium text-gray-600 mb-2">
+                Last Name
+              </label>
+              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                <User size={16} className="text-gray-400" />
+                <span className="text-gray-900 font-medium">
+                  {profileData.lastName}
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-2">
+                Email Address
+              </label>
               <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                 <Mail size={16} className="text-gray-400" />
-                <span className="text-gray-900 font-medium">{profileData.email}</span>
+                <span className="text-gray-900 font-medium">
+                  {profileData.email}
+                </span>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">Phone Number</label>
+              <label className="block text-sm font-medium text-gray-600 mb-2">
+                Phone Number
+              </label>
               <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                 <Phone size={16} className="text-gray-400" />
                 <div className="flex items-center space-x-2">

@@ -593,12 +593,14 @@ const SellerOnboarding: React.FC<SellerOnboardingProps> = ({ onComplete }) => {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 justify-center pt-3">
-                  <button
-                    onClick={() => handleSellerOnboardingStep("next")}
-                    className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-semibold"
-                  >
-                    Go to Dashboard
-                  </button>
+                  <a href="/seller-dashboard">
+                    <button
+                      onClick={() => handleSellerOnboardingStep("next")}
+                      className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-semibold"
+                    >
+                      Go to Dashboard
+                    </button>
+                  </a>
                   <button
                     onClick={() => {
                       // Handle view invites logic here

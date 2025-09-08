@@ -1,8 +1,31 @@
-import React, { useState } from 'react';
-import { Users, Plus, Search, Filter, MapPin, MessageSquare, FileText, Trash2, Mail, Phone, User, Building, ChevronDown, X, Send, Clock, CheckCircle, AlertCircle, Star, Eye, Download, Shield } from 'lucide-react';
-import SupplierSearchModal from './SupplierSearchModal';
-import SupplierDocumentsDrawer from './SupplierDocumentsDrawer';
-import SupplierReviewModal from './SupplierReviewModal';
+import React, { useState } from "react";
+import {
+  Users,
+  Plus,
+  Search,
+  Filter,
+  MapPin,
+  MessageSquare,
+  FileText,
+  Trash2,
+  Mail,
+  Phone,
+  User,
+  Building,
+  ChevronDown,
+  X,
+  Send,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+  Star,
+  Eye,
+  Download,
+  Shield,
+} from "lucide-react";
+import SupplierSearchModal from "./SupplierSearchModal";
+import SupplierDocumentsDrawer from "./SupplierDocumentsDrawer";
+import SupplierReviewModal from "./SupplierReviewModal";
 
 interface Supplier {
   id: string;
@@ -16,8 +39,13 @@ interface Supplier {
   };
   category: string;
   subCategory: string;
-  type: 'Distributor' | 'Manufacturer' | 'Service Provider' | 'Retailer' | 'Wholesaler';
-  status: 'approved' | 'credit-pending' | 'credit-confirmed';
+  type:
+    | "Distributor"
+    | "Manufacturer"
+    | "Service Provider"
+    | "Retailer"
+    | "Wholesaler";
+  status: "approved" | "credit-pending" | "credit-confirmed";
   dateAdded: string;
   documentsOnFile: boolean;
   lastReviewDate?: string;
@@ -29,153 +57,182 @@ interface SupplierManagementProps {
   sidebarCollapsed: boolean;
 }
 
-const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapsed }) => {
-  const [activeTab, setActiveTab] = useState<'suppliers' | 'documents' | 'reviews'>('suppliers');
+const SupplierManagement: React.FC<SupplierManagementProps> = ({
+  sidebarCollapsed,
+}) => {
+  const [activeTab, setActiveTab] = useState<
+    "suppliers" | "documents" | "reviews"
+  >("suppliers");
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isDocumentsDrawerOpen, setIsDocumentsDrawerOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
+    null
+  );
+  const [searchQuery, setSearchQuery] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-  
+  const [successMessage, setSuccessMessage] = useState("");
+
   const [filters, setFilters] = useState({
-    category: '',
-    supplierType: '',
-    location: '',
-    status: ''
+    category: "",
+    supplierType: "",
+    location: "",
+    status: "",
   });
 
   const [suppliers, setSuppliers] = useState<Supplier[]>([
     {
-      id: '1',
-      name: 'TechCorp Industries',
-      email: 'contact@techcorp.com',
-      phone: '+1-555-0123',
-      contactPerson: 'John Smith',
-      location: { city: 'San Francisco', country: 'USA' },
-      category: 'Technology',
-      subCategory: 'Hardware',
-      type: 'Manufacturer',
-      status: 'approved',
-      dateAdded: '2024-01-15',
+      id: "1",
+      name: "TechCorp Industries",
+      email: "contact@techcorp.com",
+      phone: "+1-555-0123",
+      contactPerson: "John Smith",
+      location: { city: "San Francisco", country: "USA" },
+      category: "Technology",
+      subCategory: "Hardware",
+      type: "Manufacturer",
+      status: "approved",
+      dateAdded: "2024-01-15",
       documentsOnFile: true,
-      lastReviewDate: '2024-01-10',
+      lastReviewDate: "2024-01-10",
       rating: 4.5,
-      reviewComments: 'Excellent quality and timely delivery. Highly recommended for tech equipment.'
+      reviewComments:
+        "Excellent quality and timely delivery. Highly recommended for tech equipment.",
     },
     {
-      id: '2',
-      name: 'Global Supply Co.',
-      email: 'info@globalsupply.com',
-      phone: '+1-555-0456',
-      contactPerson: 'Sarah Johnson',
-      location: { city: 'New York', country: 'USA' },
-      category: 'Manufacturing',
-      subCategory: 'Components',
-      type: 'Distributor',
-      status: 'credit-confirmed',
-      dateAdded: '2024-01-10',
+      id: "2",
+      name: "Global Supply Co.",
+      email: "info@globalsupply.com",
+      phone: "+1-555-0456",
+      contactPerson: "Sarah Johnson",
+      location: { city: "New York", country: "USA" },
+      category: "Manufacturing",
+      subCategory: "Components",
+      type: "Distributor",
+      status: "credit-confirmed",
+      dateAdded: "2024-01-10",
       documentsOnFile: true,
-      lastReviewDate: '2024-01-08',
+      lastReviewDate: "2024-01-08",
       rating: 4.2,
-      reviewComments: 'Good supplier with competitive pricing. Credit terms are favorable.'
+      reviewComments:
+        "Good supplier with competitive pricing. Credit terms are favorable.",
     },
     {
-      id: '3',
-      name: 'Innovation Partners',
-      email: 'hello@innovation.com',
-      phone: '+1-555-0789',
-      contactPerson: 'Mike Davis',
-      location: { city: 'Austin', country: 'USA' },
-      category: 'Services',
-      subCategory: 'Consulting',
-      type: 'Service Provider',
-      status: 'approved',
-      dateAdded: '2024-01-08',
+      id: "3",
+      name: "Innovation Partners",
+      email: "hello@innovation.com",
+      phone: "+1-555-0789",
+      contactPerson: "Mike Davis",
+      location: { city: "Austin", country: "USA" },
+      category: "Services",
+      subCategory: "Consulting",
+      type: "Service Provider",
+      status: "approved",
+      dateAdded: "2024-01-08",
       documentsOnFile: false,
-      lastReviewDate: '2024-01-05',
+      lastReviewDate: "2024-01-05",
       rating: 4.8,
-      reviewComments: 'Outstanding consulting services. Very professional team and excellent results.'
+      reviewComments:
+        "Outstanding consulting services. Very professional team and excellent results.",
     },
     {
-      id: '4',
-      name: 'Pending Supplier Ltd',
-      email: 'contact@pending.com',
-      phone: '+1-555-0321',
-      contactPerson: 'Lisa Wilson',
-      location: { city: 'Chicago', country: 'USA' },
-      category: 'Technology',
-      subCategory: 'Software',
-      type: 'Manufacturer',
-      status: 'credit-pending',
-      dateAdded: '2024-01-12',
-      documentsOnFile: false
+      id: "4",
+      name: "Pending Supplier Ltd",
+      email: "contact@pending.com",
+      phone: "+1-555-0321",
+      contactPerson: "Lisa Wilson",
+      location: { city: "Chicago", country: "USA" },
+      category: "Technology",
+      subCategory: "Software",
+      type: "Manufacturer",
+      status: "credit-pending",
+      dateAdded: "2024-01-12",
+      documentsOnFile: false,
     },
     {
-      id: '5',
-      name: 'Quality Components Inc',
-      email: 'sales@qualitycomp.com',
-      phone: '+1-555-0654',
-      contactPerson: 'Robert Chen',
-      location: { city: 'Seattle', country: 'USA' },
-      category: 'Manufacturing',
-      subCategory: 'Raw Materials',
-      type: 'Manufacturer',
-      status: 'approved',
-      dateAdded: '2024-01-06',
+      id: "5",
+      name: "Quality Components Inc",
+      email: "sales@qualitycomp.com",
+      phone: "+1-555-0654",
+      contactPerson: "Robert Chen",
+      location: { city: "Seattle", country: "USA" },
+      category: "Manufacturing",
+      subCategory: "Raw Materials",
+      type: "Manufacturer",
+      status: "approved",
+      dateAdded: "2024-01-06",
       documentsOnFile: true,
-      lastReviewDate: '2024-01-03',
+      lastReviewDate: "2024-01-03",
       rating: 3.9,
-      reviewComments: 'Decent quality materials but delivery times could be improved.'
-    }
+      reviewComments:
+        "Decent quality materials but delivery times could be improved.",
+    },
   ]);
 
-  const categories = ['Technology', 'Manufacturing', 'Services', 'Logistics'];
-  const supplierTypes = ['Distributor', 'Manufacturer', 'Service Provider', 'Retailer', 'Wholesaler'];
-  const locations = ['USA', 'Canada', 'UK', 'Germany'];
+  const categories = ["Technology", "Manufacturing", "Services", "Logistics"];
+  const supplierTypes = [
+    "Distributor",
+    "Manufacturer",
+    "Service Provider",
+    "Retailer",
+    "Wholesaler",
+  ];
+  const locations = ["USA", "Canada", "UK", "Germany"];
 
-  const filteredSuppliers = suppliers.filter(supplier => {
-    const matchesTab = 
-      (activeTab === 'suppliers') ||
-      (activeTab === 'documents' && supplier.documentsOnFile) ||
-      (activeTab === 'reviews' && supplier.lastReviewDate);
-    
-    const matchesSearch = supplier.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         supplier.contactPerson.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = !filters.category || supplier.category === filters.category;
-    const matchesSupplierType = !filters.supplierType || supplier.type === filters.supplierType;
-    const matchesLocation = !filters.location || supplier.location.country === filters.location;
+  const filteredSuppliers = suppliers.filter((supplier) => {
+    const matchesTab =
+      activeTab === "suppliers" ||
+      (activeTab === "documents" && supplier.documentsOnFile) ||
+      (activeTab === "reviews" && supplier.lastReviewDate);
+
+    const matchesSearch =
+      supplier.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      supplier.contactPerson.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      !filters.category || supplier.category === filters.category;
+    const matchesSupplierType =
+      !filters.supplierType || supplier.type === filters.supplierType;
+    const matchesLocation =
+      !filters.location || supplier.location.country === filters.location;
     const matchesStatus = !filters.status || supplier.status === filters.status;
 
-    return matchesTab && matchesSearch && matchesCategory && matchesSupplierType && matchesLocation && matchesStatus;
+    return (
+      matchesTab &&
+      matchesSearch &&
+      matchesCategory &&
+      matchesSupplierType &&
+      matchesLocation &&
+      matchesStatus
+    );
   });
 
-  const handleAddSupplier = (supplierData: Omit<Supplier, 'id' | 'dateAdded'>) => {
+  const handleAddSupplier = (
+    supplierData: Omit<Supplier, "id" | "dateAdded">
+  ) => {
     const newSupplier: Supplier = {
       ...supplierData,
       id: Date.now().toString(),
-      dateAdded: new Date().toISOString().split('T')[0]
+      dateAdded: new Date().toISOString().split("T")[0],
     };
-    
-    setSuppliers(prev => [...prev, newSupplier]);
+
+    setSuppliers((prev) => [...prev, newSupplier]);
     setIsSearchModalOpen(false);
-    
-    if (newSupplier.status === 'credit-pending') {
-      showSuccess('Credit supplier added! Confirmation email sent.');
+
+    if (newSupplier.status === "credit-pending") {
+      showSuccess("Credit supplier added! Confirmation email sent.");
     } else {
-      showSuccess('Approved supplier added successfully!');
+      showSuccess("Approved supplier added successfully!");
     }
   };
 
   const handleRemoveSupplier = (id: string) => {
-    setSuppliers(prev => prev.filter(supplier => supplier.id !== id));
-    showSuccess('Supplier removed successfully');
+    setSuppliers((prev) => prev.filter((supplier) => supplier.id !== id));
+    showSuccess("Supplier removed successfully");
   };
 
   const handleResendConfirmation = (id: string) => {
-    showSuccess('Confirmation email resent successfully');
+    showSuccess("Confirmation email resent successfully");
   };
 
   const handleViewDocuments = (supplier: Supplier) => {
@@ -184,12 +241,14 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
   };
 
   const handleMarkAsCreditSupplier = (supplier: Supplier) => {
-    setSuppliers(prev => prev.map(s => 
-      s.id === supplier.id 
-        ? { ...s, status: 'credit-pending' as const }
-        : s
-    ));
-    showSuccess(`${supplier.name} marked as credit supplier. Confirmation email sent.`);
+    setSuppliers((prev) =>
+      prev.map((s) =>
+        s.id === supplier.id ? { ...s, status: "credit-pending" as const } : s
+      )
+    );
+    showSuccess(
+      `${supplier.name} marked as credit supplier. Confirmation email sent.`
+    );
   };
 
   const handleViewReview = (supplier: Supplier) => {
@@ -205,28 +264,30 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
 
   const getStatusBadge = (supplier: Supplier) => {
     const statusConfig = {
-      'approved': { 
-        color: 'bg-blue-100 text-blue-800 border-blue-200', 
-        label: 'Approved',
-        icon: CheckCircle
+      approved: {
+        color: "bg-blue-100 text-blue-800 border-blue-200",
+        label: "Approved",
+        icon: CheckCircle,
       },
-      'credit-pending': { 
-        color: 'bg-yellow-100 text-yellow-800 border-yellow-200', 
-        label: 'Credit Pending',
-        icon: Clock
+      "credit-pending": {
+        color: "bg-yellow-100 text-yellow-800 border-yellow-200",
+        label: "Credit Pending",
+        icon: Clock,
       },
-      'credit-confirmed': { 
-        color: 'bg-green-100 text-green-800 border-green-200', 
-        label: 'Credit Confirmed',
-        icon: CheckCircle
-      }
+      "credit-confirmed": {
+        color: "bg-green-100 text-green-800 border-green-200",
+        label: "Credit Confirmed",
+        icon: CheckCircle,
+      },
     };
 
     const config = statusConfig[supplier.status];
     const IconComponent = config.icon;
 
     return (
-      <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full border ${config.color}`}>
+      <span
+        className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full border ${config.color}`}
+      >
         <IconComponent size={12} className="mr-1" />
         {config.label}
       </span>
@@ -235,15 +296,19 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
 
   const getSupplierTypeBadge = (type: string) => {
     const typeColors = {
-      'Distributor': 'bg-blue-100 text-blue-800',
-      'Manufacturer': 'bg-green-100 text-green-800',
-      'Service Provider': 'bg-purple-100 text-purple-800',
-      'Retailer': 'bg-orange-100 text-orange-800',
-      'Wholesaler': 'bg-indigo-100 text-indigo-800'
+      Distributor: "bg-blue-100 text-blue-800",
+      Manufacturer: "bg-green-100 text-green-800",
+      "Service Provider": "bg-purple-100 text-purple-800",
+      Retailer: "bg-orange-100 text-orange-800",
+      Wholesaler: "bg-indigo-100 text-indigo-800",
     };
 
     return (
-      <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${typeColors[type as keyof typeof typeColors]}`}>
+      <span
+        className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
+          typeColors[type as keyof typeof typeColors]
+        }`}
+      >
         {type}
       </span>
     );
@@ -251,7 +316,7 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
 
   const getRatingStars = (rating?: number) => {
     if (!rating) return null;
-    
+
     return (
       <div className="flex items-center space-x-1">
         {[1, 2, 3, 4, 5].map((star) => (
@@ -259,7 +324,7 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
             key={star}
             size={12}
             className={`${
-              star <= rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+              star <= rating ? "text-yellow-400 fill-current" : "text-gray-300"
             }`}
           />
         ))}
@@ -270,21 +335,23 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
 
   const clearFilters = () => {
     setFilters({
-      category: '',
-      supplierType: '',
-      location: '',
-      status: ''
+      category: "",
+      supplierType: "",
+      location: "",
+      status: "",
     });
   };
 
-  const hasActiveFilters = Object.values(filters).some(f => f !== '');
+  const hasActiveFilters = Object.values(filters).some((f) => f !== "");
 
   return (
-    <main className={`
+    <main
+      className={`
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-60'}
-      pt-4 lg:pt-8 px-4 lg:px-8 pb-8 min-h-screen bg-gray-50
-    `}>
+      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      pb-8 min-h-screen bg-gray-50
+    `}
+    >
       {/* Success Message */}
       {showSuccessMessage && (
         <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2 animate-slide-in">
@@ -297,10 +364,14 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
       <div className="mb-8 mt-12 lg:mt-0">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl lg:text-3xl font-medium text-gray-900 mb-2">Supplier Management</h1>
-            <p className="text-gray-600">Manage your suppliers, documents, and reviews</p>
+            <h1 className="text-2xl lg:text-3xl font-medium text-gray-900 mb-2">
+              Supplier Management
+            </h1>
+            <p className="text-gray-600">
+              Manage your suppliers, documents, and reviews
+            </p>
           </div>
-          
+
           {/* Add Supplier Button - Sticky Top Right */}
           <button
             onClick={() => setIsSearchModalOpen(true)}
@@ -316,47 +387,54 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
       <div className="bg-white rounded-xl border border-gray-200 mb-6 shadow-sm overflow-x-auto">
         <div className="flex min-w-max">
           <button
-            onClick={() => setActiveTab('suppliers')}
+            onClick={() => setActiveTab("suppliers")}
             className={`flex-1 py-4 px-6 text-center font-medium transition-colors whitespace-nowrap min-w-[120px] ${
-              activeTab === 'suppliers'
-                ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              activeTab === "suppliers"
+                ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
             }`}
           >
             <div className="flex items-center justify-center space-x-2">
               <span>Approved Suppliers</span>
               <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
-                {suppliers.filter(s => s.status === 'approved' || s.status === 'credit-pending' || s.status === 'credit-confirmed').length}
+                {
+                  suppliers.filter(
+                    (s) =>
+                      s.status === "approved" ||
+                      s.status === "credit-pending" ||
+                      s.status === "credit-confirmed"
+                  ).length
+                }
               </span>
             </div>
           </button>
           <button
-            onClick={() => setActiveTab('documents')}
+            onClick={() => setActiveTab("documents")}
             className={`flex-1 py-4 px-6 text-center font-medium transition-colors whitespace-nowrap min-w-[120px] ${
-              activeTab === 'documents'
-                ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              activeTab === "documents"
+                ? "text-purple-600 border-b-2 border-purple-600 bg-purple-50"
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
             }`}
           >
             <div className="flex items-center justify-center space-x-2">
               <span>Supplier Documents</span>
               <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">
-                {suppliers.filter(s => s.documentsOnFile).length}
+                {suppliers.filter((s) => s.documentsOnFile).length}
               </span>
             </div>
           </button>
           <button
-            onClick={() => setActiveTab('reviews')}
+            onClick={() => setActiveTab("reviews")}
             className={`flex-1 py-4 px-6 text-center font-medium transition-colors whitespace-nowrap min-w-[120px] ${
-              activeTab === 'reviews'
-                ? 'text-orange-600 border-b-2 border-orange-600 bg-orange-50'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              activeTab === "reviews"
+                ? "text-orange-600 border-b-2 border-orange-600 bg-orange-50"
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
             }`}
           >
             <div className="flex items-center justify-center space-x-2">
               <span>Supplier Reviews</span>
               <span className="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full">
-                {suppliers.filter(s => s.lastReviewDate).length}
+                {suppliers.filter((s) => s.lastReviewDate).length}
               </span>
             </div>
           </button>
@@ -368,7 +446,10 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
         <div className="flex flex-col lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-4">
           {/* Search */}
           <div className="flex-1 relative">
-            <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <Search
+              size={20}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            />
             <input
               type="text"
               placeholder="Search suppliers by name or contact person..."
@@ -398,12 +479,19 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
               <div>
                 <select
                   value={filters.category}
-                  onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      category: e.target.value,
+                    }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 >
                   <option value="">All Categories</option>
-                  {categories.map(category => (
-                    <option key={category} value={category}>{category}</option>
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -411,12 +499,19 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
               <div>
                 <select
                   value={filters.supplierType}
-                  onChange={(e) => setFilters(prev => ({ ...prev, supplierType: e.target.value }))}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      supplierType: e.target.value,
+                    }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 >
                   <option value="">All Supplier Types</option>
-                  {supplierTypes.map(type => (
-                    <option key={type} value={type}>{type}</option>
+                  {supplierTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -424,12 +519,19 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
               <div>
                 <select
                   value={filters.location}
-                  onChange={(e) => setFilters(prev => ({ ...prev, location: e.target.value }))}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      location: e.target.value,
+                    }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 >
                   <option value="">All Locations</option>
-                  {locations.map(location => (
-                    <option key={location} value={location}>{location}</option>
+                  {locations.map((location) => (
+                    <option key={location} value={location}>
+                      {location}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -437,7 +539,9 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
               <div>
                 <select
                   value={filters.status}
-                  onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+                  onChange={(e) =>
+                    setFilters((prev) => ({ ...prev, status: e.target.value }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 >
                   <option value="">All Status</option>
@@ -475,55 +579,86 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
                 <X size={20} />
               </button>
             </div>
-            
+
             <div className="p-4 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Category
+                </label>
                 <select
                   value={filters.category}
-                  onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      category: e.target.value,
+                    }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">All Categories</option>
-                  {categories.map(category => (
-                    <option key={category} value={category}>{category}</option>
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Supplier Type</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Supplier Type
+                </label>
                 <select
                   value={filters.supplierType}
-                  onChange={(e) => setFilters(prev => ({ ...prev, supplierType: e.target.value }))}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      supplierType: e.target.value,
+                    }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">All Supplier Types</option>
-                  {supplierTypes.map(type => (
-                    <option key={type} value={type}>{type}</option>
+                  {supplierTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Location
+                </label>
                 <select
                   value={filters.location}
-                  onChange={(e) => setFilters(prev => ({ ...prev, location: e.target.value }))}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      location: e.target.value,
+                    }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">All Locations</option>
-                  {locations.map(location => (
-                    <option key={location} value={location}>{location}</option>
+                  {locations.map((location) => (
+                    <option key={location} value={location}>
+                      {location}
+                    </option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Status
+                </label>
                 <select
                   value={filters.status}
-                  onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+                  onChange={(e) =>
+                    setFilters((prev) => ({ ...prev, status: e.target.value }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">All Status</option>
@@ -556,21 +691,29 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
       <div className="space-y-4">
         {/* Mobile: Card Layout */}
         {/* Suppliers Tab - Mobile */}
-        {activeTab === 'suppliers' && (
+        {activeTab === "suppliers" && (
           <div className="lg:hidden">
             {filteredSuppliers.map((supplier) => (
-              <div key={supplier.id} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+              <div
+                key={supplier.id}
+                className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"
+              >
                 <div className="mb-4">
-                  <h3 className="font-semibold text-gray-900 text-lg mb-2">{supplier.name}</h3>
+                  <h3 className="font-semibold text-gray-900 text-lg mb-2">
+                    {supplier.name}
+                  </h3>
                   <div className="flex items-center space-x-2 mb-3">
-                    <span className="text-sm text-gray-600">{supplier.location.country}</span>
+                    <span className="text-sm text-gray-600">
+                      {supplier.location.country}
+                    </span>
                   </div>
                   <div className="flex flex-wrap gap-2 mb-3">
                     {getSupplierTypeBadge(supplier.type)}
                     {getStatusBadge(supplier)}
                   </div>
                   <div className="text-sm text-gray-600">
-                    <span className="font-medium">{supplier.category}</span> → {supplier.subCategory}
+                    <span className="font-medium">{supplier.category}</span> →{" "}
+                    {supplier.subCategory}
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -596,64 +739,84 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
         )}
 
         {/* Documents Tab - Mobile */}
-        {activeTab === 'documents' && (
+        {activeTab === "documents" && (
           <div className="lg:hidden">
-            {filteredSuppliers.filter(s => s.documentsOnFile).map((supplier) => (
-              <div key={supplier.id} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                <div className="mb-4">
-                  <h3 className="font-semibold text-gray-900 text-lg mb-2">{supplier.name}</h3>
-                  <div className="flex items-center space-x-2 mb-3">
-                    <span className="text-sm text-gray-600">{supplier.location.city}, {supplier.location.country}</span>
+            {filteredSuppliers
+              .filter((s) => s.documentsOnFile)
+              .map((supplier) => (
+                <div
+                  key={supplier.id}
+                  className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"
+                >
+                  <div className="mb-4">
+                    <h3 className="font-semibold text-gray-900 text-lg mb-2">
+                      {supplier.name}
+                    </h3>
+                    <div className="flex items-center space-x-2 mb-3">
+                      <span className="text-sm text-gray-600">
+                        {supplier.location.city}, {supplier.location.country}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2 mb-3">
+                      <FileText size={14} className="text-purple-600" />
+                      <span className="text-sm font-medium text-gray-900">
+                        4 documents on file
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2 mb-3">
-                    <FileText size={14} className="text-purple-600" />
-                    <span className="text-sm font-medium text-gray-900">4 documents on file</span>
+                  <div className="w-full">
+                    <button
+                      onClick={() => handleViewDocuments(supplier)}
+                      className="w-full flex items-center justify-center px-4 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700 transition-colors"
+                    >
+                      <Eye size={14} className="mr-1" />
+                      View Documents
+                    </button>
                   </div>
                 </div>
-                <div className="w-full">
-                  <button
-                    onClick={() => handleViewDocuments(supplier)}
-                    className="w-full flex items-center justify-center px-4 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700 transition-colors"
-                  >
-                    <Eye size={14} className="mr-1" />
-                    View Documents
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         )}
 
         {/* Reviews Tab - Mobile */}
-        {activeTab === 'reviews' && (
+        {activeTab === "reviews" && (
           <div className="lg:hidden">
-            {filteredSuppliers.filter(s => s.lastReviewDate).map((supplier) => (
-              <div key={supplier.id} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                <div className="mb-4">
-                  <h3 className="font-semibold text-gray-900 text-lg mb-2">{supplier.name}</h3>
-                  <div className="text-sm text-gray-600 mb-2">
-                    <span className="font-medium">RFQ:</span> RFQ-2024-{String(parseInt(supplier.id) + 100).padStart(3, '0')}
-                  </div>
-                  <div className="text-sm text-gray-600 mb-3">
-                    <span className="font-medium">Review Date:</span> {new Date(supplier.lastReviewDate).toLocaleDateString()}
-                  </div>
-                  {supplier.rating && (
-                    <div className="mb-3">
-                      {getRatingStars(supplier.rating)}
+            {filteredSuppliers
+              .filter((s) => s.lastReviewDate)
+              .map((supplier) => (
+                <div
+                  key={supplier.id}
+                  className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"
+                >
+                  <div className="mb-4">
+                    <h3 className="font-semibold text-gray-900 text-lg mb-2">
+                      {supplier.name}
+                    </h3>
+                    <div className="text-sm text-gray-600 mb-2">
+                      <span className="font-medium">RFQ:</span> RFQ-2024-
+                      {String(parseInt(supplier.id) + 100).padStart(3, "0")}
                     </div>
-                  )}
+                    <div className="text-sm text-gray-600 mb-3">
+                      <span className="font-medium">Review Date:</span>{" "}
+                      {new Date(supplier.lastReviewDate).toLocaleDateString()}
+                    </div>
+                    {supplier.rating && (
+                      <div className="mb-3">
+                        {getRatingStars(supplier.rating)}
+                      </div>
+                    )}
+                  </div>
+                  <div className="w-full">
+                    <button
+                      onClick={() => handleViewReview(supplier)}
+                      className="w-full flex items-center justify-center px-4 py-2 bg-orange-600 text-white text-sm rounded-lg hover:bg-orange-700 transition-colors"
+                    >
+                      <Eye size={14} className="mr-1" />
+                      View Review
+                    </button>
+                  </div>
                 </div>
-                <div className="w-full">
-                  <button
-                    onClick={() => handleViewReview(supplier)}
-                    className="w-full flex items-center justify-center px-4 py-2 bg-orange-600 text-white text-sm rounded-lg hover:bg-orange-700 transition-colors"
-                  >
-                    <Eye size={14} className="mr-1" />
-                    View Review
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         )}
 
@@ -663,44 +826,71 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="text-left py-3 px-4 font-medium text-gray-600">Supplier</th>
-                  {activeTab === 'suppliers' && (
+                  <th className="text-left py-3 px-4 font-medium text-gray-600">
+                    Supplier
+                  </th>
+                  {activeTab === "suppliers" && (
                     <>
-                      <th className="text-left py-3 px-4 font-medium text-gray-600">Country</th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-600">Type</th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-600">Category</th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-600">Status</th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-600">
+                        Country
+                      </th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-600">
+                        Type
+                      </th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-600">
+                        Category
+                      </th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-600">
+                        Status
+                      </th>
                     </>
                   )}
-                  {activeTab === 'documents' && (
+                  {activeTab === "documents" && (
                     <>
-                      <th className="text-left py-3 px-4 font-medium text-gray-600">Country</th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-600">Documents</th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-600">
+                        Country
+                      </th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-600">
+                        Documents
+                      </th>
                     </>
                   )}
-                  {activeTab === 'reviews' && (
+                  {activeTab === "reviews" && (
                     <>
-                      <th className="text-left py-3 px-4 font-medium text-gray-600">RFQ Number</th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-600">Review Date</th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-600">Rating</th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-600">
+                        RFQ Number
+                      </th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-600">
+                        Review Date
+                      </th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-600">
+                        Rating
+                      </th>
                     </>
                   )}
-                  <th className="text-right py-3 px-4 font-medium text-gray-600">Actions</th>
+                  <th className="text-right py-3 px-4 font-medium text-gray-600">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {filteredSuppliers.map((supplier) => (
-                  <tr key={supplier.id} className="border-b border-gray-100 hover:bg-gray-50">
+                  <tr
+                    key={supplier.id}
+                    className="border-b border-gray-100 hover:bg-gray-50"
+                  >
                     <td className="py-4 px-4">
                       <div className="flex items-center space-x-3">
                         <div>
                           <div className="flex items-center space-x-2">
-                            <h3 className="font-semibold text-gray-900">{supplier.name}</h3>
+                            <h3 className="font-semibold text-gray-900">
+                              {supplier.name}
+                            </h3>
                           </div>
                         </div>
                       </div>
                     </td>
-                    {activeTab === 'suppliers' && (
+                    {activeTab === "suppliers" && (
                       <>
                         <td className="py-4 px-4">
                           <div className="flex items-center text-sm text-gray-600">
@@ -712,8 +902,12 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
                         </td>
                         <td className="py-4 px-4">
                           <div className="text-sm">
-                            <p className="font-medium text-gray-900">{supplier.category}</p>
-                            <p className="text-gray-600">{supplier.subCategory}</p>
+                            <p className="font-medium text-gray-900">
+                              {supplier.category}
+                            </p>
+                            <p className="text-gray-600">
+                              {supplier.subCategory}
+                            </p>
                           </div>
                         </td>
                         <td className="py-4 px-4">
@@ -721,7 +915,7 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
                         </td>
                       </>
                     )}
-                    {activeTab === 'documents' && (
+                    {activeTab === "documents" && (
                       <>
                         <td className="py-4 px-4">
                           <div className="flex items-center text-sm text-gray-600">
@@ -731,21 +925,31 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
                         <td className="py-4 px-4">
                           <div className="flex items-center space-x-2">
                             <FileText size={14} className="text-purple-600" />
-                            <span className="text-sm font-medium text-gray-900">4 documents</span>
+                            <span className="text-sm font-medium text-gray-900">
+                              4 documents
+                            </span>
                           </div>
                         </td>
                       </>
                     )}
-                    {activeTab === 'reviews' && (
+                    {activeTab === "reviews" && (
                       <>
                         <td className="py-4 px-4">
                           <span className="inline-block bg-blue-100 text-blue-800 px-2 py-1 text-xs font-medium rounded-full">
-                            RFQ-2024-{String(parseInt(supplier.id) + 100).padStart(3, '0')}
+                            RFQ-2024-
+                            {String(parseInt(supplier.id) + 100).padStart(
+                              3,
+                              "0"
+                            )}
                           </span>
                         </td>
                         <td className="py-4 px-4">
                           <span className="text-sm text-gray-900">
-                            {supplier.lastReviewDate ? new Date(supplier.lastReviewDate).toLocaleDateString() : '-'}
+                            {supplier.lastReviewDate
+                              ? new Date(
+                                  supplier.lastReviewDate
+                                ).toLocaleDateString()
+                              : "-"}
                           </span>
                         </td>
                         <td className="py-4 px-4">
@@ -755,7 +959,7 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
                     )}
                     <td className="py-4 px-4">
                       <div className="flex items-center justify-end space-x-2">
-                        {activeTab === 'suppliers' && (
+                        {activeTab === "suppliers" && (
                           <>
                             <button className="p-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
                               <MessageSquare size={16} />
@@ -771,7 +975,7 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
                             </button>
                           </>
                         )}
-                        {activeTab === 'documents' && (
+                        {activeTab === "documents" && (
                           <button
                             onClick={() => handleViewDocuments(supplier)}
                             className="p-2 text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors"
@@ -779,7 +983,7 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
                             <Eye size={16} />
                           </button>
                         )}
-                        {activeTab === 'reviews' && (
+                        {activeTab === "reviews" && (
                           <button
                             onClick={() => handleViewReview(supplier)}
                             className="p-2 text-orange-600 hover:text-orange-700 hover:bg-orange-50 rounded-lg transition-colors"
@@ -801,13 +1005,18 @@ const SupplierManagement: React.FC<SupplierManagementProps> = ({ sidebarCollapse
           <div className="bg-white rounded-xl border border-gray-200 p-12 text-center shadow-sm">
             <Users size={48} className="mx-auto text-gray-300 mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              No {activeTab === 'suppliers' ? 'suppliers' : activeTab === 'documents' ? 'suppliers with documents' : 'reviewed suppliers'} found
+              No{" "}
+              {activeTab === "suppliers"
+                ? "suppliers"
+                : activeTab === "documents"
+                ? "suppliers with documents"
+                : "reviewed suppliers"}{" "}
+              found
             </h3>
             <p className="text-gray-600 mb-6">
-              {searchQuery || hasActiveFilters 
-                ? 'Try adjusting your search or filters'
-                : `Start by adding your first supplier`
-              }
+              {searchQuery || hasActiveFilters
+                ? "Try adjusting your search or filters"
+                : `Start by adding your first supplier`}
             </p>
             <button
               onClick={() => setIsSearchModalOpen(true)}

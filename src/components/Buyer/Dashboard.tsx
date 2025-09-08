@@ -215,7 +215,7 @@ const Dashboard: React.FC<DashboardProps> = ({ sidebarCollapsed }) => {
       className={`
       transition-all duration-300 ease-in-out
       ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
-      pt-4 lg:pt-8 px-4 lg:px-8 pb-8 min-h-screen bg-gray-50
+      pb-8 min-h-screen bg-gray-50
     `}
     >
       {/* Header */}

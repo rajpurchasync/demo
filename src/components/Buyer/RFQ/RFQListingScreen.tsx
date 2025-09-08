@@ -1,47 +1,66 @@
-import React, { useState, useMemo } from 'react';
-import { Search, Filter, Calendar, FileText, ChevronRight, Clock, CheckCircle } from 'lucide-react';
-import { RFQ, RFQCategory, RFQStatus, SortOrder } from '../types/rfq';
+import React, { useState, useMemo } from "react";
+import {
+  Search,
+  Filter,
+  Calendar,
+  FileText,
+  ChevronRight,
+  Clock,
+  CheckCircle,
+  Plus,
+  Quote,
+  ChevronDown,
+  Paperclip,
+  X,
+} from "lucide-react";
+import { RFQ, RFQCategory, RFQStatus, SortOrder } from "../types/rfq";
+import { purchaseTypes } from "../../lib/mockData";
 
 interface RFQListingScreenProps {
   rfqs: RFQ[];
   onRFQSelect: (rfq: RFQ) => void;
 }
 
-const RFQListingScreen: React.FC<RFQListingScreenProps> = ({ rfqs, onRFQSelect }) => {
-  const [activeCategory, setActiveCategory] = useState<RFQCategory>('Products');
-  const [statusFilter, setStatusFilter] = useState<RFQStatus | 'All'>('All');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('newest');
-  const [searchQuery, setSearchQuery] = useState('');
+const RFQListingScreen: React.FC<RFQListingScreenProps> = ({
+  rfqs,
+  onRFQSelect,
+}) => {
+  const [activeCategory, setActiveCategory] = useState<RFQCategory>("Products");
+  const [statusFilter, setStatusFilter] = useState<string>("Ongoing");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
+  const [searchQuery, setSearchQuery] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
   const filteredAndSortedRFQs = useMemo(() => {
-    let filtered = rfqs.filter(rfq => {
+    let filtered = rfqs.filter((rfq) => {
       const matchesCategory = rfq.category === activeCategory;
-      const matchesStatus = statusFilter === 'All' || rfq.status === statusFilter;
-      const matchesSearch = searchQuery === '' || 
+      const matchesStatus =
+        statusFilter === "all" || rfq.status === statusFilter;
+      const matchesSearch =
+        searchQuery === "" ||
         rfq.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         rfq.rfqNumber.toLowerCase().includes(searchQuery.toLowerCase());
-      
+
       return matchesCategory && matchesStatus && matchesSearch;
     });
 
     return filtered.sort((a, b) => {
       const dateA = new Date(a.createdDate).getTime();
       const dateB = new Date(b.createdDate).getTime();
-      return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+      return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
     });
   }, [rfqs, activeCategory, statusFilter, searchQuery, sortOrder]);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
   const getStatusBadge = (status: RFQStatus) => {
-    if (status === 'Ongoing') {
+    if (status === "Ongoing") {
       return (
         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
           <Clock className="w-3 h-3 mr-1" />
@@ -57,46 +76,546 @@ const RFQListingScreen: React.FC<RFQListingScreenProps> = ({ rfqs, onRFQSelect }
     );
   };
 
-  const ongoingCount = filteredAndSortedRFQs.filter(rfq => rfq.status === 'Ongoing').length;
-  const completedCount = filteredAndSortedRFQs.filter(rfq => rfq.status === 'Completed').length;
+  const ongoingCount = filteredAndSortedRFQs.filter(
+    (rfq) => rfq.status === "Ongoing"
+  ).length;
+  const completedCount = filteredAndSortedRFQs.filter(
+    (rfq) => rfq.status === "Completed"
+  ).length;
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const DatePicker = ({
+    value,
+    onSelect,
+    className = "",
+  }: {
+    value: string;
+    onSelect: (value: string) => void;
+    className?: string;
+  }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [currentDate, setCurrentDate] = useState(new Date());
 
+    const today = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const formatDate = (date: Date) => {
+      const day = date.getDate();
+      const month = monthNames[date.getMonth()];
+      return `${month} ${day}`;
+    };
+
+    const isDateDisabled = (day: number) => {
+      const date = new Date(currentYear, currentMonth, day);
+      return date < today;
+    };
+
+    const handleDateSelect = (day: number) => {
+      const selectedDate = new Date(currentYear, currentMonth, day);
+      if (!isDateDisabled(day)) {
+        onSelect(formatDate(selectedDate));
+        setIsOpen(false);
+      }
+    };
+
+    const navigateMonth = (direction: "prev" | "next") => {
+      setCurrentDate((prev) => {
+        const newDate = new Date(prev);
+        if (direction === "prev") {
+          newDate.setMonth(prev.getMonth() - 1);
+        } else {
+          newDate.setMonth(prev.getMonth() + 1);
+        }
+        return newDate;
+      });
+    };
+
+    return (
+      <div className="relative">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`flex items-center gap-1 hover:bg-gray-100 px-2 py-1 rounded transition-colors ${className}`}
+        >
+          {value}
+          <ChevronDown className="w-3 h-3 text-gray-400" />
+        </button>
+
+        {isOpen && (
+          <>
+            <div
+              className="fixed inset-0 z-10"
+              onClick={() => setIsOpen(false)}
+            />
+            <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-20 min-w-[280px]">
+              {/* Month/Year Header */}
+              <div className="flex items-center justify-between mb-4">
+                <button
+                  onClick={() => navigateMonth("prev")}
+                  className="p-1 hover:bg-gray-100 rounded"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <span className="font-medium">
+                  {monthNames[currentMonth]} {currentYear}
+                </span>
+                <button
+                  onClick={() => navigateMonth("next")}
+                  className="p-1 hover:bg-gray-100 rounded"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Calendar Grid */}
+              <div className="grid grid-cols-7 gap-1 text-center text-sm">
+                {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
+                  <div key={day} className="p-2 text-gray-500 font-medium">
+                    {day}
+                  </div>
+                ))}
+
+                {/* Empty cells for days before month starts */}
+                {Array.from({ length: firstDayOfMonth }, (_, i) => (
+                  <div key={`empty-${i}`} className="p-2"></div>
+                ))}
+
+                {/* Days of the month */}
+                {Array.from({ length: daysInMonth }, (_, i) => {
+                  const day = i + 1;
+                  const isDisabled = isDateDisabled(day);
+                  const isToday =
+                    today.getDate() === day &&
+                    today.getMonth() === currentMonth &&
+                    today.getFullYear() === currentYear;
+
+                  return (
+                    <button
+                      key={day}
+                      onClick={() => handleDateSelect(day)}
+                      disabled={isDisabled}
+                      className={`p-2 rounded hover:bg-blue-50 transition-colors ${
+                        isDisabled
+                          ? "text-gray-300 cursor-not-allowed"
+                          : "text-gray-900 hover:text-blue-600"
+                      } ${
+                        isToday ? "bg-blue-100 text-blue-600 font-medium" : ""
+                      }`}
+                    >
+                      {day}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    );
+  };
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "High":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "Medium":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "Low":
+        return "bg-gray-100 text-gray-600 border-gray-200";
+      case "No priority":
+        return "bg-gray-50 text-gray-500 border-gray-200";
+      default:
+        return "bg-gray-100 text-gray-600 border-gray-200";
+    }
+  };
+
+  const TaskCreationModal = () => {
+    const [taskData, setTaskData] = useState({
+      title: "",
+      description: "",
+      purchasytype: "Credit",
+      paymentTerms: "Net 30",
+      category: "Food",
+      assignee: "Raj Dhakal",
+      dueDate: "Due date",
+      deliveryDate: "Delivery date",
+      priority: "No priority",
+      status: "Open",
+      type: "Setup",
+    });
+    const [showPriorityDropdown, setShowPriorityDropdown] = useState(false);
+    const [showAssigneeDropdown, setShowAssigneeDropdown] = useState(false);
+    const [showPurchaseType, setShowPurchaseType] = useState(false);
+    const [showCategory, setShowCategory] = useState(false);
+    const [showPaymentTerms, setShowPaymentTerms] = useState(false);
+    const [showDatePicker, setShowDatePicker] = useState(false);
+
+    if (!showTaskModal) return null;
+
+    const handleSubmit = () => {
+      if (taskData.title.trim()) {
+        const newTask: Task = {
+          id: Date.now().toString(),
+          title: taskData.title,
+          description: taskData.description,
+          assignee: taskData.assignee.charAt(0),
+          dueDate: taskData.dueDate,
+          priority: taskData.priority as
+            | "High"
+            | "Medium"
+            | "Low"
+            | "No priority",
+          status: taskData.status as "Open" | "Completed",
+          type: taskData.type,
+          createdBy: "Current User",
+          assignedTo: taskData.assignee,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+
+        setTasks((prev) => [...prev, newTask]);
+        setTaskData({
+          title: "",
+          purchasytype: "",
+          description: "",
+          assignee: "Raj Dhakal",
+          dueDate: "Due date",
+          priority: "No priority",
+          status: "Open",
+          type: "Setup",
+        });
+        setShowTaskModal(false);
+      }
+    };
+
+    const priorityOptions = ["High", "Medium", "Low", "No priority"];
+    const assigneeOptions = [
+      "Raj Dhakal",
+      "Jane Smith",
+      "Mike Johnson",
+      "Sarah Wilson",
+    ];
+    const typeOptions = [
+      "Setup",
+      "Sales",
+      "Training",
+      "Testing",
+      "Review",
+      "Data",
+    ];
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+        <div className="bg-white rounded-xl shadow-xl w-full max-w-xs sm:max-w-lg max-h-[90vh] overflow-y-auto">
+          <div className="flex items-center justify-between p-3 sm:p-4 border-b border-gray-200">
+            <input
+              type="text"
+              value={taskData.title}
+              onChange={(e) =>
+                setTaskData((prev) => ({ ...prev, title: e.target.value }))
+              }
+              placeholder="RFQ title"
+              className="text-base sm:text-lg font-medium text-gray-900 bg-transparent border-none outline-none flex-1"
+            />
+            <button
+              onClick={() => setShowTaskModal(false)}
+              className="min-w-[44px] min-h-[44px] w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="p-3 sm:p-4">
+            <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-4">
+              {/* Priority */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowPriorityDropdown(!showPriorityDropdown)}
+                  className={`flex items-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg text-xs sm:text-sm border ${getPriorityColor(
+                    taskData.priority
+                  )} min-h-[36px]`}
+                >
+                  <div className="w-3 h-3 bg-current rounded opacity-60"></div>
+                  {taskData.priority}
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+                {showPriorityDropdown && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-10"
+                      onClick={() => setShowPriorityDropdown(false)}
+                    />
+                    <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-20 min-w-[120px]">
+                      {priorityOptions.map((priority) => (
+                        <button
+                          key={priority}
+                          onClick={() => {
+                            setTaskData((prev) => ({ ...prev, priority }));
+                            setShowPriorityDropdown(false);
+                          }}
+                          className="w-full text-left px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50"
+                        >
+                          {priority}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Purchase typew */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowPurchaseType(!showPurchaseType)}
+                  className="flex items-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-3 sm:py-2 bg-gray-100 rounded-lg text-xs sm:text-sm text-gray-700 min-h-[36px]"
+                >
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 bg-teal-500 rounded-full flex items-center justify-center text-white text-xs">
+                    {taskData.purchasytype.charAt(0)}
+                  </div>
+                  {taskData.purchasytype}
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+                {showPurchaseType && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-10"
+                      onClick={() => setShowPurchaseType(false)}
+                    />
+                    <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-20 min-w-[140px]">
+                      {["Cash", "Credit", "Contract"].map((assignee) => (
+                        <button
+                          key={assignee}
+                          onClick={() => {
+                            setTaskData((prev) => ({
+                              ...prev,
+                              purchasytype: assignee,
+                            }));
+                            setShowAssigneeDropdown(false);
+                          }}
+                          className="w-full text-left px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                        >
+                          <div className="w-4 h-4 bg-teal-500 rounded-full flex items-center justify-center text-white text-xs">
+                            {assignee.charAt(0)}
+                          </div>
+                          {assignee}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+              {/* Category */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowPaymentTerms(!showPaymentTerms)}
+                  className="flex items-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-3 sm:py-2 bg-gray-100 rounded-lg text-xs sm:text-sm text-gray-700 min-h-[36px]"
+                >
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 bg-teal-500 rounded-full flex items-center justify-center text-white text-xs">
+                    {taskData.paymentTerms.charAt(0)}
+                  </div>
+                  {taskData.paymentTerms}
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+                {showPaymentTerms && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-10"
+                      onClick={() => setShowPaymentTerms(false)}
+                    />
+                    <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-20 min-w-[140px]">
+                      {["Net 30", "Net 60", "Net 90"].map((assignee) => (
+                        <button
+                          key={assignee}
+                          onClick={() => {
+                            setTaskData((prev) => ({
+                              ...prev,
+                              category: assignee,
+                            }));
+                            setShowAssigneeDropdown(false);
+                          }}
+                          className="w-full text-left px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                        >
+                          <div className="w-4 h-4 bg-teal-500 rounded-full flex items-center justify-center text-white text-xs">
+                            {assignee.charAt(0)}
+                          </div>
+                          {assignee}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+              {/* payment terms */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowCategory(!showCategory)}
+                  className="flex items-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-3 sm:py-2 bg-gray-100 rounded-lg text-xs sm:text-sm text-gray-700 min-h-[36px]"
+                >
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 bg-teal-500 rounded-full flex items-center justify-center text-white text-xs">
+                    {taskData.category.charAt(0)}
+                  </div>
+                  {taskData.category}
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+                {showCategory && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-10"
+                      onClick={() => setShowCategory(false)}
+                    />
+                    <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-20 min-w-[140px]">
+                      {["Food", "Electronics", "Beverages"].map((assignee) => (
+                        <button
+                          key={assignee}
+                          onClick={() => {
+                            setTaskData((prev) => ({
+                              ...prev,
+                              category: assignee,
+                            }));
+                            setShowAssigneeDropdown(false);
+                          }}
+                          className="w-full text-left px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                        >
+                          <div className="w-4 h-4 bg-teal-500 rounded-full flex items-center justify-center text-white text-xs">
+                            {assignee.charAt(0)}
+                          </div>
+                          {assignee}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+              {/* Due Date */}
+              <div className="relative">
+                <DatePicker
+                  value={taskData.deliveryDate}
+                  onSelect={(value) =>
+                    setTaskData((prev) => ({ ...prev, deliveryDate: value }))
+                  }
+                  className="flex items-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-3 sm:py-2 bg-gray-100 rounded-lg text-xs sm:text-sm text-teal-600 min-h-[36px]"
+                />
+              </div>
+              <div className="relative">
+                <DatePicker
+                  value={taskData.dueDate}
+                  onSelect={(value) =>
+                    setTaskData((prev) => ({ ...prev, dueDate: value }))
+                  }
+                  className="flex items-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-3 sm:py-2 bg-gray-100 rounded-lg text-xs sm:text-sm text-teal-600 min-h-[36px]"
+                />
+              </div>
+
+              {/* Type */}
+              {/* <button className="flex items-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-3 sm:py-2 bg-blue-100 rounded-lg text-xs sm:text-sm text-blue-700 min-h-[36px]">
+                <div className="w-3 h-3 bg-blue-500 rounded"></div>
+                {taskData.type}
+              </button> */}
+
+              {/* Add Attachment */}
+            </div>
+            <textarea
+              value={taskData.description}
+              onChange={(e) =>
+                setTaskData((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }))
+              }
+              placeholder="Message for supplier..."
+              className="w-full h-12 sm:h-16 text-xs sm:text-sm text-gray-600 bg-transparent border-none outline-none resize-none mb-3 sm:mb-4"
+            />
+          </div>
+
+          <div className="flex justify-between gap-3 p-3 sm:p-4 border-t border-gray-200">
+            <button className="flex items-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-3 sm:py-2 bg-gray-100 rounded-lg text-xs sm:text-sm text-gray-700 hover:bg-gray-200 transition-colors min-h-[36px]">
+              <Paperclip className="w-3 h-3" />
+              <span className="hidden sm:inline">Add attachment</span>
+            </button>
+            <button
+              onClick={handleSubmit}
+              className="px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors min-h-[36px] sm:min-h-[44px]"
+            >
+              Create RFQ
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
   return (
     <div className="min-h-screen bg-gray-50">
+      <TaskCreationModal />
       {/* Mobile-First Header */}
       <div className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="px-4 py-4 sm:px-6">
-          <h1 className="text-lg sm:text-2xl font-bold text-gray-900 mb-4">
-            RFQ Management
-          </h1>
-          
-          {/* Category Toggle Tabs */}
-          <div className="flex bg-gray-100 rounded-lg p-1 mb-4 lg:max-w-xs">
+        <div className="">
+          <div className="flex items-center justify-between p-4 py-3  lg:py-2 border-b border-gray-200">
+            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
+                  RFQ Management
+                </h1>
+              </div>
+            </div>
+
+            {/* <a href="rfq-creation"> */}
             <button
-              onClick={() => setActiveCategory('Products')}
+              // onClick={() => setShowTaskModal(true)}
+              onClick={() => {
+                setShowTaskModal(true);
+              }}
+              className="flex items-center gap-2 bg-gray-900 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors text-xs sm:text-sm min-h-[16px]"
+            >
+              <Plus className="w-4 h-4" />
+              <span className="hidden sm:inline">Create RFQ</span>
+              {/* <span className="sm:hidden">Add</span> */}
+            </button>
+            {/* </a> */}
+          </div>
+          {/* Category Toggle Tabs */}
+          {/* <div className="flex bg-gray-100 rounded-lg p-1 mb-4 lg:max-w-xs">
+            <button
+              onClick={() => setActiveCategory("Products")}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-                activeCategory === 'Products'
-                  ? 'bg-white text-blue-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                activeCategory === "Products"
+                  ? "bg-white text-blue-600 shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
-              style={{ minHeight: '44px' }}
+              style={{ minHeight: "44px" }}
             >
               Products
             </button>
             <button
-              onClick={() => setActiveCategory('Services')}
+              onClick={() => setActiveCategory("Services")}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-                activeCategory === 'Services'
-                  ? 'bg-white text-blue-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                activeCategory === "Services"
+                  ? "bg-white text-blue-600 shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
-              style={{ minHeight: '44px' }}
+              style={{ minHeight: "44px" }}
             >
               Services
             </button>
-          </div>
+          </div> */}
 
           {/* Search Bar */}
-          <div className="relative mb-4">
+          {/* <div className="relative mb-4">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
               type="text"
@@ -104,135 +623,116 @@ const RFQListingScreen: React.FC<RFQListingScreenProps> = ({ rfqs, onRFQSelect }
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              style={{ minHeight: '44px' }}
+              style={{ minHeight: "44px" }}
             />
-          </div>
+          </div> */}
 
           {/* Filter Controls */}
           {/* Always Visible Filters */}
-          <div className="space-y-4">
-            {/* Mobile Filters - Stacked */}
-            <div className="lg:hidden space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => setStatusFilter('All')}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      statusFilter === 'All'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    All ({ongoingCount + completedCount})
-                  </button>
-                  <button
-                    onClick={() => setStatusFilter('Ongoing')}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      statusFilter === 'Ongoing'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    Ongoing ({ongoingCount})
-                  </button>
-                  <button
-                    onClick={() => setStatusFilter('Completed')}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      statusFilter === 'Completed'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    Completed ({completedCount})
-                  </button>
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Date Range</label>
-                <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="date"
-                    placeholder="From Date"
-                    className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                    style={{ minHeight: '44px' }}
-                  />
-                  <input
-                    type="date"
-                    placeholder="To Date"
-                    className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                    style={{ minHeight: '44px' }}
-                  />
-                </div>
-              </div>
-            </div>
+          <div className="flex items-center gap-3 px-3 sm:px-4 lg:px-6 py-1  border-b border-gray-200 overflow-x-auto">
+            <button
+              onClick={() => setStatusFilter("all")}
+              className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
+                statusFilter === "all"
+                  ? " "
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              } text-xs sm:text-sm min-h-[36px]`}
+            >
+              All
+              {statusFilter === "all" && (
+                <hr className="border-black mt-1 border-[1.2px]" />
+              )}
+            </button>
+            <button
+              onClick={() => setStatusFilter("Draft")}
+              className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
+                statusFilter === "Draft"
+                  ? " "
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              } text-xs sm:text-sm min-h-[36px]`}
+            >
+              Draft
+              {statusFilter === "Draft" && (
+                <hr className="border-black mt-1 border-[1.2px]" />
+              )}
+            </button>
+            <button
+              onClick={() => setStatusFilter("under-approval")}
+              className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
+                statusFilter === "under-approval"
+                  ? " "
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              } text-xs sm:text-sm min-h-[36px]`}
+            >
+              Under Approval
+              {statusFilter === "under-approval" && (
+                <hr className="border-black mt-1 border-[1.2px]" />
+              )}
+            </button>
+            <button
+              onClick={() => setStatusFilter("Ongoing")}
+              className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
+                statusFilter === "Ongoing"
+                  ? ""
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              } text-xs sm:text-sm min-h-[36px]`}
+            >
+              Ongoing
+              {statusFilter === "Ongoing" && (
+                <hr className="border-black mt-1 border-[1.2px]" />
+              )}
+            </button>
 
-            {/* Desktop Filters - Same Row */}
-            <div className="hidden lg:flex lg:items-center lg:justify-between lg:space-x-6">
-              <div className="flex items-center space-x-2">
-                <label className="text-sm font-medium text-gray-700">Status:</label>
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => setStatusFilter('All')}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      statusFilter === 'All'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    All ({ongoingCount + completedCount})
-                  </button>
-                  <button
-                    onClick={() => setStatusFilter('Ongoing')}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      statusFilter === 'Ongoing'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    Ongoing ({ongoingCount})
-                  </button>
-                  <button
-                    onClick={() => setStatusFilter('Completed')}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      statusFilter === 'Completed'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    Completed ({completedCount})
-                  </button>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <label className="text-sm font-medium text-gray-700">Date Range:</label>
-                <input
-                  type="date"
-                  placeholder="From Date"
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm w-36"
-                />
-                <span className="text-gray-500">to</span>
-                <input
-                  type="date"
-                  placeholder="To Date"
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm w-36"
-                />
-              </div>
+            <button
+              onClick={() => setStatusFilter("Completed")}
+              className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
+                statusFilter === "Completed"
+                  ? " "
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              } text-xs sm:text-sm min-h-[36px]`}
+            >
+              Completed
+              {statusFilter === "Completed" && (
+                <hr className="border-black mt-1 border-[1.2px]" />
+              )}
+            </button>
+
+            <div className="relative w-80 ml-auto ">
+              <Search
+                size={18}
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              />
+              <input
+                type="text"
+                placeholder="Search anything..."
+                // value={}
+                // onChange={(e) => setSearchQuery(e.target.value)}
+                className="outline-none w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:bg-white focus:border-primary-300  transition-all duration-200 text-sm shadow-soft"
+              />
             </div>
+            <button
+              onClick={() => setShowFilters(true)}
+              className="flex items-center gap-1 sm:gap-2 px-2 py-2 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors min-h-[16px]"
+            >
+              <Filter className="w-4 h-4" />
+              <span className="hidden sm:inline">Filter</span>
+            </button>
           </div>
         </div>
       </div>
 
       {/* RFQ List */}
-      <div className="px-4 py-4 sm:px-6 space-y-3">
+      <div className="">
         {filteredAndSortedRFQs.length === 0 ? (
           <div className="text-center py-12">
             <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No RFQs Found</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              No RFQs Found
+            </h3>
             <p className="text-gray-600">
-              {searchQuery ? 'Try adjusting your search terms or filters.' : `No ${activeCategory.toLowerCase()} RFQs available.`}
+              {searchQuery
+                ? "Try adjusting your search terms or filters."
+                : `No ${activeCategory.toLowerCase()} RFQs available.`}
             </p>
           </div>
         ) : (
@@ -262,11 +762,12 @@ const RFQListingScreen: React.FC<RFQListingScreenProps> = ({ rfqs, onRFQSelect }
                     </div>
                     <ChevronRight className="w-5 h-5 text-gray-400 ml-3 flex-shrink-0" />
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     {getStatusBadge(rfq.status)}
                     <div className="text-xs text-gray-500">
-                      {rfq.vendors.length} vendor{rfq.vendors.length !== 1 ? 's' : ''} invited
+                      {rfq.vendors.length} vendor
+                      {rfq.vendors.length !== 1 ? "s" : ""} invited
                     </div>
                   </div>
                 </div>
@@ -277,24 +778,24 @@ const RFQListingScreen: React.FC<RFQListingScreenProps> = ({ rfqs, onRFQSelect }
             <div className="hidden lg:block bg-white rounded-lg shadow-sm overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50 border-b border-gray-200">
+                  <thead className="border-b border-gray-200">
                     <tr>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
                         RFQ Number
                       </th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
                         Title
                       </th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
                         Created Date
                       </th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
                         Status
                       </th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
                         Vendors
                       </th>
-                      <th className="px-6 py-4 text-right text-sm font-semibold text-gray-900">
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-900">
                         Action
                       </th>
                     </tr>
@@ -306,26 +807,26 @@ const RFQListingScreen: React.FC<RFQListingScreenProps> = ({ rfqs, onRFQSelect }
                         onClick={() => onRFQSelect(rfq)}
                         className="hover:bg-gray-50 cursor-pointer transition-colors"
                       >
-                        <td className="px-6 py-4">
-                          <div className="font-semibold text-blue-600">
+                        <td className="px-6 py-3">
+                          <div className="font-medium text-gray-500 text-sm">
                             {rfq.rfqNumber}
                           </div>
                         </td>
-                        <td className="px-6 py-4">
-                          <div className="font-medium text-gray-900">
+                        <td className="px-6 py-3">
+                          <div className="font-medium  text-sm">
                             {rfq.title}
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-gray-600">
+                        <td className="px-6 py-3 text-gray-500 text-sm">
                           {formatDate(rfq.createdDate)}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-3">
                           {getStatusBadge(rfq.status)}
                         </td>
-                        <td className="px-6 py-4 text-gray-600">
+                        <td className="px-6 py-3 text-gray-500 text-sm">
                           {rfq.vendors.length} invited
                         </td>
-                        <td className="px-6 py-4 text-right">
+                        <td className="px-6 py-3 text-right text-sm">
                           <span className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
                             View
                           </span>

@@ -21,15 +21,64 @@ export interface ToDo {
 export interface Supplier {
   id: string;
   name: string;
+  type: string; // e.g., "Vendor", "Manufacturer", "Service Provider"
   category: string;
+  country: string;
+  state: string;
+  city: string;
   tags: string[];
-  contact: {
-    name: string;
-    email: string;
-    phone: string;
-  };
-  rating: number;
-  isPreferred: boolean;
+  contacts: SupplierContact[];
+  documents: SupplierDocument[];
+  quotations: SupplierQuotation[];
+  samples: SupplierSample[];
+}
+
+export interface SupplierContact {
+  id: string;
+  name: string;
+  position: string;
+  email: string;
+  phone: string;
+}
+
+export interface SupplierDocument {
+  id: string;
+  name: string;
+  type: string;
+  expiryDate?: string;
+  attachmentUrl: string;
+}
+
+export interface SupplierQuotation {
+  id: string;
+  rfqId: string;
+  title: string;
+  status: 'pending' | 'received' | 'rejected';
+  value?: number;
+  date: string;
+}
+
+export interface SupplierSample {
+  id: string;
+  productName: string;
+  status: 'requested' | 'shipped' | 'received' | 'feedback-pending';
+  requestDate: string;
+  deliveryDate?: string;
+}
+
+export interface Supplier {
+  id: string;
+  name: string;
+  type: string; // e.g., "Vendor", "Manufacturer", "Service Provider"
+  category: string;
+  country: string;
+  state: string;
+  city: string;
+  tags: string[];
+  contacts: SupplierContact[];
+  documents: SupplierDocument[];
+  quotations: SupplierQuotation[];
+  samples: SupplierSample[];
 }
 
 export interface RFQ {
@@ -160,58 +209,131 @@ export const mockToDos: ToDo[] = [
   }
 ];
 
+// Utility function to add new ToDo items
+export function addMockToDo(todo: Omit<ToDo, 'id'>) {
+  const newToDo: ToDo = {
+    id: Date.now().toString(),
+    ...todo
+  };
+  mockToDos.unshift(newToDo); // Add to beginning of array
+  return newToDo;
+}
+
+
 export const mockSuppliers: Supplier[] = [
   {
     id: '1',
     name: 'FreshCo Vegetables',
+    type: 'Vendor',
     category: 'Produce',
+    country: 'United Arab Emirates',
+    state: 'Dubai',
+    city: 'Dubai',
     tags: ['Sustainable', 'Local', 'Certified'],
-    contact: {
-      name: 'Ahmed Hassan',
-      email: 'ahmed@freshco.ae',
-      phone: '+971 50 123 4567'
-    },
-    rating: 4.8,
-    isPreferred: true
+    contacts: [
+      { id: '1', name: 'Ahmed Hassan', position: 'Sales Manager', email: 'ahmed@freshco.ae', phone: '+971 50 123 4567' },
+      { id: '2', name: 'Sara Al-Zahra', position: 'Account Manager', email: 'sara@freshco.ae', phone: '+971 50 234 5678' }
+    ],
+    documents: [
+      { id: 'doc1', name: 'Trade License', expiryDate: '2025-12-31', attachmentUrl: '/docs/freshco_trade_license.pdf' },
+      { id: 'doc2', name: 'Food Safety Certificate', expiryDate: '2024-11-15', attachmentUrl: '/docs/freshco_food_safety.pdf' }
+    ],
+    quotations: [
+      { id: 'q1', rfqId: 'RFQ-101', title: 'Weekly Vegetable Supply', status: 'received', value: 2500, submittedDate: '2024-01-25' },
+      { id: 'q2', rfqId: 'RFQ-105', title: 'Organic Produce Order', status: 'pending', submittedDate: '2024-02-10' }
+    ],
+    samples: [
+      { id: 's1', productName: 'Organic Tomatoes', status: 'received', requestDate: '2024-01-10', expectedDate: '2024-01-15' },
+      { id: 's2', productName: 'Fresh Lettuce', status: 'shipped', requestDate: '2024-01-20', expectedDate: '2024-01-25' }
+    ]
   },
   {
     id: '2',
     name: 'Gulf Meat Supplies',
+    type: 'Manufacturer',
     category: 'Meat & Poultry',
-    tags: ['Halal', 'Premium', 'Preferred'],
-    contact: {
-      name: 'Sara Al-Mansoori',
-      email: 'sara@gulfmeat.ae',
-      phone: '+971 50 234 5678'
-    },
-    rating: 4.6,
-    isPreferred: true
+    country: 'United Arab Emirates',
+    state: 'Abu Dhabi',
+    city: 'Abu Dhabi',
+    tags: ['Halal', 'Premium'],
+    contacts: [
+      { id: '1', name: 'Sara Al-Mansoori', position: 'Account Manager', email: 'sara@gulfmeat.ae', phone: '+971 50 234 5678' }
+    ],
+    documents: [
+      { id: 'doc3', name: 'Halal Certificate', expiryDate: '2025-06-30', attachmentUrl: '/docs/gulfmeat_halal.pdf' }
+    ],
+    quotations: [
+      { id: 'q3', rfqId: 'RFQ-103', title: 'Premium Meat Selection', status: 'received', value: 15000, submittedDate: '2024-01-28' }
+    ],
+    samples: [
+      { id: 's3', productName: 'Premium Beef', status: 'shipped', requestDate: '2024-01-12', expectedDate: '2024-01-18' }
+    ]
   },
   {
     id: '3',
     name: 'EquipMax',
+    type: 'Distributor',
     category: 'Kitchen Equipment',
+    country: 'United Arab Emirates',
+    state: 'Dubai',
+    city: 'Dubai',
     tags: ['Gulffood', 'Warranty', 'Installation'],
-    contact: {
-      name: 'Mohammed Ali',
-      email: 'mohammed@equipmax.ae',
-      phone: '+971 50 345 6789'
-    },
-    rating: 4.5,
-    isPreferred: false
+    contacts: [
+      { id: '1', name: 'Mohammed Ali', position: 'Sales Executive', email: 'mohammed@equipmax.ae', phone: '+971 50 345 6789' }
+    ],
+    documents: [
+      { id: 'doc4', name: 'Equipment Warranty', expiryDate: '2025-12-31', attachmentUrl: '/docs/equipmax_warranty.pdf' }
+    ],
+    quotations: [
+      { id: 'q4', rfqId: 'RFQ-102', title: 'Commercial Oven', status: 'received', value: 15000, submittedDate: '2024-01-20' }
+    ],
+    samples: [
+      { id: 's4', productName: 'Oven Sample Model', status: 'requested', requestDate: '2024-01-15', expectedDate: '2024-01-30' }
+    ]
   },
   {
     id: '4',
     name: 'Spice Route Trading',
+    type: 'Vendor',
     category: 'Spices & Seasonings',
+    country: 'United Arab Emirates',
+    state: 'Sharjah',
+    city: 'Sharjah',
     tags: ['Organic', 'Import', 'Bulk'],
-    contact: {
-      name: 'Priya Sharma',
-      email: 'priya@spiceroute.ae',
-      phone: '+971 50 456 7890'
-    },
-    rating: 4.3,
-    isPreferred: false
+    contacts: [
+      { id: '1', name: 'Priya Sharma', position: 'Procurement Specialist', email: 'priya@spiceroute.ae', phone: '+971 50 456 7890' }
+    ],
+    documents: [
+      { id: 'doc5', name: 'Import License', expiryDate: '2024-12-31', attachmentUrl: '/docs/spiceroute_import.pdf' }
+    ],
+    quotations: [
+      { id: 'q5', rfqId: 'RFQ-104', title: 'Spice Collection', status: 'pending', submittedDate: '2024-02-01' }
+    ],
+    samples: [
+      { id: 's5', productName: 'Saffron', status: 'feedback-pending', requestDate: '2024-01-08', expectedDate: '2024-01-14' }
+    ]
+  },
+  {
+    id: '5',
+    name: 'CleanPro Services',
+    type: 'Service Provider',
+    category: 'Cleaning Services',
+    country: 'United Arab Emirates',
+    state: 'Dubai',
+    city: 'Dubai',
+    tags: ['Commercial', 'Eco-friendly'],
+    contacts: [
+      { id: '1', name: 'Omar Khan', position: 'Service Manager', email: 'omar@cleanpro.ae', phone: '+971 50 987 6543' }
+    ],
+    documents: [
+      { id: 'doc6', name: 'Service Agreement', expiryDate: '2025-03-31', attachmentUrl: '/docs/cleanpro_agreement.pdf' }
+    ],
+    quotations: [
+      { id: 'q6', rfqId: 'RFQ-106', title: 'Office Cleaning Contract', status: 'pending', submittedDate: '2024-02-15' }
+    ],
+    samples: [
+      { id: 's6', productName: 'Cleaning Kit Sample', status: 'received', requestDate: '2024-01-05', expectedDate: '2024-01-10' }
+    ]
   }
 ];
 
@@ -221,35 +343,33 @@ export const mockRFQs: RFQ[] = [
     title: 'Fresh Vegetables - Weekly Supply',
     status: 'pending',
     createdDate: '2024-01-20',
-    createdDate: '2024-01-20',
     dueDate: '2024-01-30',
     suppliersInvited: 3,
     quotationsReceived: 2,
     category: 'Produce',
     lineItems: [
       { name: 'Tomatoes', quantity: 50, unit: 'kg' },
-      { name: 'Onions', quantity: 30, unit: 'kg' },
-      { name: 'Lettuce', quantity: 20, unit: 'heads' }
+      { name: 'Lettuce', quantity: 30, unit: 'kg' },
+      { name: 'Carrots', quantity: 25, unit: 'kg' }
     ],
-    suppliers: ['1', '4'],
+    suppliers: ['1', '2'],
     quotes: [
       { supplierId: '1', status: 'received', value: 2500 },
-      { supplierId: '4', status: 'pending' }
+      { supplierId: '2', status: 'pending' }
     ]
   },
   {
     id: 'RFQ-102',
-    title: 'Kitchen Equipment Upgrade',
+    title: 'Commercial Kitchen Equipment',
     status: 'open',
     createdDate: '2024-01-18',
-    createdDate: '2024-01-18',
-    dueDate: '2024-01-29',
+    dueDate: '2024-01-28',
     suppliersInvited: 2,
     quotationsReceived: 1,
     category: 'Equipment',
     lineItems: [
-      { name: 'Commercial Oven', quantity: 1, unit: 'unit' },
-      { name: 'Prep Tables', quantity: 3, unit: 'units' }
+      { name: 'Commercial Oven', quantity: 1, unit: 'pieces' },
+      { name: 'Industrial Mixer', quantity: 1, unit: 'pieces' }
     ],
     suppliers: ['3'],
     quotes: [
@@ -259,80 +379,19 @@ export const mockRFQs: RFQ[] = [
   {
     id: 'RFQ-103',
     title: 'Premium Meat Selection',
-    status: 'draft',
-    createdDate: '2024-01-22',
-    createdDate: '2024-01-22',
-    dueDate: '2024-02-05',
-    suppliersInvited: 0,
-    quotationsReceived: 0,
+    status: 'closed',
+    createdDate: '2024-01-15',
+    dueDate: '2024-01-25',
+    suppliersInvited: 1,
+    quotationsReceived: 1,
     category: 'Meat',
     lineItems: [
-      { name: 'Beef Tenderloin', quantity: 10, unit: 'kg' },
+      { name: 'Premium Beef', quantity: 20, unit: 'kg' },
       { name: 'Lamb Chops', quantity: 15, unit: 'kg' }
     ],
-    suppliers: [],
-    quotes: []
+    suppliers: ['2'],
+    quotes: [
+      { supplierId: '2', status: 'received', value: 8500 }
+    ]
   }
-];
-
-export const mockSamples: Sample[] = [
-  {
-    id: '1',
-    supplierName: 'FreshCo Vegetables',
-    productName: 'Organic Tomatoes',
-    status: 'received',
-    requestDate: '2024-01-10',
-    expectedDate: '2024-01-15',
-    trackingNumber: 'FC123456'
-  },
-  {
-    id: '2',
-    supplierName: 'Gulf Meat Supplies',
-    productName: 'Premium Beef',
-    status: 'shipped',
-    requestDate: '2024-01-12',
-    expectedDate: '2024-01-18',
-    trackingNumber: 'GM789012'
-  },
-  {
-    id: '3',
-    supplierName: 'Spice Route Trading',
-    productName: 'Saffron',
-    status: 'pending-feedback',
-    requestDate: '2024-01-08',
-    expectedDate: '2024-01-14'
-  }
-];
-
-export const mockContracts: Contract[] = [
-  {
-    id: '1',
-    title: 'Annual Vegetable Supply Agreement',
-    supplierName: 'FreshCo Vegetables',
-    status: 'signed',
-    value: 150000,
-    startDate: '2024-01-01',
-    endDate: '2024-12-31',
-    type: 'active'
-  },
-  {
-    id: '2',
-    title: 'Equipment Maintenance Contract',
-    supplierName: 'EquipMax',
-    status: 'under-review',
-    value: 25000,
-    startDate: '2024-02-01',
-    endDate: '2025-01-31',
-    type: 'active'
-  },
-  {
-    id: '3',
-    title: 'Standard Supplier Agreement Template',
-    supplierName: '',
-    status: 'draft',
-    value: 0,
-    startDate: '',
-    endDate: '',
-    type: 'template'
-  }
-];
+]

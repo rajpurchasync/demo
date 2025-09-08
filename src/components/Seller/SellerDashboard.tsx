@@ -74,7 +74,6 @@ const SellerDashboard: React.FC<SellerDashboardProps> = ({ profileStatus }) => {
     // Workspace Section
     {
       title: "Workspace",
-      title: "Workspace",
       items: [
         { name: "home", icon: Home, component: HomeSection },
         { name: "todos", icon: CheckSquare, component: ToDos },

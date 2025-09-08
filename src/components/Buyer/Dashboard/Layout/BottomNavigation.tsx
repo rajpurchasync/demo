@@ -2,10 +2,17 @@ import React from "react";
 import { Home, Users, FileText, CheckSquare, User } from "lucide-react";
 import { cn } from "../utils/cn";
 
-type Screen = "home" | "suppliers" | "rfqs" | "todos" | "profile";
+type Screen =
+  | "home"
+  | "suppliers"
+  | "rfqs"
+  | "todos"
+  | "profile"
+  | "team"
+  | "supplierDetail";
 
 interface BottomNavigationProps {
-  currentScreen: any;
+  currentScreen: Screen;
   onScreenChange: (screen: Screen) => void;
 }
 

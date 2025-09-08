@@ -1,5 +1,17 @@
 import React from "react";
 import {
+  CheckSquare,
+  Inbox,
+  FileCheck,
+  MessageCircle,
+  UserPlus,
+  TrendingUp,
+  Cat as Catalog,
+  Settings,
+  PanelRightClose,
+  PanelRightOpen,
+} from "lucide-react";
+import {
   LayoutDashboard,
   FileText,
   Users,
@@ -15,6 +27,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import { useNavigate, useNavigation } from "react-router-dom";
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -22,6 +35,7 @@ interface SidebarProps {
   isMobileMenuOpen: boolean;
   onToggleMobileMenu: () => void;
   onNavigate: (view: string) => void;
+  type?: "buyer" | "seller";
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -30,80 +44,126 @@ const Sidebar: React.FC<SidebarProps> = ({
   isMobileMenuOpen,
   onToggleMobileMenu,
   onNavigate,
+  type = "buyer",
 }) => {
-  const [currentView, setCurrentView] = React.useState("dashboard");
+  const [currentView, setCurrentView] = React.useState("todos");
   const [expandedMenus, setExpandedMenus] = React.useState<{
     [key: string]: boolean;
   }>({});
 
-  const menuItems = [
+  const menuItems2 = [
     {
-      icon: LayoutDashboard,
-      label: "Dashboard",
-      view: "dashboard",
-      type: "single",
-    },
-    {
-      icon: Building,
-      label: "My Company",
-      view: "my-company",
-      type: "single",
-    },
-    {
-      icon: Users,
+      id: "suppliers",
       label: "Suppliers",
-      view: "suppliers",
-      type: "single",
+      icon: Users,
+      color: "text-purple-600",
     },
+
     {
-      icon: FileText,
-      label: "Quotations",
-      view: "quotations",
-      type: "expandable",
+      id: "RFQs",
+      label: "RFQ",
+      icon: TrendingUp,
+      color: "text-orange-600",
       subItems: [
-        { label: "RFQ List", view: "rfq-list" },
-        { label: "RFQ Templates", view: "rfq-templates" },
-        { label: "Approvals", view: "rfq-approvals" },
+        { id: "rfq-list", label: "RFQ List", view: "rfq-list" },
+        // { label: "RFQ Templates", view: "rfq-templates" },
+        { id: "rfq-approvals", label: "Approvals", view: "rfq-approvals" },
       ],
     },
     {
-      icon: FileText,
+      id: "templates",
+      label: "Templates",
+      icon: Catalog,
+      color: "text-yellow-600",
+      subItems: [
+        { id: "rfq-templates", label: "RFQ Templates", view: "rfq-templates" },
+        {
+          id: "contract-template",
+          label: "Contract Template",
+          view: "contract-templates",
+        },
+        // { label: "Approvals", view: "rfq-approvals" },
+      ],
+    },
+    {
+      id: "samples",
       label: "Samples",
-      view: "samples",
-      type: "single",
+      icon: FileText,
+      color: "text-indigo-600",
     },
     {
-      icon: Users,
-      label: "Team",
-      view: "team",
-      type: "single",
+      id: "contract-list",
+      label: "Contracts",
+      icon: FileCheck,
+      color: "text-red-600",
     },
     {
-      icon: MessageSquare,
+      id: "messages",
       label: "Messages",
-      view: "messages",
-      type: "single",
+      icon: MessageCircle,
+      color: "text-pink-600",
     },
     {
-      icon: Bell,
-      label: "Notifications",
-      view: "notifications",
-      type: "single",
+      id: "team",
+      label: "Team Management",
+      icon: UserPlus,
+      color: "text-teal-600",
     },
-    {
-      icon: User,
-      label: "My Profile",
-      view: "profile",
-      type: "single",
-    },
-    {
-      icon: BarChart3,
-      label: "Report",
-      view: "report",
-      type: "single",
-    },
+    { id: "profile", label: "Profile", icon: User, color: "text-gray-600" },
   ];
+  const menuItemsSeller = [
+    {
+      id: "suppliers",
+      label: "Customers",
+      icon: Users,
+      color: "text-purple-600",
+    },
 
+    {
+      id: "leads",
+      label: "Leads",
+      icon: TrendingUp,
+      color: "text-orange-600",
+      subItems: [
+        { label: "RFQ List", view: "rfq-list", id: "rfq-list" },
+        { label: "Sample", view: "sample", id: "sample" },
+      ],
+    },
+    {
+      id: "templates",
+      label: "Templates",
+      icon: Catalog,
+      color: "text-yellow-600",
+      subItems: [
+        { id: "rfq-templates", label: "RFQ Templates", view: "rfq-templates" },
+        {
+          id: "contract-template",
+          label: "Contract Template",
+          view: "contract-templates",
+        },
+        // { label: "Approvals", view: "rfq-approvals" },
+      ],
+    },
+    {
+      id: "contract-list",
+      label: "Contracts",
+      icon: FileCheck,
+      color: "text-red-600",
+    },
+    {
+      id: "messages",
+      label: "Messages",
+      icon: MessageCircle,
+      color: "text-pink-600",
+    },
+    {
+      id: "team",
+      label: "Team Management",
+      icon: UserPlus,
+      color: "text-teal-600",
+    },
+    { id: "profile", label: "Profile", icon: User, color: "text-gray-600" },
+  ];
   const handleNavigation = (view: string) => {
     setCurrentView(view);
     onNavigate(view);
@@ -121,17 +181,19 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const handleMenuItemClick = (item: any) => {
-    if (item.type === "expandable") {
+    setCurrentView(item.id);
+    if (item.subItems) {
       toggleMenuExpansion(item.label);
       // If it's a main expandable item, also navigate to its main view
       if (item.view) {
-        handleNavigation(item.view);
+        handleNavigation(item.id);
       }
     } else {
-      handleNavigation(item.view);
+      toggleMenuExpansion("");
+      handleNavigation(item.id);
     }
   };
-
+  const router = useNavigate();
   return (
     <>
       {/* Mobile Menu Button */}
@@ -152,8 +214,11 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Sidebar */}
       <aside
+        style={{
+          height: "calc(100% - 80px)",
+        }}
         className={`
-        fixed left-0 top-0 h-full bg-white border-r border-gray-200 z-40 transition-all duration-300 ease-in-out lg:translate-x-0
+      flex flex-col  fixed left-0 top-[80px]  border-r border-gray-200 z-40 transition-all duration-300 ease-in-out lg:translate-x-0
         ${isCollapsed ? "lg:w-16" : "lg:w-60"}
         w-72
         ${
@@ -164,18 +229,25 @@ const Sidebar: React.FC<SidebarProps> = ({
       `}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-100">
-          <a href="/">
+        {/* <div className="flex items-center justify-between p-4 border-b border-gray-100">
+          <a
+            href="#"
+            onClick={() =>
+              handleMenuItemClick({
+                id: "dashboard",
+                label: "Dashboard",
+                icon: LayoutDashboard,
+                color: "text-blue-600",
+              })
+            }
+          >
             <div
               className={`flex items-center space-x-3 ${
                 isCollapsed ? "lg:hidden" : ""
               }`}
             >
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
-                <span className="text-white font-bold text-sm">P</span>
-              </div>
               <span className="font-bold text-lg bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Purchasync
+                <span className="text-gray-500 font-light">My Workspace</span>
               </span>
             </div>
           </a>
@@ -190,14 +262,151 @@ const Sidebar: React.FC<SidebarProps> = ({
               <ChevronLeft size={20} />
             )}
           </button>
-        </div>
-
+        </div> */}
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto py-4">
-          <div className="space-y-1 px-3">
+        <nav
+          className={`relative flex-1 overflow-y-auto py-4 ${
+            isCollapsed ? "px-3" : "px-4"
+          }`}
+        >
+          <button
+            onClick={onToggleCollapse}
+            className={`absolute -top-2 ${
+              isCollapsed ? "left-3" : "right-0"
+            } hidden lg:flex p-2 rounded-lg hover:bg-gray-100 transition-colors`}
+          >
+            {isCollapsed ? (
+              <PanelRightClose className="w-4 h-4 text-gray-500" size={20} />
+            ) : (
+              <PanelRightOpen className="w-4 h-4 text-gray-500" size={20} />
+            )}
+          </button>
+          <div className={`space-y-1 ${isCollapsed ? "py-2" : ""}`}>
+            <span
+              className={`text-[16px] text-gray-500 font-light ${
+                isCollapsed ? "hidden" : ""
+              }`}
+            >
+              My Workspace
+            </span>
+
+            {[
+              {
+                id: "todos",
+                label: "To do list",
+                icon: CheckSquare,
+                color: "text-blue-600",
+              },
+              {
+                id: "inbox",
+                label: "Inbox",
+                icon: Inbox,
+                color: "text-green-600",
+              },
+            ].map((item) => {
+              const Icon = item.icon;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    console.log(`Navigate to ${item.id}`);
+                    // router("/" + item.id);
+                    // onClose();
+                    handleMenuItemClick(item);
+                  }}
+                  className={` ${
+                    currentView === item.id
+                      ? "bg-blue-100 text-blue-700 font-medium"
+                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                  }pl-4 w-full flex items-center p-2 hover:bg-gray-50 rounded transition-colors text-left group`}
+                >
+                  <div
+                    className={`p-1 rounded bg-gray-100 mr-2 ${item.color} group-hover:bg-gray-200 transition-colors`}
+                  >
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  {!isCollapsed && (
+                    <span className="text-[14px] font-medium text-gray-900 group-hover:text-gray-700">
+                      {item.label}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+            <hr className="!my-6 border-gray-200" />
+            {(type === "buyer" ? menuItems2 : menuItemsSeller).map((item) => {
+              const Icon = item.icon;
+              return (
+                <div key={item.id}>
+                  <button
+                    onClick={() => {
+                      console.log(`Navigate to ${item.id}`);
+                      // router("/" + item.id);
+                      // onClose();
+                      handleMenuItemClick(item);
+                    }}
+                    className={` ${
+                      currentView === item.id
+                        ? "bg-blue-100 text-blue-700 font-medium"
+                        : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                    }pl-4 w-full flex items-center p-2 hover:bg-gray-50 rounded transition-colors text-left group`}
+                  >
+                    <div
+                      className={`p-1 rounded bg-gray-100 mr-2 ${item.color} group-hover:bg-gray-200 transition-colors`}
+                    >
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    {!isCollapsed && (
+                      <span className="text-[14px] font-medium text-gray-900 group-hover:text-gray-700">
+                        {item.label}
+                      </span>
+                    )}
+                    {item.subItems && (
+                      <ChevronDown
+                        size={16}
+                        className={`ml-auto transform transition-transform duration-200 ${
+                          expandedMenus[item.label] ? "rotate-180" : ""
+                        } ${
+                          currentView === item.id
+                            ? "text-blue-600"
+                            : "text-gray-400"
+                        }`}
+                      />
+                    )}
+                  </button>
+                  {item.subItems && expandedMenus[item.label] && (
+                    <div
+                      className={`ml-6 mt-1 space-y-1 ${
+                        isCollapsed ? "lg:hidden" : ""
+                      }`}
+                    >
+                      {item.subItems?.map((subItem) => (
+                        <div
+                          key={subItem.view}
+                          className={`
+                          flex items-center px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 text-sm
+                          ${
+                            currentView === subItem.view
+                              ? "bg-blue-100 text-blue-700 font-medium"
+                              : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                          }
+                        `}
+                          onClick={() => handleNavigation(subItem.view)}
+                        >
+                          <span className="text-[14px] font-medium text-gray-600 group-hover:text-gray-700">
+                            {subItem.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          {/* <div className="space-y-1 px-3">
             {menuItems.map((item) => (
               <div key={item.label}>
-                {/* Main Menu Item */}
                 <div
                   className={`
                     flex items-center px-3 py-3 rounded-lg cursor-pointer transition-all duration-200
@@ -211,16 +420,14 @@ const Sidebar: React.FC<SidebarProps> = ({
                 >
                   <div className="flex items-center justify-between w-full">
                     <div className="flex items-center space-x-3">
-                      <item.icon
-                        size={20}
-                        className={
-                          currentView === item.view
-                            ? "text-blue-600"
-                            : "text-gray-500 group-hover:text-blue-600"
-                        }
-                      />
+                      <div
+                        className={`p-1 rounded bg-gray-100 mr-2 ${item.color} group-hover:bg-gray-200 transition-colors`}
+                      >
+                        <item.icon className="w-4 h-4" />
+                      </div>
+
                       <span
-                        className={`font-medium ${
+                        className={`font-medium text-sm ${
                           isCollapsed ? "lg:hidden" : ""
                         }`}
                       >
@@ -242,7 +449,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                   </div>
                 </div>
 
-                {/* Sub Menu Items */}
                 {item.type === "expandable" && expandedMenus[item.label] && (
                   <div
                     className={`ml-6 mt-1 space-y-1 ${
@@ -269,26 +475,22 @@ const Sidebar: React.FC<SidebarProps> = ({
                 )}
               </div>
             ))}
-          </div>
+          </div> */}
         </nav>
 
         {/* Footer */}
         <div
-          className={`p-4 border-t border-gray-100 ${
+          className={`p-4 mt-auto border-t border-gray-200 ${
             isCollapsed ? "lg:hidden" : ""
           }`}
         >
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
-              <span className="text-white font-bold text-sm">JB</span>
-            </div>
+            <UserPlus className="w-4 h-4" />
             <div>
-              <div className="font-semibold text-gray-900 text-sm">
-                John Buyer
-              </div>
-              <div className="text-xs text-gray-600 font-medium">
+              <div className="font-semibold text-gray-900 text-sm">Invite</div>
+              {/* <div className="text-xs text-gray-600 font-medium">
                 Procurement Manager
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

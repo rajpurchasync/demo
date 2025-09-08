@@ -16,13 +16,18 @@ import MessagesInterface from "./Buyer/MessagesInterface";
 import NotificationsInterface from "./Buyer/NotificationsInterface";
 import RFQSummaryReport from "./Buyer/RFQSummaryReport";
 import BottomNavigation from "./Buyer/BottomNavigation";
+import TasksPage from "./DesktopDashboard/TasksPage";
+import SuppliersManagement from "./DesktopDashboard/SuppliersManagement";
+import InboxManagement from "./DesktopDashboard/InboxManagement";
+import ContractTemplates from "./Buyer/ContractTemplates";
+import ContractManagement from "./Buyer/ContractManagement";
 
 function BuyerDashboard() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [activeBottomTab, setActiveBottomTab] = useState("dashboard");
-  const [currentView, setCurrentView] = useState("dashboard");
+  const [activeBottomTab, setActiveBottomTab] = useState("todos");
+  const [currentView, setCurrentView] = useState("todos");
   const [isNotificationCenterOpen, setIsNotificationCenterOpen] =
     useState(false);
   const [unreadNotificationCount, setUnreadNotificationCount] = useState(3);
@@ -88,6 +93,48 @@ function BuyerDashboard() {
     switch (currentView) {
       case "dashboard":
         return <Dashboard sidebarCollapsed={sidebarCollapsed} />;
+      case "suppliers":
+        return (
+          <>
+            <div
+              className={`
+      transition-all duration-300 ease-in-out
+      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+     pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
+    `}
+            >
+              <SuppliersManagement />
+            </div>
+          </>
+        );
+      case "inbox":
+        return (
+          <>
+            <div
+              className={`
+      transition-all duration-300 ease-in-out
+      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+       pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
+    `}
+            >
+              <InboxManagement />
+            </div>
+          </>
+        );
+      case "todos":
+        return (
+          <>
+            <div
+              className={`
+      transition-all duration-300 ease-in-out
+      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
+    `}
+            >
+              <TasksPage />
+            </div>
+          </>
+        );
       case "my-company":
         return <MyBusiness sidebarCollapsed={sidebarCollapsed} />;
       case "samples":
@@ -99,7 +146,7 @@ function BuyerDashboard() {
           <div
             className={`transition-all duration-300 ease-in-out ${
               sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"
-            } pt-4 lg:pt-8 px-4 lg:px-8 pb-8 min-h-screen bg-gray-50`}
+            } pt-4 lg:pt-8 px-4 lg:px-8 pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden`}
           >
             <div className="mb-8 mt-12 lg:mt-0">
               <h1 className="text-2xl lg:text-3xl font-medium text-gray-900 mb-2">
@@ -119,6 +166,10 @@ function BuyerDashboard() {
         return <QuotationManagement sidebarCollapsed={sidebarCollapsed} />;
       case "rfq-templates":
         return <RFQTemplates sidebarCollapsed={sidebarCollapsed} />;
+      case "contract-templates":
+        return <ContractTemplates sidebarCollapsed={sidebarCollapsed} />;
+      case "contract-list":
+        return <ContractManagement sidebarCollapsed={sidebarCollapsed} />;
       case "rfq-approvals":
         return <RFQApprovals sidebarCollapsed={sidebarCollapsed} />;
       case "team":
@@ -137,7 +188,7 @@ function BuyerDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-16 lg:pb-0">
+    <div className="relative min-h-screen bg-gray-100 pb-16 lg:pb-0 ">
       <TopNavigation
         onNotificationClick={() => setIsNotificationCenterOpen(true)}
         unreadNotificationCount={unreadNotificationCount}
@@ -150,9 +201,12 @@ function BuyerDashboard() {
         isMobileMenuOpen={isMobileMenuOpen}
         onToggleMobileMenu={toggleMobileMenu}
         onNavigate={handleSidebarNavigation}
+        type="buyer"
       />
 
-      {renderCurrentView()}
+      <div className="rounded-[12px] overflow-hidden">
+        {renderCurrentView()}
+      </div>
 
       <NotificationCenter
         isOpen={isNotificationCenterOpen}

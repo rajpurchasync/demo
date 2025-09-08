@@ -161,14 +161,14 @@ const Home: React.FC<HomeProps> = ({
       </div> */}
 
       {/* Greeting */}
-      <div className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg p-6 text-white">
+      {/* <div className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg p-6 text-white">
         <h1 className="text-lg sm:text-2xl font-bold mb-2">
           {getGreeting()}, John! 👋
         </h1>
         <p className="text-xs sm:text-sm text-purple-100">
           Welcome to your dashboard.
         </p>
-      </div>
+      </div> */}
 
       {/* Sticky Profile Completion - Ultra Minimal */}
       {completionPercentage < 100 && (

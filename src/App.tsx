@@ -6,7 +6,6 @@ import AboutPage from "./components/AboutPage";
 import SellerLogin from "./components/SellerLogin";
 import BuyerLogin from "./components/BuyerLogin";
 
-import Marketplace from "./components/Marketplace";
 import AnitaPage from "./components/AnitaPage";
 import SmartSourcingTools from "./components/SmartSourcingTools";
 import LearnPage from "./components/LearnPage";
@@ -25,11 +24,20 @@ import RFQCreationFlow from "./components/Buyer/RFQCreation/RFQCreationFlow";
 import MainLogin from "./components/OnBoarding/login";
 import SellerDashboard from "./components/Seller/SellerDashboard";
 import MobileDashboardBuyer from "./components/Buyer/Dashboard/MobileBuyerdashboard";
+import MarketIndex from "./components/MarketPlace/MarketIndex";
+import Marketplace from "./components/MarketPlace/Marketplace";
+import ProductSearchPage from "./components/MarketPlace/ProductSearchPage";
+import ServiceSearchPage from "./components/MarketPlace/ServiceSearchPage";
+import ServiceProviderPage from "./components/MarketPlace/ServiceProviderPage";
+import ProductDetailPage from "./components/MarketPlace/ProductDetailPage";
+import MobileDashboardSeller from "./components/Seller/DashBoard/MobileDashboard";
+import DashboardV2 from "./components/Dashboardv2";
+import TopNavigation from "./components/TopNavigation";
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-gray-50">
         <Routes>
           <Route
             path="/"
@@ -62,7 +70,35 @@ function App() {
             path="/seller-dashboard"
             element={
               <>
-                <SellerDashboard profileStatus="pending" />
+                <div className="hidden md:block pt-[70px]">
+                  <TopNavigation
+                    onNotificationClick={() => {}}
+                    unreadNotificationCount={2}
+                    onProfileClick={() => {}}
+                  />
+                  <SellerDashboard profileStatus="pending" />
+                </div>
+                <div className="md:hidden">
+                  <MobileDashboardSeller />
+                </div>
+              </>
+            }
+          />
+          <Route
+            path="/seller-dashboard-v2"
+            element={
+              <>
+                <div className="hidden md:block pt-[70px]">
+                  <TopNavigation
+                    onNotificationClick={() => {}}
+                    unreadNotificationCount={2}
+                    onProfileClick={() => {}}
+                  />
+                  <DashboardV2 />
+                </div>
+                <div className="md:hidden">
+                  <MobileDashboardSeller />
+                </div>
               </>
             }
           />
@@ -97,7 +133,12 @@ function App() {
             path="/buyer-dashboard"
             element={
               <>
-                <div className="hidden md:block">
+                <div className="hidden md:block pt-[70px] bg-gray-100">
+                  <TopNavigation
+                    onNotificationClick={() => {}}
+                    unreadNotificationCount={2}
+                    onProfileClick={() => {}}
+                  />
                   <BuyerDashboard />
                 </div>
                 <div className="md:hidden">
@@ -106,6 +147,19 @@ function App() {
               </>
             }
           />
+          {/* <Route
+            path="/buyer-dashboard"
+            element={
+              <>
+                <div className="hidden md:block">
+                  <BuyerDashboard />
+                </div>
+                <div className="md:hidden">
+                  <MobileDashboardBuyer />
+                </div>
+              </>
+            }
+          /> */}
           <Route
             path="/become-a-seller"
             element={
@@ -126,6 +180,17 @@ function App() {
           />
 
           <Route path="/marketplace" element={<Marketplace />} />
+          <Route path="/products" element={<ProductSearchPage />} />
+          <Route path="/services" element={<ServiceSearchPage />} />
+          <Route path="/seller/:sellerId" element={<SellerPage />} />
+          <Route
+            path="/provider/:providerId"
+            element={<ServiceProviderPage />}
+          />
+          <Route
+            path="/seller/:sellerId/product/:productId"
+            element={<ProductDetailPage />}
+          />
           <Route
             path="/anita"
             element={
@@ -219,7 +284,7 @@ function App() {
           <Route path="/procurement-solutions" element={<Footer />} />
           <Route path="/sales-solutions" element={<Footer />} />
           <Route path="/integration-solutions" element={<Footer />} />
-          <Route path="*" element={<Footer />} />
+          {/* <Route path="*" element={<Footer />} /> */}
         </Routes>
       </div>
     </Router>

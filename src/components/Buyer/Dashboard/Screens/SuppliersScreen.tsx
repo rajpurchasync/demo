@@ -14,16 +14,18 @@ import {
 import { SupplierCard } from "../Cards/SupplierCard";
 import { Button } from "../UI/Button";
 import { Input } from "../UI/Input";
-import { mockSuppliers } from "../types/purchasync";
+import { mockSuppliers, Supplier } from "../types/purchasync";
 
 interface SuppliersScreenProps {
   showAddSupplierModal: boolean;
   setShowAddSupplierModal: (show: boolean) => void;
+  onViewSupplier: (supplier: Supplier) => void;
 }
 
 export function SuppliersScreen({
   showAddSupplierModal,
   setShowAddSupplierModal,
+  onViewSupplier,
 }: SuppliersScreenProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showFilters, setShowFilters] = useState(false);
@@ -245,7 +247,11 @@ export function SuppliersScreen({
       {/* Suppliers List */}
       <div className="space-y-3">
         {filteredSuppliers.map((supplier) => (
-          <SupplierCard key={supplier.id} supplier={supplier} />
+          <SupplierCard
+            key={supplier.id}
+            supplier={supplier}
+            onClick={onViewSupplier}
+          />
         ))}
       </div>
 

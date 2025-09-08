@@ -97,6 +97,7 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import MainRFQ from "./Seller/Proposals/MainRFQ";
+import Sidebar from "./Buyer/Sidebar";
 
 interface SellerDashboardProps {
   profileStatus: "pending" | "approved" | "rejected";
@@ -112,6 +113,9 @@ const SellerDashboard: React.FC<SellerDashboardProps> = ({ profileStatus }) => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const [sortBy, setSortBy] = useState("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   useEffect(() => {
     const isNewSubmission =
@@ -2555,7 +2559,18 @@ const SellerDashboard: React.FC<SellerDashboardProps> = ({ profileStatus }) => {
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
-
+      <Sidebar
+        isCollapsed={isSidebarOpen}
+        onToggleCollapse={toggleSidebar}
+        isMobileMenuOpen={false}
+        onToggleMobileMenu={() => {}}
+        onNavigate={(item: any) => {
+          setActiveMenu(item.id);
+          setActiveSubMenu("");
+          setIsSidebarOpen(false);
+        }}
+        type="buyer"
+      />
       {/* Sidebar */}
       <div
         className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${

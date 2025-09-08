@@ -12,9 +12,10 @@ import { cn } from "../utils/cn";
 
 interface SupplierCardProps {
   supplier: Supplier;
+  onClick?: (supplier: Supplier) => void;
 }
 
-export function SupplierCard({ supplier }: SupplierCardProps) {
+export function SupplierCard({ supplier, onClick }: SupplierCardProps) {
   const [showMenu, setShowMenu] = useState(false);
 
   const menuOptions = [
@@ -27,7 +28,10 @@ export function SupplierCard({ supplier }: SupplierCardProps) {
   ];
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-3 hover:shadow-sm transition-shadow">
+    <div
+      className="bg-white border border-gray-200 rounded-lg p-3 hover:shadow-sm transition-shadow cursor-pointer"
+      onClick={() => onClick?.(supplier)}
+    >
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-1">
@@ -57,7 +61,10 @@ export function SupplierCard({ supplier }: SupplierCardProps) {
 
         <div className="relative">
           <button
-            onClick={() => setShowMenu(!showMenu)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowMenu(!showMenu);
+            }}
             className="px-3 py-1.5 text-xs font-semibold text-white bg-[#145434] hover:bg-[#0f3f29] rounded-md transition-colors shadow-sm"
           >
             Manage
@@ -70,7 +77,8 @@ export function SupplierCard({ supplier }: SupplierCardProps) {
                 return (
                   <button
                     key={option.id}
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       console.log(`${option.label} for ${supplier.name}`);
                       setShowMenu(false);
                     }}

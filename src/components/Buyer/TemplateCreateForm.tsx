@@ -1,5 +1,14 @@
-import React, { useState } from 'react';
-import { X, FileText, ChevronDown, Plus, Trash2, ArrowLeft, ArrowRight, Save } from 'lucide-react';
+import React, { useState } from "react";
+import {
+  X,
+  FileText,
+  ChevronDown,
+  Plus,
+  Trash2,
+  ArrowLeft,
+  ArrowRight,
+  Save,
+} from "lucide-react";
 
 interface RFQItem {
   id: string;
@@ -25,92 +34,116 @@ interface TemplateCreateFormProps {
 const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
   isOpen,
   onClose,
-  onSave
+  onSave,
 }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<TemplateData>({
-    title: '',
-    category: '',
-    subCategory: '',
-    subSubCategory: '',
-    items: []
+    title: "",
+    category: "",
+    subCategory: "",
+    subSubCategory: "",
+    items: [],
   });
 
   const [dropdowns, setDropdowns] = useState({
     category: false,
     subCategory: false,
-    subSubCategory: false
+    subSubCategory: false,
   });
 
   const [newItem, setNewItem] = useState({
-    productName: '',
-    uom: ''
+    productName: "",
+    uom: "",
   });
 
   const categories = {
-    'Office Supplies': {
-      'Furniture': ['Desks & Chairs', 'Storage', 'Meeting Room'],
-      'Stationery': ['Writing Materials', 'Paper Products', 'Filing'],
-      'Equipment': ['Printers', 'Scanners', 'Shredders']
+    "Office Supplies": {
+      Furniture: ["Desks & Chairs", "Storage", "Meeting Room"],
+      Stationery: ["Writing Materials", "Paper Products", "Filing"],
+      Equipment: ["Printers", "Scanners", "Shredders"],
     },
-    'Technology': {
-      'Hardware': ['Computers', 'Servers', 'Networking'],
-      'Software': ['Operating Systems', 'Applications', 'Security'],
-      'Services': ['Support', 'Consulting', 'Training']
+    Technology: {
+      Hardware: ["Computers", "Servers", "Networking"],
+      Software: ["Operating Systems", "Applications", "Security"],
+      Services: ["Support", "Consulting", "Training"],
     },
-    'Services': {
-      'Food & Beverage': ['Event Catering', 'Office Catering', 'Vending'],
-      'Cleaning': ['Office Cleaning', 'Deep Cleaning', 'Maintenance'],
-      'Maintenance': ['HVAC', 'Electrical', 'Plumbing']
+    Services: {
+      "Food & Beverage": ["Event Catering", "Office Catering", "Vending"],
+      Cleaning: ["Office Cleaning", "Deep Cleaning", "Maintenance"],
+      Maintenance: ["HVAC", "Electrical", "Plumbing"],
     },
-    'Manufacturing': {
-      'Raw Materials': ['Metals', 'Plastics', 'Chemicals'],
-      'Components': ['Electronic', 'Mechanical', 'Fasteners'],
-      'Tools': ['Hand Tools', 'Power Tools', 'Measuring']
-    }
+    Manufacturing: {
+      "Raw Materials": ["Metals", "Plastics", "Chemicals"],
+      Components: ["Electronic", "Mechanical", "Fasteners"],
+      Tools: ["Hand Tools", "Power Tools", "Measuring"],
+    },
   };
 
   const uomOptions = [
-    'Piece', 'Unit', 'Set', 'Pair', 'Box', 'Pack', 'Carton', 'Dozen',
-    'Meter', 'Kilogram', 'Liter', 'Square Meter', 'Cubic Meter',
-    'Hour', 'Day', 'Month', 'Year', 'Person', 'Service'
+    "Piece",
+    "Unit",
+    "Set",
+    "Pair",
+    "Box",
+    "Pack",
+    "Carton",
+    "Dozen",
+    "Meter",
+    "Kilogram",
+    "Liter",
+    "Square Meter",
+    "Cubic Meter",
+    "Hour",
+    "Day",
+    "Month",
+    "Year",
+    "Person",
+    "Service",
   ];
 
   const steps = [
-    { number: 1, title: 'Basic Info', description: 'Template title and category' },
-    { number: 2, title: 'Add Items', description: 'Product list and specifications' },
-    { number: 3, title: 'Review', description: 'Confirm and save template' }
+    {
+      number: 1,
+      title: "Basic Info",
+      description: "Title and category",
+    },
+    {
+      number: 2,
+      title: "Add Items",
+      description: "Product or Service List",
+    },
+    { number: 3, title: "Review", description: "Confirm and save" },
   ];
 
   const handleDropdownToggle = (dropdown: keyof typeof dropdowns) => {
-    setDropdowns(prev => ({
+    setDropdowns((prev) => ({
       ...prev,
-      [dropdown]: !prev[dropdown]
+      [dropdown]: !prev[dropdown],
     }));
   };
 
   const handleCategorySelect = (category: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       category,
-      subCategory: '',
-      subSubCategory: ''
+      subCategory: "",
+      subSubCategory: "",
     }));
-    setDropdowns(prev => ({ ...prev, category: false }));
+    setDropdowns((prev) => ({ ...prev, category: false }));
   };
 
   const handleSubCategorySelect = (subCategory: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       subCategory,
-      subSubCategory: ''
+      subSubCategory: "",
     }));
-    setDropdowns(prev => ({ ...prev, subCategory: false }));
+    setDropdowns((prev) => ({ ...prev, subCategory: false }));
   };
 
   const handleSubSubCategorySelect = (subSubCategory: string) => {
-    setFormData(prev => ({ ...prev, subSubCategory }));
-    setDropdowns(prev => ({ ...prev, subSubCategory: false }));
+    setFormData((prev) => ({ ...prev, subSubCategory }));
+    setDropdowns((prev) => ({ ...prev, subSubCategory: false }));
   };
 
   const handleAddItem = () => {
@@ -118,20 +151,20 @@ const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
       const item: RFQItem = {
         id: Date.now().toString(),
         productName: newItem.productName.trim(),
-        uom: newItem.uom
+        uom: newItem.uom,
       };
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        items: [...prev.items, item]
+        items: [...prev.items, item],
       }));
-      setNewItem({ productName: '', uom: '' });
+      setNewItem({ productName: "", uom: "" });
     }
   };
 
   const handleRemoveItem = (id: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      items: prev.items.filter(item => item.id !== id)
+      items: prev.items.filter((item) => item.id !== id),
     }));
   };
 
@@ -155,14 +188,18 @@ const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
   const handleClose = () => {
     setCurrentStep(1);
     setFormData({
-      title: '',
-      category: '',
-      subCategory: '',
-      subSubCategory: '',
-      items: []
+      title: "",
+      category: "",
+      subCategory: "",
+      subSubCategory: "",
+      items: [],
     });
-    setNewItem({ productName: '', uom: '' });
-    setDropdowns({ category: false, subCategory: false, subSubCategory: false });
+    setNewItem({ productName: "", uom: "" });
+    setDropdowns({
+      category: false,
+      subCategory: false,
+      subSubCategory: false,
+    });
     onClose();
   };
 
@@ -183,7 +220,9 @@ const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
         <div className="sticky top-0 bg-white border-b border-gray-200 p-4 lg:p-6 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <FileText className="text-purple-600" size={24} />
-            <h2 className="text-xl font-medium text-gray-900">Create RFQ Template</h2>
+            <h2 className="text-xl font-medium text-gray-900">
+              Create RFQ Template
+            </h2>
           </div>
           <button
             onClick={handleClose}
@@ -198,25 +237,35 @@ const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
           <div className="flex items-center justify-between">
             {steps.map((step, index) => (
               <div key={step.number} className="flex items-center">
-                <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
-                  currentStep >= step.number
-                    ? 'bg-purple-600 text-white'
-                    : 'bg-gray-200 text-gray-600'
-                }`}>
+                <div
+                  className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
+                    currentStep >= step.number
+                      ? "bg-purple-600 text-white"
+                      : "bg-gray-200 text-gray-600"
+                  }`}
+                >
                   {step.number}
                 </div>
                 <div className="ml-3 hidden lg:block">
-                  <p className={`text-sm font-medium ${
-                    currentStep >= step.number ? 'text-purple-600' : 'text-gray-600'
-                  }`}>
+                  <p
+                    className={`text-sm font-medium ${
+                      currentStep >= step.number
+                        ? "text-purple-600"
+                        : "text-gray-600"
+                    }`}
+                  >
                     {step.title}
                   </p>
                   <p className="text-xs text-gray-500">{step.description}</p>
                 </div>
                 {index < steps.length - 1 && (
-                  <div className={`w-12 lg:w-20 h-0.5 mx-4 ${
-                    currentStep > step.number ? 'bg-purple-600' : 'bg-gray-200'
-                  }`} />
+                  <div
+                    className={`w-12 lg:w-20 h-0.5 mx-4 ${
+                      currentStep > step.number
+                        ? "bg-purple-600"
+                        : "bg-gray-200"
+                    }`}
+                  />
                 )}
               </div>
             ))}
@@ -229,8 +278,10 @@ const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
           {currentStep === 1 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Template Information</h3>
-                
+                <h3 className="text-lg font-medium text-gray-900 mb-4">
+                  Template Information
+                </h3>
+
                 {/* Template Title */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -240,8 +291,13 @@ const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
                     type="text"
                     required
                     value={formData.title}
-                    onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        title: e.target.value,
+                      }))
+                    }
+                    className="outline-none w-full px-4 py-3 border border-gray-300 rounded-lg "
                     placeholder="Enter template title"
                   />
                 </div>
@@ -252,18 +308,40 @@ const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
                     Category *
                   </label>
                   <div className="relative">
-                    <button
+                    <input
+                      type="text"
+                      required
+                      value={formData.category}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          category: e.target.value,
+                        }))
+                      }
+                      className="outline-none w-full px-4 py-3 border border-gray-300 rounded-lg "
+                      placeholder="Enter template category"
+                    />
+                    {/* <button
                       type="button"
-                      onClick={() => handleDropdownToggle('category')}
+                      onClick={() => handleDropdownToggle("category")}
                       className="w-full flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                     >
-                      <span className={formData.category ? 'text-gray-900' : 'text-gray-500'}>
-                        {formData.category || 'Select category'}
+                      <span
+                        className={
+                          formData.category ? "text-gray-900" : "text-gray-500"
+                        }
+                      >
+                        {formData.category || "Select category"}
                       </span>
-                      <ChevronDown size={20} className={`transform transition-transform ${dropdowns.category ? 'rotate-180' : ''}`} />
-                    </button>
+                      <ChevronDown
+                        size={20}
+                        className={`transform transition-transform ${
+                          dropdowns.category ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button> */}
 
-                    {dropdowns.category && (
+                    {/* {dropdowns.category && (
                       <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
                         {Object.keys(categories).map((category) => (
                           <button
@@ -271,14 +349,16 @@ const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
                             type="button"
                             onClick={() => handleCategorySelect(category)}
                             className={`w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors ${
-                              formData.category === category ? 'bg-purple-50 text-purple-700' : 'text-gray-700'
+                              formData.category === category
+                                ? "bg-purple-50 text-purple-700"
+                                : "text-gray-700"
                             }`}
                           >
                             {category}
                           </button>
                         ))}
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </div>
 
@@ -288,43 +368,24 @@ const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
                     Sub-Category *
                   </label>
                   <div className="relative">
-                    <button
-                      type="button"
-                      onClick={() => handleDropdownToggle('subCategory')}
-                      disabled={!formData.category}
-                      className={`w-full flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg transition-colors ${
-                        formData.category 
-                          ? 'hover:bg-gray-50' 
-                          : 'bg-gray-100 cursor-not-allowed'
-                      }`}
-                    >
-                      <span className={formData.subCategory ? 'text-gray-900' : 'text-gray-500'}>
-                        {formData.subCategory || (formData.category ? 'Select sub-category' : 'Select category first')}
-                      </span>
-                      <ChevronDown size={20} className={`transform transition-transform ${dropdowns.subCategory ? 'rotate-180' : ''}`} />
-                    </button>
-
-                    {dropdowns.subCategory && formData.category && (
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
-                        {Object.keys(categories[formData.category as keyof typeof categories]).map((subCategory) => (
-                          <button
-                            key={subCategory}
-                            type="button"
-                            onClick={() => handleSubCategorySelect(subCategory)}
-                            className={`w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors ${
-                              formData.subCategory === subCategory ? 'bg-purple-50 text-purple-700' : 'text-gray-700'
-                            }`}
-                          >
-                            {subCategory}
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                    <input
+                      type="text"
+                      required
+                      value={formData.subCategory}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          subCategory: e.target.value,
+                        }))
+                      }
+                      className="outline-none w-full px-4 py-3 border border-gray-300 rounded-lg "
+                      placeholder="Enter template sub-category"
+                    />
                   </div>
                 </div>
 
                 {/* Sub-Sub-Category Selection */}
-                <div className="mb-6">
+                {/* <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Sub-Sub-Category (Optional)
                   </label>
@@ -362,7 +423,7 @@ const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
                       </div>
                     )}
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           )}
@@ -371,30 +432,46 @@ const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
           {currentStep === 2 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Add Items to Template</h3>
-                
+                <h3 className="text-lg font-medium text-gray-900 mb-4">
+                  Add Items to Template
+                </h3>
+
                 {/* Add New Item Form */}
                 <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                  <h4 className="font-medium text-gray-900 mb-3">Add New Item</h4>
+                  <h4 className="font-medium text-gray-900 mb-3">
+                    Add New Item
+                  </h4>
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                     <div className="lg:col-span-2">
                       <input
                         type="text"
                         placeholder="Product name"
                         value={newItem.productName}
-                        onChange={(e) => setNewItem(prev => ({ ...prev, productName: e.target.value }))}
+                        onChange={(e) =>
+                          setNewItem((prev) => ({
+                            ...prev,
+                            productName: e.target.value,
+                          }))
+                        }
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
                     <div className="flex space-x-2">
                       <select
                         value={newItem.uom}
-                        onChange={(e) => setNewItem(prev => ({ ...prev, uom: e.target.value }))}
+                        onChange={(e) =>
+                          setNewItem((prev) => ({
+                            ...prev,
+                            uom: e.target.value,
+                          }))
+                        }
                         className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       >
                         <option value="">UOM</option>
-                        {uomOptions.map(uom => (
-                          <option key={uom} value={uom}>{uom}</option>
+                        {uomOptions.map((uom) => (
+                          <option key={uom} value={uom}>
+                            {uom}
+                          </option>
                         ))}
                       </select>
                       <button
@@ -411,15 +488,24 @@ const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
 
                 {/* Items List */}
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-3">Template Items ({formData.items.length})</h4>
+                  <h4 className="font-medium text-gray-900 mb-3">
+                    Template Items ({formData.items.length})
+                  </h4>
                   {formData.items.length > 0 ? (
                     <div className="space-y-2">
                       {formData.items.map((item, index) => (
-                        <div key={item.id} className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
+                        <div
+                          key={item.id}
+                          className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg"
+                        >
                           <div className="flex-1">
                             <div className="flex items-center space-x-4">
-                              <span className="text-sm font-medium text-gray-500 w-8">#{index + 1}</span>
-                              <span className="font-medium text-gray-900">{item.productName}</span>
+                              <span className="text-sm font-medium text-gray-500 w-8">
+                                #{index + 1}
+                              </span>
+                              <span className="font-medium text-gray-900">
+                                {item.productName}
+                              </span>
                               <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
                                 {item.uom}
                               </span>
@@ -437,7 +523,10 @@ const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
                     </div>
                   ) : (
                     <div className="text-center py-8 text-gray-500">
-                      <FileText size={48} className="mx-auto mb-4 text-gray-300" />
+                      <FileText
+                        size={48}
+                        className="mx-auto mb-4 text-gray-300"
+                      />
                       <p>No items added yet. Add your first item above.</p>
                     </div>
                   )}
@@ -450,26 +539,35 @@ const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
           {currentStep === 3 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Review Template</h3>
-                
+                <h3 className="text-lg font-medium text-gray-900 mb-4">
+                  Review Template
+                </h3>
+
                 {/* Template Summary */}
                 <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-6">
-                  <h4 className="font-medium text-purple-900 mb-3">Template Summary</h4>
+                  <h4 className="font-medium text-purple-900 mb-3">
+                    Template Summary
+                  </h4>
                   <div className="space-y-2 text-sm">
                     <div>
                       <span className="text-purple-700">Title:</span>
-                      <span className="ml-2 font-medium text-purple-900">{formData.title}</span>
+                      <span className="ml-2 font-medium text-purple-900">
+                        {formData.title}
+                      </span>
                     </div>
                     <div>
                       <span className="text-purple-700">Category:</span>
                       <span className="ml-2 font-medium text-purple-900">
                         {formData.category} → {formData.subCategory}
-                        {formData.subSubCategory && ` → ${formData.subSubCategory}`}
+                        {formData.subSubCategory &&
+                          ` → ${formData.subSubCategory}`}
                       </span>
                     </div>
                     <div>
                       <span className="text-purple-700">Items:</span>
-                      <span className="ml-2 font-medium text-purple-900">{formData.items.length} items</span>
+                      <span className="ml-2 font-medium text-purple-900">
+                        {formData.items.length} items
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -479,10 +577,17 @@ const TemplateCreateForm: React.FC<TemplateCreateFormProps> = ({
                   <h4 className="font-medium text-gray-900 mb-3">Items List</h4>
                   <div className="space-y-2">
                     {formData.items.map((item, index) => (
-                      <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div
+                        key={item.id}
+                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                      >
                         <div className="flex items-center space-x-4">
-                          <span className="text-sm font-medium text-gray-500 w-8">#{index + 1}</span>
-                          <span className="font-medium text-gray-900">{item.productName}</span>
+                          <span className="text-sm font-medium text-gray-500 w-8">
+                            #{index + 1}
+                          </span>
+                          <span className="font-medium text-gray-900">
+                            {item.productName}
+                          </span>
                           <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
                             {item.uom}
                           </span>

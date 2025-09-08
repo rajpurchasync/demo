@@ -634,14 +634,16 @@ const BuyerOnboarding: React.FC<BuyerOnboardingProps> = ({
                   </p>
                 </div>
 
-                <div className="flex justify-center pt-3">
-                  <button
-                    onClick={() => handleBuyerOnboardingStep("next")}
-                    className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-semibold"
-                  >
-                    Create RFQ
-                  </button>
-                </div>
+                <a href="buyer-dashboard">
+                  <div className="flex justify-center pt-3">
+                    <button
+                      onClick={() => handleBuyerOnboardingStep("next")}
+                      className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-semibold"
+                    >
+                      Create RFQ
+                    </button>
+                  </div>
+                </a>
               </div>
             )}
           </div>
