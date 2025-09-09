@@ -13,6 +13,7 @@ import { RequestSampleModal } from "./Modals/RequestSampleModal";
 import { RequestMeetingModal } from "./Modals/RequestMeetingModal";
 import { RequestDocumentModal } from "./Modals/RequestDocumentModal";
 import { SendMessageModal } from "./Modals/SendMessageModal";
+import { FloatingActionMenuModal } from "./Modals/FloatingActionMenuModal";
 import { Customer } from "./types/purchasync";
 
 type Screen =
@@ -37,18 +38,11 @@ function MobileDashboardSeller() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
     null
   );
+  const [showFloatingActionMenuModal, setShowFloatingActionMenuModal] =
+    useState(false);
 
   const handleFloatingButtonClick = () => {
-    switch (currentScreen) {
-      case "customers":
-        setShowAddCustomerModal(true);
-        break;
-      case "todos":
-        setShowCreateToDoModal(true);
-        break;
-      default:
-        setShowCreateToDoModal(true);
-    }
+    setShowFloatingActionMenuModal(true);
   };
 
   const handleViewCustomer = (customer: Customer) => {
@@ -169,6 +163,14 @@ function MobileDashboardSeller() {
           isOpen={showSendMessageModal}
           onClose={() => setShowSendMessageModal(false)}
           customerName={selectedCustomer?.name || ""}
+        />
+
+        <FloatingActionMenuModal
+          isOpen={showFloatingActionMenuModal}
+          onClose={() => setShowFloatingActionMenuModal(false)}
+          setShowCreateRFQModal={setShowCreateRFQModal}
+          setShowAddCustomerModal={setShowAddCustomerModal}
+          setShowCreateToDoModal={setShowCreateToDoModal}
         />
       </div>
     </div>

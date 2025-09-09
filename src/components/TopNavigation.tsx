@@ -56,13 +56,13 @@ const TopNavigation: React.FC<TopNavigationProps> = ({
       action: () => console.log("Add Supplier"),
       color: "text-purple-600",
     },
-    // {
-    //   icon: FolderOpen,
-    //   label: "Create Project",
-    //   description: "New procurement project",
-    //   action: () => console.log("Create Project"),
-    //   color: "text-orange-600",
-    // },
+    {
+      icon: FolderOpen,
+      label: "Supplier KYC",
+      description: "New supplier KYC",
+      action: () => console.log("Create Supplier KYC"),
+      color: "text-orange-600",
+    },
   ];
 
   const profileOptions = [

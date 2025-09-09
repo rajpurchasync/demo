@@ -6,6 +6,7 @@ import {
   Package,
   CheckSquare,
   Handshake,
+  User,
 } from "lucide-react";
 import { Tabs } from "../UI/Tabs";
 import { NotificationCard } from "../Cards/NotificationCard";
@@ -36,52 +37,79 @@ export function HomeScreen({
       ? "Good afternoon"
       : "Good evening";
 
+  // Mock marketplace joined status - in real app this would come from user profile/API
+  const [isMarketplaceJoined, setIsMarketplaceJoined] = useState(false);
+
+  // Calculate contextual data
+  const newRequestsCount = 2; // This would come from actual data
+  const pendingTasksToday = mockToDos.filter((todo) => {
+    const today = new Date().toDateString();
+    return (
+      new Date(todo.dueDate).toDateString() === today &&
+      todo.status !== "completed"
+    );
+  }).length;
   const quickActions = [
     {
-      id: "manage-todo",
-      label: "Manage To-Do List",
+      id: "tasks",
+      label: "Tasks",
       icon: CheckSquare,
-      gradient: "from-blue-500 to-blue-600",
+      iconColor: "bg-blue-600",
+      color:
+        "bg-white border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-700 hover:text-blue-600",
       action: () => {
         onScreenChange("todos");
       },
     },
     {
-      id: "respond-customer-requests",
-      label: "Respond to Customer Requests",
+      id: "customers",
+      label: "Customers",
+      icon: Handshake,
+      iconColor: "bg-green-600",
+      color:
+        "bg-white border-2 border-gray-200 hover:border-green-300 hover:bg-green-50 text-gray-700 hover:text-green-600",
+      action: () => {
+        onScreenChange("customers");
+      },
+    },
+    {
+      id: "requests",
+      label: "Requests",
       icon: FileText,
-      gradient: "from-purple-500 to-purple-600",
+      iconColor: "bg-purple-600",
+      color:
+        "bg-white border-2 border-gray-200 hover:border-purple-300 hover:bg-purple-50 text-gray-700 hover:text-purple-600",
       action: () => {
         onScreenChange("rfqs");
       },
     },
     {
-      id: "update-catalog",
-      label: "Update Catalogue",
-      icon: Package,
-      gradient: "from-green-500 to-green-600",
+      id: "profile",
+      label: "Profile",
+      icon: User,
+      iconColor: "bg-orange-600",
+      color:
+        "bg-white border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 text-gray-700 hover:text-orange-600",
       action: () => {
-        console.log("Update catalogue");
+        onScreenChange("profile");
       },
     },
   ];
 
-  // Mock marketplace joined status - in real app this would come from user profile/API
-  const [isMarketplaceJoined, setIsMarketplaceJoined] = useState(false);
-
   const handleMarketplaceAction = () => {
     if (isMarketplaceJoined) {
-      window.open("https://marketplace.purchasync.com/manage", "_blank");
+      // Navigate to storefront management
+      console.log("Navigate to storefront management");
     } else {
       setIsMarketplaceJoined(true);
-      window.open("https://marketplace.purchasync.com/join", "_blank");
+      console.log("Join marketplace");
     }
   };
 
   const tabs = [
     {
       id: "notifications",
-      label: "Notifications",
+      label: "Latest Activities",
       count: mockNotifications.filter((n) => !n.isRead).length,
     },
   ];
@@ -133,15 +161,20 @@ export function HomeScreen({
       {/* Welcome Section */}
       <div className="py-2">
         <h1 className="text-2xl font-bold text-gray-900 mb-0.5 tracking-tight">
-          {greeting}, Sarah
+          {greeting}, Matt
         </h1>
-        <p className="text-xs text-gray-500">
-          What would you like to do today?
+        <p className="text-sm text-gray-600">
+          You have {newRequestsCount} new request
+          {newRequestsCount !== 1 ? "s" : ""} and {pendingTasksToday} task
+          {pendingTasksToday !== 1 ? "s" : ""} pending today
         </p>
       </div>
 
       {/* Quick Actions */}
       <div>
+        <h2 className="text-sm font-semibold text-gray-900 mb-3 px-1">
+          Manage
+        </h2>
         <div className="flex space-x-2 overflow-x-auto scrollbar-hide pb-1">
           {quickActions.map((action) => {
             const Icon = action.icon;
@@ -149,15 +182,15 @@ export function HomeScreen({
               <button
                 key={action.id}
                 onClick={action.action}
-                className="grow group relative overflow-hidden bg-white hover:bg-gray-50 rounded-xl p-2  py-3 transition-all duration-300 hover:scale-105 hover:shadow-lg border border-gray-200 hover:border-gray-300 flex-shrink-0 w-20"
+                className={`grow group relative overflow-hidden rounded-xl p-3 py-4 transition-all duration-200 shadow-sm hover:shadow-md flex-shrink-0 w-20 ${action.color}`}
               >
                 <div className="flex flex-col items-center space-y-2">
                   <div
-                    className={`w-8 h-8 bg-gradient-to-r ${action.gradient} rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow duration-300`}
+                    className={`w-8 h-8 ${action.iconColor} group-hover:bg-current group-hover:bg-opacity-10 rounded-lg flex items-center justify-center transition-colors`}
                   >
-                    <Icon className="w-4 h-4 text-white" />
+                    <Icon className={`text-white w-4 h-4 text-current `} />
                   </div>
-                  <span className="text-xs font-medium text-gray-700 text-center leading-tight">
+                  <span className="text-xs font-medium text-current text-center leading-tight">
                     {action.label}
                   </span>
                 </div>
@@ -169,28 +202,27 @@ export function HomeScreen({
 
       {/* Marketplace Section */}
       <div>
-        <h2 className="text-base font-medium text-gray-900 mb-3 px-1">
+        <h2 className="text-sm font-semibold text-gray-900 mb-3 px-1">
           Marketplace
         </h2>
         <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-4 text-white">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-semibold mb-1">
-                Join Our Marketplace
+                {isMarketplaceJoined ? "Manage Storefront" : "Join Marketplace"}
               </h3>
               <p className="text-xs opacity-90">
-                Connect with verified buyers and expand your business
+                {isMarketplaceJoined
+                  ? "Manage your online presence"
+                  : "Showcase your brand and grow business"}
               </p>
             </div>
             <button
-              onClick={() => handleMarketplaceAction()}
+              onClick={handleMarketplaceAction}
               className="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg transition-all duration-200 backdrop-blur-sm"
             >
-              <span className="text-xs font-medium">Join Marketplace</span>
               <span className="text-xs font-medium">
-                {isMarketplaceJoined
-                  ? "Manage Marketplace"
-                  : "Join Marketplace"}
+                {isMarketplaceJoined ? "Manage Store" : "Build Your Store"}
               </span>
             </button>
           </div>
@@ -199,16 +231,20 @@ export function HomeScreen({
 
       {/* Overview */}
       <div>
-        <h2 className="text-base font-medium text-gray-900 mb-3 px-1">
+        <h2 className="text-sm font-semibold text-gray-900 mb-3 px-1">
           Overview
         </h2>
         <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-3">
-            <div className="text-xl font-bold text-blue-700 mb-1">2</div>
+            <div className="text-xl font-bold text-blue-700 mb-1">
+              {newRequestsCount}
+            </div>
             <div className="text-xs font-medium text-black">New Requests</div>
           </div>
           <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-xl p-3">
-            <div className="text-xl font-bold text-purple-700 mb-1">4</div>
+            <div className="text-xl font-bold text-purple-700 mb-1">
+              {pendingTasksToday}
+            </div>
             <div className="text-xs font-medium text-black">
               Tasks for Today
             </div>

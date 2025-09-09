@@ -489,7 +489,7 @@ const MainLogin = ({ page = "login" }) => {
             </div>
 
             <button
-              onClick={() => navigate("/seller-dashboard")}
+              onClick={() => navigate("/seller-dashboard-v2")}
               className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-200"
             >
               Log In

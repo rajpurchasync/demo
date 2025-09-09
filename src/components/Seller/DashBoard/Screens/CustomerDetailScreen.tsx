@@ -145,7 +145,9 @@ export function CustomerDetailScreen({
             <div className="space-y-3">
               <h3 className="text-sm font-medium text-gray-900 flex items-center justify-between">
                 Activity
-                {/* <button className="text-xs text-purple-600 hover:text-purple-700">Subscribe</button> */}
+                <button className="text-xs text-purple-600 hover:text-purple-700">
+                  Subscribe
+                </button>
               </h3>
 
               {mockActivity.map((activity) => (
@@ -244,26 +246,26 @@ export function CustomerDetailScreen({
   };
 
   return (
-    <div className="fixed inset-0 bg-white z-40 overflow-y-auto">
+    <div className="fixed inset-0 bg-white z-40 overflow-y-auto max-w-md mx-auto">
       {/* Header */}
-      <div className="sticky top-0 bg-white border-b border-gray-100 z-10 shadow-sm px-3 py-2 flex items-center justify-between">
+      <div className="sticky top-0 bg-white border-b border-gray-100 z-10 shadow-sm px-4 py-3 flex items-center justify-between">
         <button
           onClick={onClose}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
         >
-          <ChevronLeft className="w-5 h-5 text-gray-600" />
+          <ChevronLeft className="w-4 h-4 text-gray-600" />
         </button>
-        <h1 className="text-sm font-bold text-gray-900 tracking-tight flex-1 text-left ml-2">
+        <h1 className="text-base font-bold text-gray-900 tracking-tight flex-1 text-left ml-3">
           Customer Details
         </h1>
       </div>
 
       {/* Main Content */}
-      <div className="p-3 space-y-4">
+      <div className="p-4 space-y-4">
         {/* Company Details Card */}
-        <div className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
+        <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
           <div className="flex items-start justify-between mb-3">
-            <h3 className="text-base font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-gray-900">
               Company Details
             </h3>
             <div className="flex items-center space-x-2">
@@ -271,28 +273,28 @@ export function CustomerDetailScreen({
                 <>
                   <button
                     onClick={() => setIsEditingCompanyInfo(true)}
-                    className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                   >
-                    <Edit3 className="w-4 h-4 text-gray-600" />
+                    <Edit3 className="w-5 h-5 text-gray-600" />
                   </button>
                   <button
                     onClick={() => setShowActionModal(true)}
-                    className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                   >
-                    <MoreVertical className="w-4 h-4 text-gray-600" />
+                    <MoreVertical className="w-5 h-5 text-gray-600" />
                   </button>
                 </>
               ) : (
                 <div className="flex space-x-2">
                   <button
                     onClick={handleSaveCompanyInfo}
-                    className="px-3 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors"
+                    className="px-4 py-2 bg-purple-600 text-white text-sm rounded hover:bg-purple-700 transition-colors"
                   >
                     Save
                   </button>
                   <button
                     onClick={handleCancelCompanyEdit}
-                    className="px-3 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300 transition-colors"
+                    className="px-4 py-2 bg-gray-200 text-gray-700 text-sm rounded hover:bg-gray-300 transition-colors"
                   >
                     Cancel
                   </button>

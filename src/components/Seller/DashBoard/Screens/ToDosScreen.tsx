@@ -5,12 +5,14 @@ import {
   ClipboardPlus,
   ClipboardList,
   UserCheck,
+  Search,
 } from "lucide-react";
 import { ToDoCard } from "../Cards/ToDoCard";
 import { ToDoDetailModal } from "../Modals/ToDoDetailModal";
 import { Button } from "../UI/Button";
 import { Input } from "../UI/Input";
 import { Select } from "../UI/Select";
+import { DateInput } from "../UI/DateInput";
 import { mockToDos, ToDo } from "../types/purchasync";
 
 interface ToDosScreenProps {
@@ -23,6 +25,12 @@ export function ToDosScreen({
   setShowCreateToDoModal,
 }: ToDosScreenProps) {
   const [statusFilter, setStatusFilter] = useState("earliest-due");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+  const [dateFromFilter, setDateFromFilter] = useState("");
+  const [dateToFilter, setDateToFilter] = useState("");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [assigneeFilter, setAssigneeFilter] = useState("all");
   const [showToDoDetailModal, setShowToDoDetailModal] = useState(false);
   const [selectedToDo, setSelectedToDo] = useState<ToDo | null>(null);
 
@@ -38,11 +46,37 @@ export function ToDosScreen({
 
   const filteredToDos = mockToDos
     .filter((todo) => {
+      // Search filter
+      const matchesSearch =
+        todo.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        todo.tags.some((tag) =>
+          tag.toLowerCase().includes(searchQuery.toLowerCase())
+        ) ||
+        (todo.assignee &&
+          todo.assignee.toLowerCase().includes(searchQuery.toLowerCase()));
+
+      // Date range filter
+      const matchesDateRange =
+        (!dateFromFilter ||
+          new Date(todo.dueDate) >= new Date(dateFromFilter)) &&
+        (!dateToFilter || new Date(todo.dueDate) <= new Date(dateToFilter));
+
+      // Type filter
+      const matchesType = typeFilter === "all" || todo.type === typeFilter;
+
+      // Assignee filter
+      const matchesAssignee =
+        assigneeFilter === "all" || todo.assignee === assigneeFilter;
+
       if (statusFilter === "due-today") {
         const today = new Date().toDateString();
         return (
           new Date(todo.dueDate).toDateString() === today &&
-          todo.status !== "completed"
+          todo.status !== "completed" &&
+          matchesSearch &&
+          matchesDateRange &&
+          matchesType &&
+          matchesAssignee
         );
       }
       if (statusFilter === "due-this-week") {
@@ -52,15 +86,29 @@ export function ToDosScreen({
         return (
           new Date(todo.dueDate) >= today &&
           new Date(todo.dueDate) <= weekFromNow &&
-          todo.status !== "completed"
+          todo.status !== "completed" &&
+          matchesSearch &&
+          matchesDateRange &&
+          matchesType &&
+          matchesAssignee
         );
       }
       if (statusFilter === "all" || statusFilter === "earliest-due") {
         return statusFilter === "earliest-due"
-          ? todo.status !== "completed"
-          : true;
+          ? todo.status !== "completed" &&
+              matchesSearch &&
+              matchesDateRange &&
+              matchesType &&
+              matchesAssignee
+          : matchesSearch && matchesDateRange && matchesType && matchesAssignee;
       }
-      return todo.status === statusFilter;
+      return (
+        todo.status === statusFilter &&
+        matchesSearch &&
+        matchesDateRange &&
+        matchesType &&
+        matchesAssignee
+      );
     })
     .sort((a, b) => {
       if (statusFilter === "earliest-due") {
@@ -79,18 +127,82 @@ export function ToDosScreen({
         </span>
       </div>
 
+      {/* Search Bar */}
+      <div className="flex space-x-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search tasks..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2.5 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-0 transition-colors text-sm"
+          />
+        </div>
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="px-3 py-2.5 border-2 border-gray-200 rounded-lg hover:border-gray-300 transition-colors flex items-center space-x-2"
+        >
+          <Filter className="w-4 h-4 text-gray-600" />
+        </button>
+      </div>
+
+      {/* Advanced Filters */}
+      {showFilters && (
+        <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <DateInput
+              label="From Date"
+              selected={dateFromFilter}
+              onChange={setDateFromFilter}
+            />
+            <DateInput
+              label="To Date"
+              selected={dateToFilter}
+              onChange={setDateToFilter}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Select
+              label="Type"
+              options={[
+                { value: "all", label: "All Types" },
+                { value: "rfq", label: "RFQ" },
+                { value: "sample", label: "Sample" },
+                { value: "contract", label: "Contract" },
+                { value: "task", label: "Task" },
+                { value: "approval", label: "Approval" },
+              ]}
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value)}
+            />
+            <Select
+              label="Assignee"
+              options={[
+                { value: "all", label: "All Assignees" },
+                { value: "Sarah Johnson", label: "Sarah Johnson" },
+                { value: "Ahmed Hassan", label: "Ahmed Hassan" },
+                { value: "Fatima Al-Zahra", label: "Fatima Al-Zahra" },
+                { value: "Omar Abdullah", label: "Omar Abdullah" },
+              ]}
+              value={assigneeFilter}
+              onChange={(e) => setAssigneeFilter(e.target.value)}
+            />
+          </div>
+        </div>
+      )}
+
       {/* Filters */}
-      <div className="flex items-center space-x-3">
-        <Filter className="w-4 h-4 text-gray-500" />
+      <div className="flex items-center space-x-2">
         <div className="flex space-x-2 overflow-x-auto">
           {statusFilters.map((filter) => (
             <button
               key={filter.id}
               onClick={() => setStatusFilter(filter.id)}
-              className={`px-4 py-2 rounded-full text-xs font-medium transition-colors whitespace-nowrap ${
+              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors whitespace-nowrap border ${
                 statusFilter === filter.id
-                  ? "bg-green-100 text-green-700"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-purple-100 text-purple-700 border-purple-200"
+                  : "bg-white text-gray-600 hover:bg-gray-50 border-gray-200 hover:border-gray-300"
               }`}
             >
               {filter.label}

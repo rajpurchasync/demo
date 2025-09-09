@@ -27,6 +27,7 @@ export function ToDoDetailModal({
 }: ToDoDetailModalProps) {
   if (!isOpen || !todo) return null;
 
+  const [activeTab, setActiveTab] = useState("details");
   const [isEditing, setIsEditing] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [editData, setEditData] = useState({
@@ -34,7 +35,8 @@ export function ToDoDetailModal({
     priority: todo.priority,
     dueDate: todo.dueDate,
     description: todo.description || "",
-    assignee: "Sarah Johnson",
+    assignee: todo.assignee || "Sarah Johnson",
+    tags: todo.tags.join(", "),
   });
 
   const [comments, setComments] = useState([
@@ -120,6 +122,12 @@ export function ToDoDetailModal({
     },
   ];
 
+  const tabs = [
+    { id: "details", label: "Details" },
+    { id: "comments", label: "Comments" },
+    { id: "activity", label: "Activity Log" },
+  ];
+
   const handleSave = () => {
     console.log("Saving todo updates:", editData);
     setIsEditing(false);
@@ -138,95 +146,13 @@ export function ToDoDetailModal({
     }
   };
 
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-2">
-      <div className="bg-white w-full max-w-4xl h-full sm:max-h-[90vh] sm:h-auto rounded-t-lg sm:rounded-lg overflow-hidden">
-        <div className="flex h-full">
-          {/* Main Content */}
-          <div className="flex-1 p-3 overflow-y-auto min-w-0">
-            {/* Header */}
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex-1 min-w-0">
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={editData.title}
-                    onChange={(e) =>
-                      setEditData((prev) => ({
-                        ...prev,
-                        title: e.target.value,
-                      }))
-                    }
-                    className="w-full text-sm font-semibold text-gray-900 mb-1 px-2 py-1 border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:border-transparent"
-                  />
-                ) : (
-                  <h1 className="text-sm font-semibold text-gray-900 mb-1">
-                    {todo.title}
-                  </h1>
-                )}
-                <div className="flex items-center space-x-2 text-xs text-gray-500">
-                  <span className="capitalize">{todo.type}</span>
-                  <span>•</span>
-                  <span>Created Jan 25, 2024</span>
-                </div>
-              </div>
-              <div className="flex items-center space-x-1 ml-2">
-                <button
-                  onClick={() => setIsEditing(!isEditing)}
-                  className="p-1 hover:bg-gray-100 rounded transition-colors"
-                >
-                  <Edit3 className="w-4 h-4 text-gray-500" />
-                </button>
-                <button
-                  onClick={onClose}
-                  className="p-1 hover:bg-gray-100 rounded transition-colors"
-                >
-                  <X className="w-4 h-4 text-gray-500" />
-                </button>
-              </div>
-            </div>
-
-            {/* Status and Priority */}
-            <div className="flex items-center space-x-2 mb-4">
-              <span
-                className={cn(
-                  "inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium",
-                  getStatusColor()
-                )}
-              >
-                {todo.status}
-              </span>
-              {isEditing ? (
-                <select
-                  value={editData.priority}
-                  onChange={(e) =>
-                    setEditData((prev) => ({
-                      ...prev,
-                      priority: e.target.value as any,
-                    }))
-                  }
-                  className="px-2 py-0.5 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:border-transparent"
-                >
-                  <option value="low">Low Priority</option>
-                  <option value="medium">Medium Priority</option>
-                  <option value="high">High Priority</option>
-                </select>
-              ) : (
-                <div className="flex items-center text-xs">
-                  <AlertCircle
-                    className={cn("w-3 h-3 mr-1", getPriorityColor())}
-                  />
-                  <span
-                    className={cn("font-medium capitalize", getPriorityColor())}
-                  >
-                    {todo.priority} priority
-                  </span>
-                </div>
-              )}
-            </div>
-
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "details":
+        return (
+          <div className="space-y-4">
             {/* Details Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-2">
                 <div>
                   <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
@@ -251,6 +177,43 @@ export function ToDoDetailModal({
                     </div>
                   )}
                 </div>
+                <div>
+                  <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                    Priority
+                  </label>
+                  {isEditing ? (
+                    <select
+                      value={editData.priority}
+                      onChange={(e) =>
+                        setEditData((prev) => ({
+                          ...prev,
+                          priority: e.target.value as any,
+                        }))
+                      }
+                      className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:border-transparent mt-0.5"
+                    >
+                      <option value="low">Low Priority</option>
+                      <option value="medium">Medium Priority</option>
+                      <option value="high">High Priority</option>
+                    </select>
+                  ) : (
+                    <div className="flex items-center text-xs mt-0.5">
+                      <AlertCircle
+                        className={cn("w-3 h-3 mr-1", getPriorityColor())}
+                      />
+                      <span
+                        className={cn(
+                          "font-medium capitalize",
+                          getPriorityColor()
+                        )}
+                      >
+                        {todo.priority} priority
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="space-y-2">
                 <div>
                   <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
                     Assignee
@@ -278,29 +241,42 @@ export function ToDoDetailModal({
                     </div>
                   )}
                 </div>
-              </div>
-              <div className="space-y-2">
                 <div>
                   <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
                     Tags
                   </label>
-                  <div className="flex flex-wrap gap-1 mt-0.5">
-                    {todo.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="inline-flex items-center px-1.5 py-0.5 rounded text-xs bg-gray-100 text-gray-600"
-                      >
-                        <Tag className="w-2 h-2 mr-1" />
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={editData.tags}
+                      onChange={(e) =>
+                        setEditData((prev) => ({
+                          ...prev,
+                          tags: e.target.value,
+                        }))
+                      }
+                      className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:border-transparent mt-0.5"
+                      placeholder="Comma separated tags"
+                    />
+                  ) : (
+                    <div className="flex flex-wrap gap-1 mt-0.5">
+                      {todo.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="inline-flex items-center px-1.5 py-0.5 rounded text-xs bg-gray-100 text-gray-600"
+                        >
+                          <Tag className="w-2 h-2 mr-1" />
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
 
             {/* Description */}
-            <div className="mb-4">
+            <div>
               <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
                 Description
               </label>
@@ -324,99 +300,177 @@ export function ToDoDetailModal({
                 </div>
               )}
             </div>
+          </div>
+        );
+      case "comments":
+        return (
+          <div className="space-y-4">
+            <div className="space-y-2">
+              {comments.map((comment) => (
+                <div key={comment.id} className="p-2 bg-gray-50 rounded border">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-medium text-gray-900">
+                      {comment.user}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {comment.timestamp}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-700">{comment.content}</p>
+                </div>
+              ))}
+            </div>
+            <div className="flex space-x-2">
+              <textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Add a comment..."
+                className="flex-1 px-2 py-1.5 text-xs border border-gray-300 rounded resize-none focus:ring-1 focus:ring-purple-500 focus:border-transparent"
+                rows={2}
+              />
+              <button
+                onClick={handleAddComment}
+                className="px-2 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors self-end"
+              >
+                <Send className="w-3 h-3" />
+              </button>
+            </div>
+          </div>
+        );
+      case "activity":
+        return (
+          <div className="space-y-2">
+            {mockActivityLog.map((activity) => {
+              const Icon = activity.icon;
+              return (
+                <div key={activity.id} className="flex items-start space-x-2">
+                  <div
+                    className={cn(
+                      "p-1 rounded",
+                      activity.color,
+                      "bg-opacity-10"
+                    )}
+                  >
+                    <Icon className={cn("w-3 h-3", activity.color)} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs text-gray-900 font-medium">
+                      {activity.action}
+                    </p>
+                    <p className="text-xs text-gray-500">{activity.user}</p>
+                    <p className="text-xs text-gray-400">
+                      {activity.timestamp}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end">
+      <div className="bg-white w-full max-w-md mx-auto h-full sm:max-h-[90vh] rounded-t-lg overflow-hidden">
+        <div className="flex flex-col h-full">
+          {/* Header */}
+          <div className="p-4 border-b border-gray-200">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex-1 min-w-0">
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editData.title}
+                    onChange={(e) =>
+                      setEditData((prev) => ({
+                        ...prev,
+                        title: e.target.value,
+                      }))
+                    }
+                    className="w-full text-base font-semibold text-gray-900 mb-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  />
+                ) : (
+                  <h1 className="text-base font-semibold text-gray-900 mb-1 leading-tight">
+                    {todo.title}
+                  </h1>
+                )}
+                <div className="flex items-center space-x-2 text-xs text-gray-500">
+                  <span className="capitalize font-medium">{todo.type}</span>
+                  <span>•</span>
+                  <span className="font-medium">Created Jan 25, 2024</span>
+                </div>
+              </div>
+              <div className="flex items-center space-x-1 ml-2">
+                <button
+                  onClick={() => setIsEditing(!isEditing)}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <Edit3 className="w-5 h-5 text-gray-500" />
+                </button>
+                <button
+                  onClick={onClose}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5 text-gray-500" />
+                </button>
+              </div>
+            </div>
+
+            {/* Status and Priority */}
+            <div className="flex items-center space-x-2 mb-4">
+              <span
+                className={cn(
+                  "inline-flex items-center px-3 py-1 rounded-md text-xs font-semibold",
+                  getStatusColor()
+                )}
+              >
+                {todo.status}
+              </span>
+            </div>
 
             {/* Save/Cancel Buttons */}
             {isEditing && (
               <div className="flex space-x-2 mb-4">
                 <button
                   onClick={handleSave}
-                  className="px-3 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors"
+                  className="px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors"
                 >
                   Save Changes
                 </button>
                 <button
                   onClick={() => setIsEditing(false)}
-                  className="px-3 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300 transition-colors"
+                  className="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors"
                 >
                   Cancel
                 </button>
               </div>
             )}
+          </div>
 
-            {/* Comments Section */}
-            <div>
-              <label className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 block">
-                Comments
-              </label>
-              <div className="space-y-2">
-                {comments.map((comment) => (
-                  <div
-                    key={comment.id}
-                    className="p-2 bg-gray-50 rounded border"
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-medium text-gray-900">
-                        {comment.user}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {comment.timestamp}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-700">{comment.content}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-2 flex space-x-2">
-                <textarea
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Add a comment..."
-                  className="flex-1 px-2 py-1.5 text-xs border border-gray-300 rounded resize-none focus:ring-1 focus:ring-purple-500 focus:border-transparent"
-                  rows={2}
-                />
+          {/* Tab Navigation */}
+          <div className="border-b border-gray-200">
+            <div className="flex space-x-8 px-4">
+              {tabs.map((tab) => (
                 <button
-                  onClick={handleAddComment}
-                  className="px-2 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors self-end"
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`py-3 px-1 text-sm font-semibold transition-colors whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? "text-purple-600 border-b-2 border-purple-600"
+                      : "text-gray-600 hover:text-gray-800"
+                  }`}
                 >
-                  <Send className="w-3 h-3" />
+                  {tab.label}
                 </button>
-              </div>
+              ))}
             </div>
           </div>
 
-          {/* Activity Log Sidebar */}
-          <div className="hidden sm:block w-64 border-l border-gray-200 p-3 bg-gray-50 overflow-y-auto">
-            <h3 className="text-xs font-semibold text-gray-900 uppercase tracking-wide mb-3">
-              Activity Log
-            </h3>
-            <div className="space-y-2">
-              {mockActivityLog.map((activity) => {
-                const Icon = activity.icon;
-                return (
-                  <div key={activity.id} className="flex items-start space-x-2">
-                    <div
-                      className={cn(
-                        "p-1 rounded",
-                        activity.color,
-                        "bg-opacity-10"
-                      )}
-                    >
-                      <Icon className={cn("w-3 h-3", activity.color)} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs text-gray-900 font-medium">
-                        {activity.action}
-                      </p>
-                      <p className="text-xs text-gray-500">{activity.user}</p>
-                      <p className="text-xs text-gray-400">
-                        {activity.timestamp}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          {/* Tab Content */}
+          <div className="flex-1 p-4 overflow-y-auto">{renderTabContent()}</div>
         </div>
       </div>
     </div>

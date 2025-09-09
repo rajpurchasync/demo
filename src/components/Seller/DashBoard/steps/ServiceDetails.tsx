@@ -5,7 +5,7 @@ import { RadioGroup } from "../UI/RadioGroup";
 import { Select } from "../UI/Select";
 import { NumericStepper } from "../UI/NumericStepper";
 import { PriceBreakdown } from "../PriceBreakdown";
-import { calculatePricing, getSuggestedHours } from "../utils/pricing";
+import { calculatePricing, getSuggestedHours } from "../../utils/pricing";
 
 interface ServiceDetailsProps {
   data: Partial<BookingData>;

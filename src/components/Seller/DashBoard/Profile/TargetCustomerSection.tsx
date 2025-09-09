@@ -6,10 +6,13 @@ import { Select } from '../UI/Select';
 export function TargetCustomerSection() {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    customerTypes: ['Hotels', 'Restaurants'],
+    customerType: 'Hotels, Restaurants, Catering',
+    customerTypes: ['Hotels', 'Restaurants', 'Catering'],
     serviceCountries: ['United Arab Emirates'],
     serviceStates: ['Dubai', 'Abu Dhabi', 'Sharjah']
   });
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedState, setSelectedState] = useState('');
 
   const customerTypeOptions = [
     { value: 'Hotels', label: 'Hotels' },
@@ -50,6 +53,73 @@ export function TargetCustomerSection() {
     ]
   };
 
+  const handleAddCountry = () => {
+    if (selectedCountry && !formData.serviceCountries.includes(selectedCountry)) {
+      setFormData(prev => ({
+        ...prev,
+        serviceCountries: [...prev.serviceCountries, selectedCountry]
+      }));
+      setSelectedCountry('');
+    }
+  };
+
+  const handleRemoveCountry = (country: string) => {
+    setFormData(prev => ({
+      ...prev,
+      serviceCountries: prev.serviceCountries.filter(c => c !== country),
+      serviceStates: prev.serviceStates.filter(s => {
+        const stateCountry = getCountryForState(s);
+        return stateCountry !== country;
+      })
+    }));
+  };
+
+  const handleAddState = () => {
+    if (selectedState && !formData.serviceStates.includes(selectedState)) {
+      setFormData(prev => ({
+        ...prev,
+        serviceStates: [...prev.serviceStates, selectedState]
+      }));
+      setSelectedState('');
+    }
+  };
+
+  const handleRemoveState = (state: string) => {
+    setFormData(prev => ({
+      ...prev,
+      serviceStates: prev.serviceStates.filter(s => s !== state)
+    }));
+  };
+
+  const handleSave = () => {
+    console.log('Saving target customer data:', formData);
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    // Reset form data to original values
+  };
+
+  const getCountryForState = (state: string) => {
+    for (const [country, states] of Object.entries(stateOptions)) {
+      if (states.some(s => s.value === state)) {
+        return country;
+      }
+    }
+    return null;
+  };
+
+  const getAvailableStates = () => {
+    const allStates = [];
+    formData.serviceCountries.forEach(country => {
+      if (stateOptions[country]) {
+        allStates.push(...stateOptions[country]);
+      }
+    });
+    return allStates.filter(state => !formData.serviceStates.includes(state.value));
+  };
+
   const handleCustomerTypeChange = (type: string) => {
     setFormData(prev => ({
       ...prev,
@@ -64,55 +134,25 @@ export function TargetCustomerSection() {
       ...prev,
       serviceCountries: prev.serviceCountries.includes(country)
         ? prev.serviceCountries.filter(c => c !== country)
-        : [...prev.serviceCountries, country],
-      serviceStates: [] // Reset states when countries change
+        : [...prev.serviceCountries, country]
     }));
-  };
-
-  const handleStateChange = (state: string) => {
-    setFormData(prev => ({
-      ...prev,
-      serviceStates: prev.serviceStates.includes(state)
-        ? prev.serviceStates.filter(s => s !== state)
-        : [...prev.serviceStates, state]
-    }));
-  };
-
-  const handleSave = () => {
-    console.log('Saving target customer data:', formData);
-    setIsEditing(false);
-  };
-
-  const handleCancel = () => {
-    setIsEditing(false);
-    // Reset form data to original values
-  };
-
-  const getAvailableStates = () => {
-    const allStates = [];
-    for (const country of formData.serviceCountries) {
-      if (stateOptions[country]) {
-        allStates.push(...stateOptions[country]);
-      }
-    }
-    return allStates;
   };
 
   return (
-    <div className="p-3 space-y-4">
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-sm font-semibold text-gray-900">Target Customer</h2>
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-lg font-semibold text-gray-900">Target Customers</h3>
         {!isEditing ? (
           <Button size="sm" variant="ghost" onClick={() => setIsEditing(true)} className="text-xs">
             <Edit3 className="w-3 h-3 mr-1" />
             Edit
           </Button>
         ) : (
-          <div className="flex space-x-1">
-            <Button size="sm" onClick={handleSave} className="text-xs">
+          <div className="flex space-x-2">
+            <Button size="sm" onClick={handleSave} className="text-xs bg-purple-600 hover:bg-purple-700">
               Save
             </Button>
-            <Button size="sm" variant="secondary" onClick={handleCancel} className="text-xs">
+            <Button size="sm" variant="ghost" onClick={handleCancel} className="text-xs">
               Cancel
             </Button>
           </div>
@@ -184,18 +224,40 @@ export function TargetCustomerSection() {
               {/* States */}
               {formData.serviceCountries.length > 0 && (
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">States/Emirates</label>
-                  <div className="grid grid-cols-2 gap-1">
-                    {getAvailableStates().map((option) => (
-                      <label key={option.value} className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={formData.serviceStates.includes(option.value)}
-                          onChange={() => handleStateChange(option.value)}
-                          className="text-purple-600 focus:ring-purple-500"
-                        />
-                        <span className="text-sm text-gray-700">{option.label}</span>
-                      </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Add States/Emirates</label>
+                  <div className="flex space-x-2 mb-3">
+                    <Select
+                      options={[
+                        { value: '', label: 'Select state' },
+                        ...getAvailableStates()
+                      ]}
+                      value={selectedState}
+                      onChange={(e) => setSelectedState(e.target.value)}
+                      className="flex-1"
+                    />
+                    <Button 
+                      size="sm" 
+                      onClick={handleAddState}
+                      disabled={!selectedState}
+                      className="bg-purple-600 hover:bg-purple-700"
+                    >
+                      Add
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {formData.serviceStates.map((state) => (
+                      <span
+                        key={state}
+                        className="inline-flex items-center px-3 py-1 rounded-full text-xs bg-green-100 text-green-800"
+                      >
+                        {state}
+                        <button
+                          onClick={() => handleRemoveState(state)}
+                          className="ml-2 hover:text-green-600"
+                        >
+                          ×
+                        </button>
+                      </span>
                     ))}
                   </div>
                 </div>
@@ -209,14 +271,13 @@ export function TargetCustomerSection() {
                   {formData.serviceCountries.map((country) => (
                     <span
                       key={country}
-                      className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800"
+                      className="inline-flex items-center px-3 py-1 rounded-full text-xs bg-purple-100 text-purple-800"
                     >
                       {country}
                     </span>
                   ))}
                 </div>
               </div>
-              
               <div>
                 <span className="text-xs font-medium text-gray-600">States/Emirates:</span>
                 <div className="flex flex-wrap gap-1 mt-1">

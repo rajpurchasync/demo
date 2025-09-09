@@ -76,19 +76,29 @@ export function ToDoCard({ todo, onClick }: ToDoCardProps) {
     >
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-gray-900 text-sm">{todo.title}</h3>
+          <h3 className="font-semibold text-gray-900 text-sm leading-tight">
+            {todo.title}
+          </h3>
           <div className="flex items-center mt-0.5 space-x-2">
-            <span className="text-sm text-gray-500 capitalize">
+            <span className="text-xs text-gray-500 capitalize font-medium">
               {todo.type}
             </span>
+            {todo.assignee && (
+              <>
+                <span className="text-xs text-gray-400">•</span>
+                <span className="text-xs text-gray-500 font-medium">
+                  {todo.assignee}
+                </span>
+              </>
+            )}
             <div
               className={cn(
-                "flex items-center text-sm",
+                "flex items-center text-xs",
                 isOverdue ? "text-red-600" : "text-gray-500"
               )}
             >
               <Calendar className="w-3 h-3 mr-1" />
-              {formatDate(todo.dueDate)}
+              <span className="font-medium">{formatDate(todo.dueDate)}</span>
             </div>
           </div>
           {todo.tags.length > 0 && (
@@ -96,13 +106,13 @@ export function ToDoCard({ todo, onClick }: ToDoCardProps) {
               {todo.tags.slice(0, 2).map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-gray-100 text-gray-600"
+                  className="inline-flex items-center px-2 py-0.5 rounded-md text-xs bg-gray-100 text-gray-600 font-medium"
                 >
                   {tag}
                 </span>
               ))}
               {todo.tags.length > 2 && (
-                <span className="text-sm text-gray-500">
+                <span className="text-xs text-gray-500 font-medium">
                   +{todo.tags.length - 2} more
                 </span>
               )}
@@ -111,7 +121,7 @@ export function ToDoCard({ todo, onClick }: ToDoCardProps) {
         </div>
         <span
           className={cn(
-            "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ml-2",
+            "inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold ml-2",
             getStatusColor()
           )}
         >

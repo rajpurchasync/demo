@@ -154,7 +154,7 @@ const SellerLogin = () => {
 
   const handleSubmitLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate("/seller-dashboard");
+    navigate("/seller-dashboard-v2");
   };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -163,7 +163,7 @@ const SellerLogin = () => {
     setActiveTab("otp");
     console.log("Form submitted:", formData);
     // Simulate login and redirect to dashboard
-    // navigate("/seller-dashboard");
+    // navigate("/seller-dashboard-v2");
   };
 
   const handleRegisterClick = () => {
@@ -246,7 +246,7 @@ const SellerLogin = () => {
         );
 
       case "dashboard":
-        navigate("/seller-dashboard");
+        navigate("/seller-dashboard-v2");
         return <></>;
 
       case "store-success":

@@ -16,6 +16,7 @@ export interface ToDo {
   priority: 'high' | 'medium' | 'low';
   tags: string[];
   description?: string;
+  assignee?: string;
 }
 
 export interface Customer {
@@ -157,7 +158,8 @@ export const mockToDos: ToDo[] = [
     dueDate: '2024-01-30',
     priority: 'high',
     tags: ['urgent', 'meat-supplies'],
-    description: 'Compare 3 quotes from Gulf Meat, FreshCo, and Local Butcher'
+    description: 'Compare 3 quotes from Gulf Meat, FreshCo, and Local Butcher',
+    assignee: 'Sarah Johnson'
   },
   {
     id: '2',
@@ -166,7 +168,8 @@ export const mockToDos: ToDo[] = [
     status: 'pending',
     dueDate: '2024-01-29',
     priority: 'medium',
-    tags: ['vegetables', 'quality-check']
+    tags: ['vegetables', 'quality-check'],
+    assignee: 'Ahmed Hassan'
   },
   {
     id: '3',
@@ -175,7 +178,8 @@ export const mockToDos: ToDo[] = [
     status: 'ongoing',
     dueDate: '2024-02-01',
     priority: 'high',
-    tags: ['equipment', 'renewal']
+    tags: ['equipment', 'renewal'],
+    assignee: 'Fatima Al-Zahra'
   },
   {
     id: '4',
@@ -184,7 +188,8 @@ export const mockToDos: ToDo[] = [
     status: 'ongoing',
     dueDate: '2024-01-30',
     priority: 'medium',
-    tags: ['follow-up']
+    tags: ['follow-up'],
+    assignee: 'Sarah Johnson'
   },
   {
     id: '5',

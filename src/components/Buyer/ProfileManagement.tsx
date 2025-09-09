@@ -11,10 +11,28 @@ import {
   Shield,
   Check,
   X,
+  Edit,
 } from "lucide-react";
 import ProfileEditForm from "./ProfileEditForm";
 import PasswordResetForm from "./PasswordResetForm";
-
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+const countries = [
+  { code: "+1", name: "United States", flag: "🇺🇸" },
+  { code: "+44", name: "United Kingdom", flag: "🇬🇧" },
+  { code: "+91", name: "India", flag: "🇮🇳" },
+  { code: "+86", name: "China", flag: "🇨🇳" },
+  { code: "+49", name: "Germany", flag: "🇩🇪" },
+];
 interface ProfileData {
   firstName: string;
   lastName: string;
@@ -35,20 +53,38 @@ const ProfileManagement: React.FC<ProfileManagementProps> = ({
   const [isPasswordFormOpen, setIsPasswordFormOpen] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-
-  const [profileData, setProfileData] = useState<ProfileData>({
-    firstName: "John",
-    lastName: "Buyer",
-    email: "john.buyer@techcorp.com",
-    phoneNumber: "555-0123",
-    countryCode: "+1",
-    profilePicture: undefined,
+  const [editModes, setEditModes] = useState({
+    profile: false,
+    business: false,
+    locations: false,
+    security: false,
   });
+
+  // Profile data
+  const [profileData, setProfileData] = useState({
+    firstName: "John",
+    lastName: "Doe",
+    email: "john@purchasync.com",
+    phone: "+1234567890",
+    countryCode: "+1",
+    position: "Procurement Manager",
+    image: null as File | null,
+  });
+
+  const [profileEditData, setProfileEditData] = useState({ ...profileData });
 
   const handleSaveProfile = (updatedData: ProfileData) => {
     setProfileData(updatedData);
     setIsEditFormOpen(false);
     showSuccess("Profile updated successfully!");
+  };
+  const toggleEditMode = (section: keyof typeof editModes) => {
+    setEditModes((prev) => ({ ...prev, [section]: !prev[section] }));
+
+    // Reset edit data when entering edit mode
+    if (!editModes[section]) {
+      setProfileEditData({ ...profileData });
+    }
   };
 
   const handlePasswordReset = () => {
@@ -62,12 +98,40 @@ const ProfileManagement: React.FC<ProfileManagementProps> = ({
     setTimeout(() => setShowSuccessMessage(false), 3000);
   };
 
+  const handleCancel = (section: keyof typeof editModes) => {
+    setEditModes((prev) => ({ ...prev, [section]: false }));
+
+    // Reset edit data to original values
+    switch (section) {
+      case "profile":
+        setProfileEditData({ ...profileData });
+        break;
+    }
+  };
+  const handleSave = (section: keyof typeof editModes) => {
+    switch (section) {
+      case "profile":
+        setProfileData({ ...profileEditData });
+        break;
+    }
+
+    setEditModes((prev) => ({ ...prev, [section]: false }));
+    setShowSuccessMessage(true);
+    // toast.success(`${section.charAt(0).toUpperCase() + section.slice(1)} settings saved successfully!`);
+  };
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setProfileEditData({ ...profileEditData, image: e.target.files[0] });
+      setShowSuccessMessage(true);
+    }
+  };
+
   return (
     <main
       className={`
       transition-all duration-300 ease-in-out
       ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
-      pb-8 min-h-screen bg-gray-50
+     pb-8 min-h-screen bg-white rounded-[12px] overflow-hidden
     `}
     >
       {/* Success Message */}
@@ -79,7 +143,19 @@ const ProfileManagement: React.FC<ProfileManagementProps> = ({
       )}
 
       {/* Header */}
-      <div className="mb-8 mt-12 lg:mt-0">
+      <div className="flex items-center justify-between p-4 py-3  lg:py-2 border-b border-gray-200">
+        <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+          <div className="flex items-center gap-1 sm:gap-2">
+            {/* <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-500 rounded flex items-center justify-center">
+              <div className="w-3 h-3 border-2 border-white rounded-sm"></div>
+            </div> */}
+            <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
+              My Profile
+            </h1>
+          </div>
+        </div>
+      </div>
+      {/* <div className="mb-8 mt-12 lg:mt-0">
         <div className="flex items-center space-x-3 mb-2">
           <User className="text-blue-600" size={28} />
           <h1 className="text-2xl lg:text-3xl font-medium text-gray-900">
@@ -89,151 +165,219 @@ const ProfileManagement: React.FC<ProfileManagementProps> = ({
         <p className="text-gray-600">
           Manage your personal information and account settings
         </p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Profile Information Card */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-medium text-gray-900">
-              Personal Information
-            </h2>
-            <button
-              onClick={() => setIsEditFormOpen(true)}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <User size={16} className="mr-2" />
-              <span className="font-medium">Edit Profile</span>
-            </button>
-          </div>
-
-          {/* Profile Picture Section */}
-          <div className="flex items-center space-x-6 mb-8 pb-6 border-b border-gray-100">
-            <div className="relative">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-                {profileData.profilePicture ? (
-                  <img
-                    src={profileData.profilePicture}
-                    alt="Profile"
-                    className="w-full h-full rounded-full object-cover"
-                  />
-                ) : (
-                  <span className="text-white font-bold text-2xl">
-                    {profileData.firstName[0]}
-                    {profileData.lastName[0]}
-                  </span>
+      </div> */}
+      <div className="max-w-[700px] mx-auto mt-6">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2">
+                <User className="w-5 h-5" />
+                Personal Profile
+              </CardTitle>
+              {!editModes.profile ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => toggleEditMode("profile")}
+                  className="flex items-center gap-2"
+                >
+                  <Edit className="w-4 h-4" />
+                  Edit
+                </Button>
+              ) : (
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleCancel("profile")}
+                    className="flex items-center gap-2"
+                  >
+                    <X className="w-4 h-4" />
+                    Cancel
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => handleSave("profile")}
+                    className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700"
+                  >
+                    <Save className="w-4 h-4" />
+                    Save
+                  </Button>
+                </div>
+              )}
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                  {(
+                    editModes.profile
+                      ? profileEditData.image
+                      : profileData.image
+                  ) ? (
+                    <img
+                      src={URL.createObjectURL(
+                        editModes.profile
+                          ? profileEditData.image!
+                          : profileData.image!
+                      )}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <User className="w-8 h-8 text-gray-400" />
+                  )}
+                </div>
+                {editModes.profile && (
+                  <label className="absolute bottom-0 right-0 bg-purple-600 text-white p-1 rounded-full cursor-pointer hover:bg-purple-700">
+                    <Camera className="w-3 h-3" />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageUpload}
+                    />
+                  </label>
                 )}
               </div>
-              <button className="absolute -bottom-1 -right-1 w-8 h-8 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow-sm">
-                <Camera size={14} className="text-gray-600" />
-              </button>
+              <div>
+                <h3 className="font-medium">Profile Picture</h3>
+                <p className="text-sm text-gray-500">
+                  {editModes.profile
+                    ? "Click camera icon to upload"
+                    : "Professional photo"}
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-xl font-semibold text-gray-900">
-                {profileData.firstName} {profileData.lastName}
-              </h3>
-              <p className="text-gray-600 font-medium">Procurement Manager</p>
-              <p className="text-sm text-gray-500 mt-1">TechCorp Industries</p>
-            </div>
-          </div>
 
-          {/* Profile Details */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">
-                First Name
-              </label>
-              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                <User size={16} className="text-gray-400" />
-                <span className="text-gray-900 font-medium">
-                  {profileData.firstName}
-                </span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="firstName">First Name *</Label>
+                {editModes.profile ? (
+                  <Input
+                    id="firstName"
+                    value={profileEditData.firstName}
+                    onChange={(e) =>
+                      setProfileEditData({
+                        ...profileEditData,
+                        firstName: e.target.value,
+                      })
+                    }
+                  />
+                ) : (
+                  <div className="p-2 bg-gray-50 rounded border text-sm">
+                    {profileData.firstName}
+                  </div>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="lastName">Last Name *</Label>
+                {editModes.profile ? (
+                  <Input
+                    id="lastName"
+                    value={profileEditData.lastName}
+                    onChange={(e) =>
+                      setProfileEditData({
+                        ...profileEditData,
+                        lastName: e.target.value,
+                      })
+                    }
+                  />
+                ) : (
+                  <div className="p-2 bg-gray-50 rounded border text-sm">
+                    {profileData.lastName}
+                  </div>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="email">Email *</Label>
+                {editModes.profile ? (
+                  <Input
+                    id="email"
+                    type="email"
+                    value={profileEditData.email}
+                    onChange={(e) =>
+                      setProfileEditData({
+                        ...profileEditData,
+                        email: e.target.value,
+                      })
+                    }
+                  />
+                ) : (
+                  <div className="p-2 bg-gray-50 rounded border text-sm">
+                    {profileData.email}
+                  </div>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="position">Position</Label>
+                {editModes.profile ? (
+                  <Input
+                    id="position"
+                    value={profileEditData.position}
+                    onChange={(e) =>
+                      setProfileEditData({
+                        ...profileEditData,
+                        position: e.target.value,
+                      })
+                    }
+                  />
+                ) : (
+                  <div className="p-2 bg-gray-50 rounded border text-sm">
+                    {profileData.position}
+                  </div>
+                )}
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">
-                Last Name
-              </label>
-              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                <User size={16} className="text-gray-400" />
-                <span className="text-gray-900 font-medium">
-                  {profileData.lastName}
-                </span>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">
-                Email Address
-              </label>
-              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                <Mail size={16} className="text-gray-400" />
-                <span className="text-gray-900 font-medium">
-                  {profileData.email}
-                </span>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">
-                Phone Number
-              </label>
-              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                <Phone size={16} className="text-gray-400" />
-                <div className="flex items-center space-x-2">
-                  <span className="text-lg">🇺🇸</span>
-                  <span className="text-gray-900 font-medium">
-                    {profileData.countryCode} {profileData.phoneNumber}
-                  </span>
+              <Label>Phone Number</Label>
+              {editModes.profile ? (
+                <div className="flex gap-2">
+                  <Select
+                    value={profileEditData.countryCode}
+                    onValueChange={(value) =>
+                      setProfileEditData({
+                        ...profileEditData,
+                        countryCode: value,
+                      })
+                    }
+                  >
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {countries.map((country) => (
+                        <SelectItem key={country.code} value={country.code}>
+                          {country.flag} {country.code}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    value={profileEditData.phone.replace(
+                      profileEditData.countryCode,
+                      ""
+                    )}
+                    onChange={(e) =>
+                      setProfileEditData({
+                        ...profileEditData,
+                        phone: profileEditData.countryCode + e.target.value,
+                      })
+                    }
+                    placeholder="Phone number"
+                    className="flex-1"
+                  />
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Security Section */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-          <div className="flex items-center space-x-3 mb-6">
-            <Shield className="text-green-600" size={24} />
-            <h2 className="text-lg font-medium text-gray-900">Security</h2>
-          </div>
-
-          {/* Password Section */}
-          <div className="space-y-4">
-            <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center space-x-2">
-                  <Lock size={16} className="text-green-600" />
-                  <span className="font-medium text-gray-900">Password</span>
+              ) : (
+                <div className="p-2 bg-gray-50 rounded border text-sm">
+                  {profileData.phone}
                 </div>
-                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-medium">
-                  Secure
-                </span>
-              </div>
-              <p className="text-sm text-gray-600 mb-4">
-                Last updated 30 days ago
-              </p>
-              <button
-                onClick={() => setIsPasswordFormOpen(true)}
-                className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
-              >
-                <Lock size={16} className="mr-2" />
-                Change Password
-              </button>
+              )}
             </div>
-
-            {/* Security Tips */}
-            <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-              <h4 className="font-medium text-gray-900 mb-2">Security Tips</h4>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• Use a strong, unique password</li>
-                <li>• Enable two-factor authentication</li>
-                <li>• Review login activity regularly</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Profile Edit Form */}

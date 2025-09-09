@@ -29,34 +29,34 @@ export function CustomerCard({ customer, onClick }: CustomerCardProps) {
 
   return (
     <div
-      className="bg-white border border-gray-200 rounded-lg p-3 hover:shadow-sm transition-shadow cursor-pointer"
+      className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-all duration-200 cursor-pointer hover:border-gray-300"
       onClick={() => onClick?.(customer)}
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-1">
-            <h3 className="font-semibold text-gray-900 text-sm">
+            <h3 className="font-semibold text-gray-900 text-sm leading-tight">
               {customer.name}
             </h3>
             {customer.isCredit && (
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-green-100 text-green-800">
                 Credit
               </span>
             )}
             {customer.isNewProspect && (
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-blue-100 text-blue-800">
                 New Prospect
               </span>
             )}
           </div>
 
           <div className="flex items-center space-x-2 mb-2">
-            <p className="text-xs text-gray-600">{customer.customerType}</p>
-            <span className="text-xs text-gray-400">•</span>
-            <p className="text-xs text-gray-600">{customer.category}</p>
+            <p className="text-xs text-gray-600 font-medium">
+              {customer.customerType}
+            </p>
           </div>
 
-          <p className="text-xs text-gray-500 mb-2">
+          <p className="text-xs text-gray-500 mb-2 font-medium">
             {customer.city}, {customer.state}
           </p>
 
@@ -64,7 +64,7 @@ export function CustomerCard({ customer, onClick }: CustomerCardProps) {
             {customer.tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs bg-gray-100 text-gray-600"
+                className="inline-flex items-center px-2 py-0.5 rounded-md text-xs bg-gray-100 text-gray-600 font-medium"
               >
                 {tag}
               </span>
@@ -76,11 +76,12 @@ export function CustomerCard({ customer, onClick }: CustomerCardProps) {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setShowMenu(!showMenu);
+              // setShowMenu(!showMenu);
             }}
-            className="px-3 py-1.5 text-xs font-semibold text-white bg-[#145434] hover:bg-[#0f3f29] rounded-md transition-colors shadow-sm"
+            className="flex items-center px-3 py-2 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors shadow-sm"
           >
-            Manage
+            <MessageCircle className="w-3 h-3 mr-1 inline-block" />
+            Message
           </button>
 
           {showMenu && (

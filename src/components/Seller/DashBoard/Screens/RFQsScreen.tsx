@@ -36,7 +36,14 @@ export function RFQsScreen({
   const [showRFQDetailModal, setShowRFQDetailModal] = useState(false);
   const [selectedRFQ, setSelectedRFQ] = useState<RFQ | null>(null);
   const [showLineItems, setShowLineItems] = useState(false);
-  const [proposalCreated, setProposalCreated] = useState(false);
+  const [rfqStatuses, setRfqStatuses] = useState<{
+    [key: string]: "pending" | "accepted" | "rejected";
+  }>({});
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [rejectComment, setRejectComment] = useState("");
+  const [selectedRFQForReject, setSelectedRFQForReject] = useState<RFQ | null>(
+    null
+  );
 
   const statusFilters = [
     { id: "new", label: "New" },
@@ -101,12 +108,49 @@ export function RFQsScreen({
     return customer ? customer.name : `Customer ${customerId}`;
   };
 
+  const handleAcceptRFQ = (rfq: RFQ) => {
+    setRfqStatuses((prev) => ({ ...prev, [rfq.id]: "accepted" }));
+    console.log("RFQ accepted:", rfq.id);
+  };
+
+  const handleRejectRFQ = (rfq: RFQ) => {
+    setSelectedRFQForReject(rfq);
+    setShowRejectModal(true);
+  };
+
+  const confirmRejectRFQ = () => {
+    if (!rejectComment.trim()) {
+      alert("Please provide a reason for rejection");
+      return;
+    }
+    if (selectedRFQForReject) {
+      setRfqStatuses((prev) => ({
+        ...prev,
+        [selectedRFQForReject.id]: "rejected",
+      }));
+      console.log(
+        "RFQ rejected:",
+        selectedRFQForReject.id,
+        "Reason:",
+        rejectComment
+      );
+      setShowRejectModal(false);
+      setRejectComment("");
+      setSelectedRFQForReject(null);
+    }
+  };
+
+  const handleCreateProposal = (rfq: RFQ) => {
+    console.log("Creating proposal for RFQ:", rfq.id);
+    // This would navigate to proposal creation page
+    alert("Proposal creation interface would open here");
+  };
   return (
     <div className="px-4 py-3 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-lg font-bold text-gray-900">Customer Requests</h1>
-        <span className="text-sm text-gray-500">
+        <h1 className="text-xl font-bold text-gray-900">Customer Requests</h1>
+        <span className="text-sm text-gray-500 font-medium">
           {filteredRFQs.length} requests
         </span>
       </div>
@@ -219,7 +263,11 @@ export function RFQsScreen({
       <div className="space-y-3">
         {filteredRFQs.length > 0 ? (
           filteredRFQs.map((rfq) => {
-            const isNew = rfq.status === "open"; // Treat "open" as "new" for seller
+            const currentStatus = rfqStatuses[rfq.id] || "pending";
+            const isNew = rfq.status === "open" && currentStatus === "pending";
+            const isAccepted = currentStatus === "accepted";
+            const isRejected = currentStatus === "rejected";
+
             return (
               <div
                 key={rfq.id}
@@ -230,9 +278,21 @@ export function RFQsScreen({
                     <h3 className="font-semibold text-gray-900 text-sm flex-1">
                       {rfq.title}
                     </h3>
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 ml-3">
-                      {rfq.category}
-                    </span>
+                    <div className="flex items-center space-x-2 ml-3">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        {rfq.category}
+                      </span>
+                      {isAccepted && (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          Accepted
+                        </span>
+                      )}
+                      {isRejected && (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                          Rejected
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   <div className="flex items-center justify-between text-xs">
@@ -252,13 +312,13 @@ export function RFQsScreen({
                   {isNew && (
                     <div className="flex space-x-2 pt-2">
                       <button
-                        onClick={() => console.log("Accept request:", rfq.id)}
+                        onClick={() => handleAcceptRFQ(rfq)}
                         className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
                       >
                         Accept
                       </button>
                       <button
-                        onClick={() => console.log("Reject request:", rfq.id)}
+                        onClick={() => handleRejectRFQ(rfq)}
                         className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
                       >
                         Reject
@@ -266,13 +326,33 @@ export function RFQsScreen({
                     </div>
                   )}
 
-                  {!isNew && (
+                  {isAccepted && (
+                    <div className="flex space-x-2 pt-2">
+                      <button
+                        onClick={() => {
+                          setSelectedRFQ(rfq);
+                          setShowRFQDetailModal(true);
+                          setShowLineItems(false);
+                        }}
+                        className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                      >
+                        View Details
+                      </button>
+                      <button
+                        onClick={() => handleCreateProposal(rfq)}
+                        className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+                      >
+                        Create Proposal
+                      </button>
+                    </div>
+                  )}
+
+                  {!isNew && !isAccepted && !isRejected && (
                     <button
                       onClick={() => {
                         setSelectedRFQ(rfq);
                         setShowRFQDetailModal(true);
                         setShowLineItems(false);
-                        setProposalCreated(false);
                       }}
                       className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                     >
@@ -423,48 +503,72 @@ export function RFQsScreen({
               </div>
 
               {/* Floating Action Button */}
-              <div className="fixed bottom-6 right-6">
-                {!proposalCreated ? (
-                  <button
-                    onClick={() => {
-                      setProposalCreated(true);
-                      console.log("Create proposal for:", selectedRFQ.id);
-                    }}
-                    className="w-14 h-14 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg flex items-center justify-center transition-colors"
-                  >
-                    <Plus className="w-6 h-6" />
-                  </button>
-                ) : (
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => console.log("View proposal")}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium"
-                    >
-                      View
-                    </button>
-                    <button
-                      onClick={() => console.log("Edit proposal")}
-                      className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg text-sm font-medium"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => console.log("Submit proposal")}
-                      className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium"
-                    >
-                      Submit
-                    </button>
-                  </div>
-                )}
+              <div className="pt-4">
+                <button
+                  onClick={() => handleCreateProposal(selectedRFQ)}
+                  className="w-full px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-colors shadow-lg"
+                >
+                  Create Proposal
+                </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
 
-              {proposalCreated && (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                  <p className="text-sm text-green-800 font-medium">
-                    ✅ Proposal created successfully!
-                  </p>
-                </div>
-              )}
+      {/* Reject Modal */}
+      {showRejectModal && selectedRFQForReject && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-md mx-auto rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Reject Request
+              </h2>
+              <button
+                onClick={() => {
+                  setShowRejectModal(false);
+                  setRejectComment("");
+                  setSelectedRFQForReject(null);
+                }}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600">
+                Please provide a reason for rejecting "
+                {selectedRFQForReject.title}"
+              </p>
+
+              <textarea
+                value={rejectComment}
+                onChange={(e) => setRejectComment(e.target.value)}
+                placeholder="Enter your reason for rejection..."
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:ring-0 transition-colors resize-none"
+                rows={4}
+                required
+              />
+
+              <div className="flex space-x-3 pt-2">
+                <button
+                  onClick={() => {
+                    setShowRejectModal(false);
+                    setRejectComment("");
+                    setSelectedRFQForReject(null);
+                  }}
+                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmRejectRFQ}
+                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+                >
+                  Reject Request
+                </button>
+              </div>
             </div>
           </div>
         </div>

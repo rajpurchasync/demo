@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   CheckSquare,
   Inbox,
@@ -10,6 +10,10 @@ import {
   Settings,
   PanelRightClose,
   PanelRightOpen,
+  ArrowLeft,
+  Puzzle,
+  CreditCard,
+  Download,
 } from "lucide-react";
 import {
   LayoutDashboard,
@@ -47,10 +51,15 @@ const Sidebar: React.FC<SidebarProps> = ({
   type = "buyer",
 }) => {
   const [currentView, setCurrentView] = React.useState("todos");
+  const [isSettingsMode, setIsSettingsMode] = useState(false);
   const [expandedMenus, setExpandedMenus] = React.useState<{
     [key: string]: boolean;
   }>({});
 
+  const handleBackToMain = () => {
+    setIsSettingsMode(false);
+    setCurrentView("home");
+  };
   const menuItems2 = [
     {
       id: "suppliers",
@@ -82,6 +91,11 @@ const Sidebar: React.FC<SidebarProps> = ({
           label: "Contract Template",
           view: "contract-templates",
         },
+        {
+          id: "kyc-template",
+          label: "KYC Template",
+          view: "kyc-templates",
+        },
         // { label: "Approvals", view: "rfq-approvals" },
       ],
     },
@@ -103,13 +117,41 @@ const Sidebar: React.FC<SidebarProps> = ({
       icon: MessageCircle,
       color: "text-pink-600",
     },
+  ];
+
+  const settingsItems = [
+    { id: "profile", label: "Profile", icon: User, color: "text-blue-600" },
     {
-      id: "team",
-      label: "Team Management",
-      icon: UserPlus,
-      color: "text-teal-600",
+      id: "business",
+      label: "Business Setup",
+      icon: Building,
+      color: "text-purple-600",
     },
-    { id: "profile", label: "Profile", icon: User, color: "text-gray-600" },
+    {
+      id: "locations",
+      label: "Locations",
+      icon: Building,
+      color: "text-green-600",
+    },
+    { id: "team", label: "Teams", icon: Users, color: "text-yellow-600" },
+    {
+      id: "security",
+      label: "Security & Privacy",
+      icon: Settings,
+      color: "text-red-600",
+    },
+    {
+      id: "integrations",
+      label: "Import & Integrations",
+      icon: Puzzle,
+      color: "text-indigo-600",
+    },
+    {
+      id: "memberships",
+      label: "Memberships",
+      icon: CreditCard,
+      color: "text-green-600",
+    },
   ];
   const menuItemsSeller = [
     {
@@ -156,13 +198,6 @@ const Sidebar: React.FC<SidebarProps> = ({
       icon: MessageCircle,
       color: "text-pink-600",
     },
-    {
-      id: "team",
-      label: "Team Management",
-      icon: UserPlus,
-      color: "text-teal-600",
-    },
-    { id: "profile", label: "Profile", icon: User, color: "text-gray-600" },
   ];
   const handleNavigation = (view: string) => {
     setCurrentView(view);
@@ -282,59 +317,79 @@ const Sidebar: React.FC<SidebarProps> = ({
             )}
           </button>
           <div className={`space-y-1 ${isCollapsed ? "py-2" : ""}`}>
-            <span
-              className={`text-[16px] text-gray-500 font-light ${
-                isCollapsed ? "hidden" : ""
-              }`}
-            >
-              My Workspace
-            </span>
-
-            {[
-              {
-                id: "todos",
-                label: "To do list",
-                icon: CheckSquare,
-                color: "text-blue-600",
-              },
-              {
-                id: "inbox",
-                label: "Inbox",
-                icon: Inbox,
-                color: "text-green-600",
-              },
-            ].map((item) => {
-              const Icon = item.icon;
-              return (
+            {isSettingsMode ? (
+              <div className="px-4 py-2 border-b border-gray-200">
                 <button
-                  key={item.id}
-                  onClick={() => {
-                    console.log(`Navigate to ${item.id}`);
-                    // router("/" + item.id);
-                    // onClose();
-                    handleMenuItemClick(item);
-                  }}
-                  className={` ${
-                    currentView === item.id
-                      ? "bg-blue-100 text-blue-700 font-medium"
-                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                  }pl-4 w-full flex items-center p-2 hover:bg-gray-50 rounded transition-colors text-left group`}
+                  onClick={handleBackToMain}
+                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
                 >
-                  <div
-                    className={`p-1 rounded bg-gray-100 mr-2 ${item.color} group-hover:bg-gray-200 transition-colors`}
-                  >
-                    <Icon className="w-4 h-4" />
-                  </div>
-                  {!isCollapsed && (
-                    <span className="text-[14px] font-medium text-gray-900 group-hover:text-gray-700">
-                      {item.label}
-                    </span>
-                  )}
+                  <ArrowLeft className="w-4 h-4" />
+                  Back to Workspace
                 </button>
-              );
-            })}
-            <hr className="!my-6 border-gray-200" />
-            {(type === "buyer" ? menuItems2 : menuItemsSeller).map((item) => {
+              </div>
+            ) : (
+              <div className={`space-y-1 ${isCollapsed ? "py-2" : ""}`}>
+                <span
+                  className={`text-[16px] text-gray-500 font-light ${
+                    isCollapsed ? "hidden" : ""
+                  }`}
+                >
+                  My Workspace
+                </span>
+
+                {[
+                  {
+                    id: "todos",
+                    label: "To do list",
+                    icon: CheckSquare,
+                    color: "text-blue-600",
+                  },
+                  {
+                    id: "inbox",
+                    label: "Inbox",
+                    icon: Inbox,
+                    color: "text-green-600",
+                  },
+                ].map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        console.log(`Navigate to ${item.id}`);
+                        // router("/" + item.id);
+                        // onClose();
+                        handleMenuItemClick(item);
+                      }}
+                      className={` ${
+                        currentView === item.id
+                          ? "bg-blue-100 text-blue-700 font-medium"
+                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                      }pl-4 w-full flex items-center p-2 hover:bg-gray-50 rounded transition-colors text-left group`}
+                    >
+                      <div
+                        className={`p-1 rounded bg-gray-100 mr-2 ${item.color} group-hover:bg-gray-200 transition-colors`}
+                      >
+                        <Icon className="w-4 h-4" />
+                      </div>
+                      {!isCollapsed && (
+                        <span className="text-[14px] font-medium text-gray-900 group-hover:text-gray-700">
+                          {item.label}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            <hr className="!my-4 border-gray-200" />
+            {(isSettingsMode
+              ? settingsItems
+              : type === "buyer"
+              ? menuItems2
+              : menuItemsSeller
+            ).map((item) => {
               const Icon = item.icon;
               return (
                 <div key={item.id}>
@@ -479,21 +534,46 @@ const Sidebar: React.FC<SidebarProps> = ({
         </nav>
 
         {/* Footer */}
-        <div
-          className={`p-4 mt-auto border-t border-gray-200 ${
-            isCollapsed ? "lg:hidden" : ""
-          }`}
-        >
-          <div className="flex items-center space-x-3">
-            <UserPlus className="w-4 h-4" />
-            <div>
-              <div className="font-semibold text-gray-900 text-sm">Invite</div>
-              {/* <div className="text-xs text-gray-600 font-medium">
+        {!isSettingsMode && (
+          <div
+            className={`flex items-center justify-between p-4 mt-auto border-t border-gray-200 ${
+              isCollapsed ? "lg:hidden" : ""
+            }`}
+          >
+            <div className="flex items-center space-x-3">
+              <UserPlus className="w-4 h-4" />
+              <div className="">
+                <div className="font-semibold text-gray-900 text-sm">
+                  Invite
+                </div>
+
+                {/* <div className="text-xs text-gray-600 font-medium">
                 Procurement Manager
               </div> */}
+              </div>
+            </div>
+            <div className="h-[20px] border-l border-gray-500"></div>
+            <div
+              className="flex items-center space-x-3 cursor-pointer"
+              onClick={() => {
+                setIsSettingsMode(true);
+                setCurrentView("profile");
+                handleNavigation("profile");
+              }}
+            >
+              <Settings className="w-4 h-4" />
+              <div className="">
+                <div className="font-semibold text-gray-900 text-sm">
+                  Settings
+                </div>
+
+                {/* <div className="text-xs text-gray-600 font-medium">
+                Procurement Manager
+              </div> */}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </aside>
     </>
   );

@@ -75,7 +75,7 @@ interface QuotationService {
   duration: string;
 }
 
-export default function CompanyDetailView({
+export default function CustomerDetailView({
   isOpen,
   onClose,
   company,

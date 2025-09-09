@@ -21,6 +21,13 @@ import SuppliersManagement from "./DesktopDashboard/SuppliersManagement";
 import InboxManagement from "./DesktopDashboard/InboxManagement";
 import ContractTemplates from "./Buyer/ContractTemplates";
 import ContractManagement from "./Buyer/ContractManagement";
+import MyLocations from "./Buyer/MyLocations";
+import SecurityPrivacy from "./Buyer/SecurityPrivacy";
+import Integrations from "./Buyer/Integrations";
+import IntegrationMain from "./Integrations/IntegrationMain";
+import Membership from "./Buyer/Membership";
+import SellerMembership from "./Seller/sections/Membership";
+import { KYCTemplateView } from "./KYCTemplateView";
 
 function BuyerDashboard() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -135,12 +142,82 @@ function BuyerDashboard() {
             </div>
           </>
         );
-      case "my-company":
-        return <MyBusiness sidebarCollapsed={sidebarCollapsed} />;
+      case "business":
+        return (
+          <div
+            className={`
+      transition-all duration-300 ease-in-out
+      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
+    `}
+          >
+            <MyBusiness sidebarCollapsed={sidebarCollapsed} />
+          </div>
+        );
+      case "locations":
+        return (
+          <div
+            className={`
+      transition-all duration-300 ease-in-out
+      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
+    `}
+          >
+            <MyLocations sidebarCollapsed={sidebarCollapsed} />
+          </div>
+        );
+      case "security":
+        return (
+          <div
+            className={`
+      transition-all duration-300 ease-in-out
+      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
+    `}
+          >
+            <SecurityPrivacy sidebarCollapsed={sidebarCollapsed} />
+          </div>
+        );
+      case "integrations":
+        return (
+          <div
+            className={`
+      transition-all duration-300 ease-in-out
+      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
+    `}
+          >
+            <IntegrationMain />
+          </div>
+        );
+      case "memberships":
+        return (
+          <div
+            className={`
+      transition-all duration-300 ease-in-out
+      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
+    `}
+          >
+            <Membership />
+            <SellerMembership />
+          </div>
+        );
+      case "kyc-templates":
+        return (
+          <div
+            className={`
+      transition-all duration-300 ease-in-out
+      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
+    `}
+          >
+            <KYCTemplateView />
+          </div>
+        );
       case "samples":
         return <SamplesManagement sidebarCollapsed={sidebarCollapsed} />;
-      case "suppliers":
-        return <SupplierManagement sidebarCollapsed={sidebarCollapsed} />;
+
       case "saved":
         return (
           <div

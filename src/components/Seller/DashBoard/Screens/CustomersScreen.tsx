@@ -64,8 +64,8 @@ export function CustomersScreen({
     <div className="px-4 py-3 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-lg font-bold text-gray-900">Customer Management</h1>
-        <span className="text-sm text-gray-500">
+        <h1 className="text-xl font-bold text-gray-900">Customer Management</h1>
+        <span className="text-sm text-gray-500 font-medium">
           {filteredCustomers.length} customers
         </span>
       </div>
@@ -197,13 +197,10 @@ export function CustomersScreen({
                     placeholder="contact@company.com"
                   />
                   <Input label="Phone" placeholder="+971 50 123 4567" />
-                  <select className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-[#145434] focus:ring-0 transition-colors">
-                    <option value="">Select Customer Type</option>
-                    <option value="Hotels">Hotels</option>
-                    <option value="Restaurants">Restaurants</option>
-                    <option value="Catering">Catering</option>
-                    <option value="Other">Other</option>
-                  </select>
+                  <Input
+                    label="Customer Type"
+                    placeholder="e.g., Hotels, Restaurants, Catering"
+                  />
                   <Input
                     label="Tags (comma separated)"
                     placeholder="e.g., Credit, Premium, Local"

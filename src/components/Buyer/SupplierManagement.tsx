@@ -60,6 +60,7 @@ interface SupplierManagementProps {
 const SupplierManagement: React.FC<SupplierManagementProps> = ({
   sidebarCollapsed,
 }) => {
+  
   const [activeTab, setActiveTab] = useState<
     "suppliers" | "documents" | "reviews"
   >("suppliers");

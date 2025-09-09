@@ -98,189 +98,220 @@ export function POSSection() {
   };
 
   return (
-    <div className="p-3 space-y-3">
-      <h2 className="text-sm font-semibold text-gray-900 mb-3">Products & Services</h2>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 px-4 py-4">
+        <h1 className="text-xl font-bold text-gray-900">Product / Category</h1>
+        <p className="text-sm text-gray-600 mt-1">Manage your products and services</p>
+      </div>
 
-      {/* Categories Section */}
-      <div className="border border-gray-200 rounded-lg">
-        <button
-          onClick={() => toggleSection('categories')}
-          className="w-full flex items-center justify-between p-3 hover:bg-gray-50 transition-colors"
-        >
-          <div className="flex items-center space-x-2">
-            <Package className="w-4 h-4 text-gray-500" />
-            <span className="text-sm font-medium text-gray-900">Categories</span>
-          </div>
-          {expandedSections.includes('categories') ? (
-            <ChevronUp className="w-4 h-4 text-gray-500" />
-          ) : (
-            <ChevronDown className="w-4 h-4 text-gray-500" />
-          )}
-        </button>
-        
-        {expandedSections.includes('categories') && (
-          <div className="p-3 border-t border-gray-200 space-y-3">
-            {availableCategories.map((category) => (
-              <div key={category.id} className="space-y-2">
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={selectedCategories.includes(category.name)}
-                    onChange={() => toggleCategory(category.name)}
-                    className="text-purple-600 focus:ring-purple-500"
-                  />
-                  <span className="text-sm font-medium text-gray-900">{category.name}</span>
-                </label>
-                
-                {selectedCategories.includes(category.name) && (
-                  <div className="ml-6 space-y-1">
-                    {category.subcategories.map((sub) => (
-                      <label key={sub} className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          className="text-purple-600 focus:ring-purple-500"
-                        />
-                        <span className="text-xs text-gray-600">{sub}</span>
-                      </label>
-                    ))}
-                  </div>
-                )}
+      <div className="p-4 space-y-6">
+        {/* Categories Section */}
+        <div className="bg-white border border-gray-200 rounded-xl shadow-sm">
+          <button
+            onClick={() => toggleSection('categories')}
+            className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors rounded-t-xl"
+          >
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-purple-100 rounded-lg">
+                <Package className="w-5 h-5 text-purple-600" />
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Keywords Section */}
-      <div className="border border-gray-200 rounded-lg">
-        <button
-          onClick={() => toggleSection('keywords')}
-          className="w-full flex items-center justify-between p-3 hover:bg-gray-50 transition-colors"
-        >
-          <div className="flex items-center space-x-2">
-            <Search className="w-4 h-4 text-gray-500" />
-            <span className="text-sm font-medium text-gray-900">Keywords</span>
-          </div>
-          {expandedSections.includes('keywords') ? (
-            <ChevronUp className="w-4 h-4 text-gray-500" />
-          ) : (
-            <ChevronDown className="w-4 h-4 text-gray-500" />
-          )}
-        </button>
-        
-        {expandedSections.includes('keywords') && (
-          <div className="p-3 border-t border-gray-200 space-y-3">
-            <div className="flex space-x-2">
-              <Input
-                placeholder="Add keyword"
-                value={newKeyword}
-                onChange={(e) => setNewKeyword(e.target.value)}
-                className="text-sm flex-1"
-                onKeyPress={(e) => e.key === 'Enter' && addKeyword()}
-              />
-              <Button size="sm" onClick={addKeyword} className="text-xs">
-                <Plus className="w-3 h-3" />
-              </Button>
+              <div className="text-left">
+                <h3 className="text-sm font-semibold text-gray-900">Categories</h3>
+                <p className="text-xs text-gray-600">Select your business categories</p>
+              </div>
             </div>
-            
-            <div className="flex flex-wrap gap-2">
-              {keywords.map((keyword) => (
-                <span
-                  key={keyword}
-                  className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-purple-100 text-purple-800"
-                >
-                  <Tag className="w-3 h-3 mr-1" />
-                  {keyword}
-                  <button
-                    onClick={() => removeKeyword(keyword)}
-                    className="ml-1 hover:text-purple-600"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Product List Section */}
-      <div className="border border-gray-200 rounded-lg">
-        <button
-          onClick={() => toggleSection('products')}
-          className="w-full flex items-center justify-between p-3 hover:bg-gray-50 transition-colors"
-        >
-          <div className="flex items-center space-x-2">
-            <Package className="w-4 h-4 text-gray-500" />
-            <span className="text-sm font-medium text-gray-900">Product / Service List</span>
-            <span className="text-xs text-gray-500">({products.length} items)</span>
-          </div>
-          {expandedSections.includes('products') ? (
-            <ChevronUp className="w-4 h-4 text-gray-500" />
-          ) : (
-            <ChevronDown className="w-4 h-4 text-gray-500" />
-          )}
-        </button>
-        
-        {expandedSections.includes('products') && (
-          <div className="p-3 border-t border-gray-200 space-y-3">
-            {/* Upload Options */}
-            <div className="grid grid-cols-2 gap-2">
-              <label className="flex flex-col items-center p-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition-colors">
-                <Upload className="w-5 h-5 text-gray-400 mb-1" />
-                <span className="text-xs text-gray-600">Upload Excel</span>
-                <input
-                  type="file"
-                  accept=".xlsx,.xls"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
-              </label>
-              <label className="flex flex-col items-center p-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition-colors">
-                <Upload className="w-5 h-5 text-gray-400 mb-1" />
-                <span className="text-xs text-gray-600">Upload PDF</span>
-                <input
-                  type="file"
-                  accept=".pdf"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
-              </label>
-            </div>
-
-            {/* Product List */}
-            <div className="space-y-2">
-              {products.map((product) => (
-                <div key={product.id} className="p-2 bg-gray-50 rounded border">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h4 className="text-sm font-medium text-gray-900">{product.name}</h4>
-                      <p className="text-xs text-gray-600">{product.category} → {product.subcategory}</p>
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {product.keywords.map((keyword) => (
-                          <span
-                            key={keyword}
-                            className="inline-flex items-center px-1.5 py-0.5 rounded text-xs bg-gray-200 text-gray-600"
-                          >
-                            {keyword}
-                          </span>
-                        ))}
-                      </div>
+            {expandedSections.includes('categories') ? (
+              <ChevronUp className="w-5 h-5 text-gray-500" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-gray-500" />
+            )}
+          </button>
+          
+          {expandedSections.includes('categories') && (
+            <div className="p-4 border-t border-gray-200 space-y-4">
+              {availableCategories.map((category) => (
+                <div key={category.id} className="space-y-3">
+                  <label className="flex items-center space-x-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={selectedCategories.includes(category.name)}
+                      onChange={() => toggleCategory(category.name)}
+                      className="text-purple-600 focus:ring-purple-500 rounded"
+                    />
+                    <span className="text-sm font-medium text-gray-900">{category.name}</span>
+                  </label>
+                  
+                  {selectedCategories.includes(category.name) && (
+                    <div className="ml-8 space-y-2">
+                      {category.subcategories.map((sub) => (
+                        <label key={sub} className="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                          <input
+                            type="checkbox"
+                            className="text-purple-600 focus:ring-purple-500 rounded"
+                          />
+                          <span className="text-sm text-gray-700">{sub}</span>
+                        </label>
+                      ))}
                     </div>
-                    <button className="p-1 text-red-500 hover:bg-red-50 rounded">
-                      <X className="w-3 h-3" />
-                    </button>
-                  </div>
+                  )}
                 </div>
               ))}
             </div>
+          )}
+        </div>
 
-            <Button size="sm" variant="ghost" fullWidth className="text-xs">
-              <Plus className="w-3 h-3 mr-1" />
-              Add Product/Service
-            </Button>
-          </div>
-        )}
+        {/* Keywords Section */}
+        <div className="bg-white border border-gray-200 rounded-xl shadow-sm">
+          <button
+            onClick={() => toggleSection('keywords')}
+            className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors rounded-t-xl"
+          >
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <Search className="w-5 h-5 text-blue-600" />
+              </div>
+              <div className="text-left">
+                <h3 className="text-sm font-semibold text-gray-900">Keywords</h3>
+                <p className="text-xs text-gray-600">Add search keywords for your business</p>
+              </div>
+            </div>
+            {expandedSections.includes('keywords') ? (
+              <ChevronUp className="w-5 h-5 text-gray-500" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-gray-500" />
+            )}
+          </button>
+          
+          {expandedSections.includes('keywords') && (
+            <div className="p-4 border-t border-gray-200 space-y-4">
+              <div className="flex space-x-2">
+                <Input
+                  placeholder="Add keyword (e.g., organic, premium)"
+                  value={newKeyword}
+                  onChange={(e) => setNewKeyword(e.target.value)}
+                  className="text-sm flex-1"
+                  onKeyPress={(e) => e.key === 'Enter' && addKeyword()}
+                />
+                <Button 
+                  size="sm" 
+                  onClick={addKeyword}
+                  className="bg-purple-600 hover:bg-purple-700"
+                >
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </div>
+              
+              <div className="flex flex-wrap gap-2">
+                {keywords.map((keyword) => (
+                  <span
+                    key={keyword}
+                    className="inline-flex items-center px-3 py-1.5 rounded-full text-sm bg-purple-100 text-purple-800 font-medium"
+                  >
+                    <Tag className="w-3 h-3 mr-1" />
+                    {keyword}
+                    <button
+                      onClick={() => removeKeyword(keyword)}
+                      className="ml-2 hover:text-purple-600 transition-colors"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Product List Section */}
+        <div className="bg-white border border-gray-200 rounded-xl shadow-sm">
+          <button
+            onClick={() => toggleSection('products')}
+            className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors rounded-t-xl"
+          >
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-green-100 rounded-lg">
+                <Package className="w-5 h-5 text-green-600" />
+              </div>
+              <div className="text-left">
+                <h3 className="text-sm font-semibold text-gray-900">Product / Service List</h3>
+                <p className="text-xs text-gray-600">{products.length} items added</p>
+              </div>
+            </div>
+            {expandedSections.includes('products') ? (
+              <ChevronUp className="w-5 h-5 text-gray-500" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-gray-500" />
+            )}
+          </button>
+          
+          {expandedSections.includes('products') && (
+            <div className="p-4 border-t border-gray-200 space-y-4">
+              {/* Upload Options */}
+              <div className="grid grid-cols-2 gap-3">
+                <label className="flex flex-col items-center p-4 border-2 border-dashed border-purple-300 rounded-xl cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition-colors">
+                  <Upload className="w-6 h-6 text-purple-500 mb-2" />
+                  <span className="text-sm font-medium text-purple-700">Upload Excel</span>
+                  <span className="text-xs text-purple-600 mt-1">(.xlsx, .xls)</span>
+                  <input
+                    type="file"
+                    accept=".xlsx,.xls"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                </label>
+                <label className="flex flex-col items-center p-4 border-2 border-dashed border-blue-300 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors">
+                  <Upload className="w-6 h-6 text-blue-500 mb-2" />
+                  <span className="text-sm font-medium text-blue-700">Upload PDF</span>
+                  <span className="text-xs text-blue-600 mt-1">(.pdf)</span>
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+
+              {/* Product List */}
+              <div className="space-y-3">
+                {products.map((product) => (
+                  <div key={product.id} className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h4 className="text-sm font-semibold text-gray-900">{product.name}</h4>
+                        <p className="text-xs text-gray-600 mt-1">{product.category} → {product.subcategory}</p>
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {product.keywords.map((keyword) => (
+                            <span
+                              key={keyword}
+                              className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-200 text-gray-700 font-medium"
+                            >
+                              {keyword}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <button className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <Button 
+                size="sm" 
+                variant="ghost" 
+                fullWidth 
+                className="text-sm border-2 border-dashed border-gray-300 hover:border-purple-400 hover:bg-purple-50 hover:text-purple-700 py-3"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Product/Service Manually
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -24,15 +24,16 @@ import RFQCreationFlow from "./components/Buyer/RFQCreation/RFQCreationFlow";
 import MainLogin from "./components/OnBoarding/login";
 import SellerDashboard from "./components/Seller/SellerDashboard";
 import MobileDashboardBuyer from "./components/Buyer/Dashboard/MobileBuyerdashboard";
-import MarketIndex from "./components/MarketPlace/MarketIndex";
+
 import Marketplace from "./components/MarketPlace/Marketplace";
 import ProductSearchPage from "./components/MarketPlace/ProductSearchPage";
 import ServiceSearchPage from "./components/MarketPlace/ServiceSearchPage";
 import ServiceProviderPage from "./components/MarketPlace/ServiceProviderPage";
 import ProductDetailPage from "./components/MarketPlace/ProductDetailPage";
-import MobileDashboardSeller from "./components/Seller/DashBoard/MobileDashboard";
+
 import DashboardV2 from "./components/Dashboardv2";
 import TopNavigation from "./components/TopNavigation";
+import MobileDashboardSeller from "./components/Seller/DashBoard/MobileDashboardSeller";
 
 function App() {
   return (
