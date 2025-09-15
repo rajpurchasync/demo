@@ -1,10 +1,10 @@
-export interface User {
+interface User {
   id: string;
   name: string;
   email: string;
 }
 
-export interface Task {
+interface Task {
   id: string;
   title: string;
   description?: string;
@@ -19,7 +19,7 @@ export interface Task {
   updatedAt: string;
 }
 
-export interface Subtask {
+interface Subtask {
   id: string;
   title: string;
   assignee: User;
@@ -28,7 +28,7 @@ export interface Subtask {
   createdAt: string;
 }
 
-export interface RFQ {
+interface RFQ {
   id: string;
   title: string;
   purchaseType: string;
@@ -43,7 +43,7 @@ export interface RFQ {
   createdAt: string;
 }
 
-export interface Supplier {
+interface Supplier {
   id: string;
   name: string;
   email: string;
@@ -52,7 +52,7 @@ export interface Supplier {
   location: string;
 }
 
-export interface Contract {
+interface Contract {
   id: string;
   title: string;
   category: string;
@@ -72,7 +72,7 @@ export interface Contract {
   createdAt: string;
 }
 
-export interface ActivityLogEntry {
+interface ActivityLogEntry {
   id: string;
   type:
     | "task_created"
@@ -89,7 +89,7 @@ export interface ActivityLogEntry {
   timestamp: string;
   metadata?: Record<string, any>;
 }
-export interface UserType {
+interface UserType {
   id: string;
   name: string;
   email: string;
@@ -1149,21 +1149,57 @@ export default function TasksPage() {
           return "bg-gray-100 text-gray-700";
       }
     };
-
+    const allSelected =
+      selectedTasks.length === tasks.length && tasks.length > 0;
+    const someSelected =
+      selectedTasks.length > 0 && selectedTasks.length < tasks.length;
+    const onToggleSelectAll = () => {
+      if (allSelected) {
+        setSelectedTasks([]);
+      } else {
+        setSelectedTasks(tasks.map((task) => task.id));
+      }
+    };
     return (
       <div className="card-clickup">
         {/* Desktop Table View */}
         <div className="hidden lg:block overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-gray-200">
-              <tr className="text-left !text-[14px] text-gray-500 tracking-wider">
-                <th className="px-4 py-3  w-8"></th>
-                <th className="px-4 py-3">Title</th>
-                <th className="px-4 py-3">Task Type</th>
-                <th className="px-4 py-3">Priority</th>
-                <th className="px-4 py-3">Assignee</th>
-                <th className="px-4 py-3">Due Date</th>
-                <th className="px-4 py-3 w-12">Actions</th>
+              <tr className="group border-b border-gray-200 text-left !text-[14px] text-gray-500 tracking-wider">
+                <th
+                  className={`${
+                    someSelected ? "opacity-100" : "opacity-100"
+                  }  w-8 sm:w-12 py-2 sm:py-3 px-2 sm:px-4`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={allSelected}
+                    ref={(input) => {
+                      if (input) input.indeterminate = someSelected;
+                    }}
+                    onChange={onToggleSelectAll}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 min-w-[16px] min-h-[16px]"
+                  />
+                </th>
+                <th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-medium text-gray-700 text-xs sm:text-sm">
+                  Title
+                </th>
+                <th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-medium text-gray-700 text-xs sm:text-sm">
+                  Task Type
+                </th>
+                <th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-medium text-gray-700 text-xs sm:text-sm">
+                  Priority
+                </th>
+                <th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-medium text-gray-700 text-xs sm:text-sm">
+                  Assignee
+                </th>
+                <th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-medium text-gray-700 text-xs sm:text-sm">
+                  Due Date
+                </th>
+                <th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-medium text-gray-700 text-xs sm:text-sm w-12">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -1181,15 +1217,19 @@ export default function TasksPage() {
                           checked={selectedTasks.includes(task.id)}
                           onChange={() => handleTaskSelect(task.id)}
                           onClick={(e) => e.stopPropagation()}
-                          className="opacity-0 group-hover:opacity-100 w-3 h-3 text-teal-600 border-gray-100  rounded focus:ring-teal-500 min-w-[16px] min-h-[16px] flex-shrink-0"
+                          className={`${
+                            selectedTasks.includes(task.id)
+                              ? "opacity-100"
+                              : "opacity-100"
+                          }  w-3 h-3 text-teal-600 border-gray-100  rounded focus:ring-teal-500 min-w-[16px] min-h-[16px] flex-shrink-0`}
                         />
                       </td>
                       <td className="px-4 py-2">
                         <button
                           onClick={() => onTaskClick(task)}
-                          className="text-left hover:text-purple-600 font-medium text-sm text-heading"
+                          className="capitalize cursor-pointer text-blue-600 text-left font-medium text-md text-heading"
                         >
-                          {task.title}
+                          {task.title.toLocaleLowerCase()}
                         </button>
                       </td>
                       <td className="px-4 py-2">
@@ -1197,7 +1237,7 @@ export default function TasksPage() {
                           variant="secondary"
                           className={`${getTypeColor(
                             task.type
-                          )} bg-transparent text-gray-500`}
+                          )} bg-transparent text-gray-500 text-sm`}
                         >
                           {task.type}
                         </Badge>
@@ -1266,7 +1306,7 @@ export default function TasksPage() {
                               className="p-2 h-auto hover:bg-gray-100 text-sm justify-start"
                             >
                               <div className="flex items-center gap-2">
-                                <div className="flex -space-x-1">
+                                <div className="flex -space-x-1 text-gray-500">
                                   {task.assignee}
                                   {/* {(task.assignee?.length || 1) > 2 && (
                                     <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs font-medium border border-white">
@@ -2295,7 +2335,7 @@ export default function TasksPage() {
   return (
     <div className="flex-1 flex flex-col bg-white overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 py-3  lg:py-2 border-b border-gray-200">
+      <div className="flex items-center justify-between p-4 py-3  lg:py-4 border-b border-gray-200">
         <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
           <div className="flex items-center gap-1 sm:gap-2">
             <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-500 rounded flex items-center justify-center">
@@ -2306,19 +2346,58 @@ export default function TasksPage() {
             </h1>
           </div>
         </div>
-
         <button
           onClick={() => setShowTaskModal(true)}
-          className="bg-gray-900 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors text-xs sm:text-sm min-h-[16px]"
+          className="bg-gray-900 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm sm:text-base min-w-[44px] min-h-[44px] flex items-center justify-center"
         >
-          <span className="hidden sm:inline">Add task</span>
+          <span className="hidden sm:inline">Add Task</span>
           <span className="sm:hidden">Add</span>
         </button>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-3 px-3 sm:px-4 lg:px-6 py-1  border-b border-gray-200 overflow-x-auto">
-        <button
+      <div className="flex items-center gap-3 px-3 sm:px-4 lg:px-6 py-0  border-b border-gray-200 overflow-x-auto">
+        <div className="flex space-x-8 px-6">
+          {[
+            { id: "all", label: "All", count: 3 },
+            { id: "invited", label: "Invited", count: 0 },
+            {
+              id: "created",
+              label: "Created",
+              count: 0,
+            },
+            {
+              id: "completed",
+              label: "Completed",
+              count: 1,
+            },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`h-[48px] py-1 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === tab.id
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              {tab.label}
+              {tab.count > 0 && (
+                <span
+                  className={`ml-2 px-2 py-1 text-xs rounded-full ${
+                    activeTab === tab.id
+                      ? "bg-blue-100 text-blue-600"
+                      : "bg-gray-100 text-gray-600"
+                  }`}
+                >
+                  {tab.count}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* <button
           onClick={() => setActiveTab("all")}
           className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
             activeTab === "all"
@@ -2369,8 +2448,8 @@ export default function TasksPage() {
           {activeTab === "completed" && (
             <hr className="border-black mt-1 border-[1.2px]" />
           )}
-        </button>
-        <div className="relative w-80 ml-auto ">
+        </button> */}
+        <div className="relative w-80 ml-auto py-1">
           <Search
             size={18}
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"

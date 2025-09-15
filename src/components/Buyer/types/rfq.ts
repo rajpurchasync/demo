@@ -22,14 +22,14 @@ export interface RFQAttachment {
   size: string;
 }
 
-export interface RFQItem {
+interface RFQItem {
   id: string;
   itemName: string;
   quantity: number;
   unitOfMeasure: string;
 }
 
-export interface RFQVendor {
+interface RFQVendor {
   id: string;
   vendorName: string;
   location: string;

@@ -13,7 +13,7 @@ export interface Message {
   attachments?: Attachment[];
 }
 
-export interface Attachment {
+interface Attachment {
   id: string;
   name: string;
   size: number;

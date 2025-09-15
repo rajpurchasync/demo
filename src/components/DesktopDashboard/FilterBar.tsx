@@ -149,21 +149,33 @@ export default function FilterBar({
 
   return (
     <>
-      <div className="bg-white border-b border-gray-200 px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4">
+      <div className="bg-white border-b border-gray-200 px-3 py-1 sm:px-4 sm:py-1 lg:px-6 lg:py-1">
         <div className="flex items-center justify-between">
+          {/* <button
+                    onClick={() => setShowFilters(true)}
+                    className="flex items-center gap-1 sm:gap-2 px-2 py-2 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors min-h-[16px]"
+                  >
+                    <Filter className="w-4 h-4" />
+                    <span className="hidden sm:inline">Filter</span>
+                  </button> */}
           {/* Right side - Search and controls */}
           <div className="flex-1 flex items-center gap-1 sm:gap-2 lg:gap-3 justify-between">
-            <div className="relative">
-              <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+            <div className="relative w-80 ml-auto ">
+              <Search
+                size={18}
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              />
               <input
                 type="text"
-                placeholder="Search..."
-                className="w-20 sm:w-32 lg:w-[500px] pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 text-xs sm:text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent min-h-[44px]"
+                placeholder="Search anything..."
+                // value={}
+                // onChange={(e) => setSearchQuery(e.target.value)}
+                className="outline-none w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:bg-white focus:border-primary-300  transition-all duration-200 text-sm shadow-soft"
               />
             </div>
             <button
               onClick={() => setShowFilters(true)}
-              className="flex items-center gap-1 sm:gap-2 px-2 py-2 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors min-w-[44px] min-h-[44px]"
+              className="flex items-center gap-1 sm:gap-2 px-2 py-2 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors min-h-[16px]"
             >
               <Filter className="w-4 h-4" />
               <span className="hidden sm:inline">Filter</span>

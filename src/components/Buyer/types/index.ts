@@ -19,4 +19,4 @@ export interface ProposalItem {
   sellerId: string;
 }
 
-export type ViewType = 'selection' | 'high-level' | 'detailed';
+type ViewType = 'selection' | 'high-level' | 'detailed';

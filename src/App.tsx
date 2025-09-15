@@ -23,7 +23,6 @@ import BuyerDashboard from "./components/BuyerDashboard";
 import RFQCreationFlow from "./components/Buyer/RFQCreation/RFQCreationFlow";
 import MainLogin from "./components/OnBoarding/login";
 import SellerDashboard from "./components/Seller/SellerDashboard";
-import MobileDashboardBuyer from "./components/Buyer/Dashboard/MobileBuyerdashboard";
 
 import Marketplace from "./components/MarketPlace/Marketplace";
 import ProductSearchPage from "./components/MarketPlace/ProductSearchPage";
@@ -33,7 +32,9 @@ import ProductDetailPage from "./components/MarketPlace/ProductDetailPage";
 
 import DashboardV2 from "./components/Dashboardv2";
 import TopNavigation from "./components/TopNavigation";
+import MobileDashboardBuyer from "./components/MobileDashboard/MobileDashboard";
 import MobileDashboardSeller from "./components/Seller/DashBoard/MobileDashboardSeller";
+// import MobileDashboardSeller from "./components/Seller/DashBoard/MobileDashboardSeller";
 
 function App() {
   return (
@@ -80,7 +81,7 @@ function App() {
                   <SellerDashboard profileStatus="pending" />
                 </div>
                 <div className="md:hidden">
-                  <MobileDashboardSeller />
+                  <MobileDashboardBuyer />
                 </div>
               </>
             }

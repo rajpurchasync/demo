@@ -1,5 +1,5 @@
 import React from 'react';
-import { Message } from '../types';
+import { Message } from './types';
 import { X, Mail, MessageCircle, User, Phone, Clock, Paperclip } from 'lucide-react';
 
 interface MessageModalProps {

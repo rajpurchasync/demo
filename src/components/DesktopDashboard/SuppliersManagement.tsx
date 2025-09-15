@@ -20,6 +20,9 @@ interface Supplier {
 const SuppliersManagement = () => {
   const [activeSection, setActiveSection] = useState("suppliers");
   const [activeTab, setActiveTab] = useState("suppliers");
+  const [activeSupplierTab, setActiveSupplierTab] = useState<
+    "all" | "credit" | "approved" | "prospect"
+  >("all");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAddCompanyModalOpen, setIsAddCompanyModalOpen] = useState(false);
   const [selectedSuppliers, setSelectedSuppliers] = useState<string[]>([]);
@@ -37,14 +40,56 @@ const SuppliersManagement = () => {
       state: "California",
       city: "San Francisco",
     },
+    {
+      id: "2",
+      companyName: "Global Supply Co.",
+      type: "Manufacturing",
+      category: "Components",
+      label: "Credit",
+      tags: ["Manufacturing", "B2B"],
+      country: "United States",
+      state: "New York",
+      city: "New York",
+    },
+    {
+      id: "3",
+      companyName: "Innovation Partners",
+      type: "Service Provider",
+      category: "Consulting",
+      label: "Prospective",
+      tags: ["Services", "Consulting"],
+      country: "United States",
+      state: "Texas",
+      city: "Austin",
+    },
   ]);
 
-  const handleUpdateSupplier = (id: string, field: string, value: string) => {
+  // Filter suppliers based on active supplier tab
+  const getFilteredSuppliersByTab = () => {
+    switch (activeSupplierTab) {
+      case "credit":
+        return suppliers.filter((s) => s.label === "Credit");
+      case "approved":
+        return suppliers.filter((s) => s.label === "Approved");
+      case "prospect":
+        return suppliers.filter((s) => s.label === "Prospective");
+      default:
+        return suppliers;
+    }
+  };
+
+  const filteredSuppliers = getFilteredSuppliersByTab();
+
+  const handleUpdateSupplier = (
+    id: string,
+    updatedFields: Partial<Supplier>
+  ) => {
     setSuppliers((prev) =>
       prev.map((supplier) =>
-        supplier.id === id ? { ...supplier, [field]: value } : supplier
+        supplier.id === id ? { ...supplier, ...updatedFields } : supplier
       )
     );
+    // Optionally show a success message here
   };
 
   const handleToggleSelection = (id: string) => {
@@ -57,7 +102,9 @@ const SuppliersManagement = () => {
 
   const handleToggleSelectAll = () => {
     setSelectedSuppliers((prev) =>
-      prev.length === suppliers.length ? [] : suppliers.map((s) => s.id)
+      prev.length === filteredSuppliers.length
+        ? []
+        : filteredSuppliers.map((s) => s.id)
     );
   };
 
@@ -82,6 +129,14 @@ const SuppliersManagement = () => {
     // Dummy implementation - would open tags assignment modal
     console.log("Assign tags to selected suppliers:", selectedSuppliers);
   };
+
+  const supplierTabCounts = {
+    all: suppliers.length,
+    credit: suppliers.filter((s) => s.label === "Credit").length,
+    approved: suppliers.filter((s) => s.label === "Approved").length,
+    prospect: suppliers.filter((s) => s.label === "Prospective").length,
+  };
+
   return (
     <div>
       <Header
@@ -90,21 +145,65 @@ const SuppliersManagement = () => {
         onAddCompany={() => setIsAddCompanyModalOpen(true)}
         onMobileMenuToggle={() => setIsMobileMenuOpen(true)}
       />
-      <FilterBar
-        selectedCount={selectedSuppliers.length}
-        onDeleteSelected={handleDeleteSelected}
-        onLabelSelected={handleLabelSelected}
-        onTagsSelected={handleTagsSelected}
-      />
+
+      {/* Supplier Filter Tabs */}
+      <div className="flex justify-between bg-white border-b border-gray-200">
+        <div className="flex space-x-8 px-6">
+          {[
+            { id: "all", label: "All", count: supplierTabCounts.all },
+            { id: "credit", label: "Credit", count: supplierTabCounts.credit },
+            {
+              id: "approved",
+              label: "Approved",
+              count: supplierTabCounts.approved,
+            },
+            {
+              id: "prospect",
+              label: "New Prospect",
+              count: supplierTabCounts.prospect,
+            },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveSupplierTab(tab.id as any)}
+              className={`py-1 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeSupplierTab === tab.id
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              {tab.label}
+              {tab.count > 0 && (
+                <span
+                  className={`ml-2 px-2 py-1 text-xs rounded-full ${
+                    activeSupplierTab === tab.id
+                      ? "bg-blue-100 text-blue-600"
+                      : "bg-gray-100 text-gray-600"
+                  }`}
+                >
+                  {tab.count}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+        <FilterBar
+          selectedCount={selectedSuppliers.length}
+          onDeleteSelected={handleDeleteSelected}
+          onLabelSelected={handleLabelSelected}
+          onTagsSelected={handleTagsSelected}
+        />
+      </div>
+
       <SuppliersTable
-        suppliers={suppliers}
+        suppliers={filteredSuppliers}
         onUpdateSupplier={handleUpdateSupplier}
         selectedSuppliers={selectedSuppliers}
         onToggleSelection={handleToggleSelection}
         onToggleSelectAll={handleToggleSelectAll}
         onCompanyClick={handleCompanyClick}
       />
-      <AddCompanyModal
+      <AddCompanyModal // This modal is for adding new companies, not editing existing ones
         isOpen={isAddCompanyModalOpen}
         onClose={() => setIsAddCompanyModalOpen(false)}
         onAddSupplier={(supplier) =>
@@ -117,6 +216,7 @@ const SuppliersManagement = () => {
         isOpen={isCompanyDetailOpen}
         onClose={() => setIsCompanyDetailOpen(false)}
         company={selectedCompany}
+        onUpdateSupplier={handleUpdateSupplier}
       />
     </div>
   );

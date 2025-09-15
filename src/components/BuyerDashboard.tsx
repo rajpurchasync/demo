@@ -5,9 +5,7 @@ import NotificationCenter from "./Buyer/NotificationCenter";
 import Dashboard from "./Buyer/Dashboard";
 import MyBusiness from "./Buyer/MyBusiness";
 import ProfileManagement from "./Buyer/ProfileManagement";
-import SupplierManagement from "./Buyer/SupplierManagement";
 import SamplesManagement from "./Buyer/SamplesManagement";
-import RFQList from "./Buyer/RFQList";
 import RFQTemplates from "./Buyer/RFQTemplates";
 import RFQApprovals from "./Buyer/RFQApprovals";
 import QuotationManagement from "./Buyer/QuotationManagement";
@@ -23,18 +21,17 @@ import ContractTemplates from "./Buyer/ContractTemplates";
 import ContractManagement from "./Buyer/ContractManagement";
 import MyLocations from "./Buyer/MyLocations";
 import SecurityPrivacy from "./Buyer/SecurityPrivacy";
-import Integrations from "./Buyer/Integrations";
 import IntegrationMain from "./Integrations/IntegrationMain";
 import Membership from "./Buyer/Membership";
-import SellerMembership from "./Seller/sections/Membership";
+import SellerMembership from "./Buyer/Membership";
 import { KYCTemplateView } from "./KYCTemplateView";
 
 function BuyerDashboard() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [activeBottomTab, setActiveBottomTab] = useState("todos");
-  const [currentView, setCurrentView] = useState("todos");
+  const [activeBottomTab, setActiveBottomTab] = useState("tasks");
+  const [currentView, setCurrentView] = useState("tasks");
   const [isNotificationCenterOpen, setIsNotificationCenterOpen] =
     useState(false);
   const [unreadNotificationCount, setUnreadNotificationCount] = useState(3);
@@ -128,7 +125,7 @@ function BuyerDashboard() {
             </div>
           </>
         );
-      case "todos":
+      case "tasks":
         return (
           <>
             <div

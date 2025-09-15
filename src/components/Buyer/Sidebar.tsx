@@ -16,21 +16,14 @@ import {
   Download,
 } from "lucide-react";
 import {
-  LayoutDashboard,
-  FileText,
-  Users,
-  Building,
-  Heart,
-  MessageSquare,
-  Bell,
-  User,
-  BarChart3,
-  ChevronLeft,
-  ChevronRight,
-  ChevronDown,
-  Menu,
-  X,
+  Package,
+  Phone,
+  Shield,
+  ClipboardList,
+  FileSignature,
+  Archive,
 } from "lucide-react";
+import { FileText, Users, Building, User, Menu, X } from "lucide-react";
 import { useNavigate, useNavigation } from "react-router-dom";
 
 interface SidebarProps {
@@ -50,7 +43,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   onNavigate,
   type = "buyer",
 }) => {
-  const [currentView, setCurrentView] = React.useState("todos");
+  const [currentView, setCurrentView] = React.useState("tasks");
   const [isSettingsMode, setIsSettingsMode] = useState(false);
   const [expandedMenus, setExpandedMenus] = React.useState<{
     [key: string]: boolean;
@@ -116,6 +109,96 @@ const Sidebar: React.FC<SidebarProps> = ({
       label: "Messages",
       icon: MessageCircle,
       color: "text-pink-600",
+    },
+  ];
+  const menuSections = [
+    {
+      title: "SRM",
+      items: [
+        {
+          id: "suppliers",
+          label: "Supplier",
+          icon: Users,
+          color: "text-purple-600",
+        },
+        {
+          id: "contactsScreen",
+          label: "Contacts",
+          icon: Phone,
+          color: "text-blue-600",
+        },
+        {
+          id: "messages",
+          label: "Messages",
+          icon: MessageCircle,
+          color: "text-pink-600",
+        },
+        {
+          id: "Meeting",
+          label: "Meeting",
+          icon: Shield,
+          color: "text-green-600",
+        },
+      ],
+    },
+    {
+      title: "Procurement",
+      items: [
+        {
+          id: "rfq-list",
+          label: "RFQ",
+          icon: FileText,
+          color: "text-orange-600",
+        },
+        {
+          id: "quotation",
+          label: "Quotation",
+          icon: FileCheck,
+          color: "text-indigo-600",
+        },
+        {
+          id: "samples",
+          label: "Sample",
+          icon: Package,
+          color: "text-teal-600",
+        },
+        {
+          id: "contract-list",
+          label: "Contract",
+          icon: FileSignature,
+          color: "text-red-600",
+        },
+      ],
+    },
+    {
+      title: "Workspace",
+      items: [
+        {
+          id: "tasks",
+          label: "Tasks",
+          icon: CheckSquare,
+          color: "text-blue-600",
+        },
+        { id: "inbox", label: "Inbox", icon: Inbox, color: "text-green-600" },
+        {
+          id: "rfq-approvals",
+          label: "Approvals",
+          icon: ClipboardList,
+          color: "text-yellow-600",
+        },
+        {
+          id: "rfq-templates",
+          label: "Templates",
+          icon: Archive,
+          color: "text-gray-600",
+        },
+      ],
+    },
+    {
+      title: "Profile & Settings",
+      items: [
+        { id: "profile", label: "Profile", icon: User, color: "text-gray-600" },
+      ],
     },
   ];
 
@@ -264,46 +347,32 @@ const Sidebar: React.FC<SidebarProps> = ({
       `}
       >
         {/* Header */}
-        {/* <div className="flex items-center justify-between p-4 border-b border-gray-100">
-          <a
-            href="#"
-            onClick={() =>
-              handleMenuItemClick({
-                id: "dashboard",
-                label: "Dashboard",
-                icon: LayoutDashboard,
-                color: "text-blue-600",
-              })
-            }
-          >
-            <div
-              className={`flex items-center space-x-3 ${
-                isCollapsed ? "lg:hidden" : ""
-              }`}
-            >
-              <span className="font-bold text-lg bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                <span className="text-gray-500 font-light">My Workspace</span>
-              </span>
-            </div>
-          </a>
 
-          <button
-            onClick={onToggleCollapse}
-            className="hidden lg:flex p-2 rounded-lg hover:bg-gray-100 transition-colors"
-          >
-            {isCollapsed ? (
-              <ChevronRight size={20} />
-            ) : (
-              <ChevronLeft size={20} />
-            )}
-          </button>
-        </div> */}
         {/* Navigation */}
         <nav
           className={`relative flex-1 overflow-y-auto py-4 ${
             isCollapsed ? "px-3" : "px-4"
           }`}
         >
+          {!isCollapsed && (
+            <div
+              className={`mb-4 p-2 bg-gray-50 rounded-lg ${
+                isCollapsed ? "hidden" : " transition-all duration-300"
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                  <User className="w-3 h-3 text-green-600" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-gray-900">
+                    Sarah Johnson
+                  </p>
+                  <p className="text-xs text-gray-500">Procurement Manager</p>
+                </div>
+              </div>
+            </div>
+          )}
           <button
             onClick={onToggleCollapse}
             className={`absolute -top-2 ${
@@ -317,144 +386,37 @@ const Sidebar: React.FC<SidebarProps> = ({
             )}
           </button>
           <div className={`space-y-1 ${isCollapsed ? "py-2" : ""}`}>
-            {isSettingsMode ? (
-              <div className="px-4 py-2 border-b border-gray-200">
-                <button
-                  onClick={handleBackToMain}
-                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  Back to Workspace
-                </button>
-              </div>
-            ) : (
-              <div className={`space-y-1 ${isCollapsed ? "py-2" : ""}`}>
-                <span
-                  className={`text-[16px] text-gray-500 font-light ${
-                    isCollapsed ? "hidden" : ""
-                  }`}
-                >
-                  My Workspace
-                </span>
-
-                {[
-                  {
-                    id: "todos",
-                    label: "To do list",
-                    icon: CheckSquare,
-                    color: "text-blue-600",
-                  },
-                  {
-                    id: "inbox",
-                    label: "Inbox",
-                    icon: Inbox,
-                    color: "text-green-600",
-                  },
-                ].map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        console.log(`Navigate to ${item.id}`);
-                        // router("/" + item.id);
-                        // onClose();
-                        handleMenuItemClick(item);
-                      }}
-                      className={` ${
-                        currentView === item.id
-                          ? "bg-blue-100 text-blue-700 font-medium"
-                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                      }pl-4 w-full flex items-center p-2 hover:bg-gray-50 rounded transition-colors text-left group`}
-                    >
-                      <div
-                        className={`p-1 rounded bg-gray-100 mr-2 ${item.color} group-hover:bg-gray-200 transition-colors`}
-                      >
-                        <Icon className="w-4 h-4" />
-                      </div>
-                      {!isCollapsed && (
-                        <span className="text-[14px] font-medium text-gray-900 group-hover:text-gray-700">
-                          {item.label}
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-
             <hr className="!my-4 border-gray-200" />
-            {(isSettingsMode
-              ? settingsItems
-              : type === "buyer"
-              ? menuItems2
-              : menuItemsSeller
-            ).map((item) => {
-              const Icon = item.icon;
+            {menuSections.map((section, sectionIndex) => {
+              // const Icon = section.icon;
               return (
-                <div key={item.id}>
-                  <button
-                    onClick={() => {
-                      console.log(`Navigate to ${item.id}`);
-                      // router("/" + item.id);
-                      // onClose();
-                      handleMenuItemClick(item);
-                    }}
-                    className={` ${
-                      currentView === item.id
-                        ? "bg-blue-100 text-blue-700 font-medium"
-                        : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                    }pl-4 w-full flex items-center p-2 hover:bg-gray-50 rounded transition-colors text-left group`}
-                  >
-                    <div
-                      className={`p-1 rounded bg-gray-100 mr-2 ${item.color} group-hover:bg-gray-200 transition-colors`}
-                    >
-                      <Icon className="w-4 h-4" />
-                    </div>
-                    {!isCollapsed && (
-                      <span className="text-[14px] font-medium text-gray-900 group-hover:text-gray-700">
-                        {item.label}
-                      </span>
-                    )}
-                    {item.subItems && (
-                      <ChevronDown
-                        size={16}
-                        className={`ml-auto transform transition-transform duration-200 ${
-                          expandedMenus[item.label] ? "rotate-180" : ""
-                        } ${
-                          currentView === item.id
-                            ? "text-blue-600"
-                            : "text-gray-400"
-                        }`}
-                      />
-                    )}
-                  </button>
-                  {item.subItems && expandedMenus[item.label] && (
-                    <div
-                      className={`ml-6 mt-1 space-y-1 ${
-                        isCollapsed ? "lg:hidden" : ""
-                      }`}
-                    >
-                      {item.subItems?.map((subItem) => (
-                        <div
-                          key={subItem.view}
-                          className={`
-                          flex items-center px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 text-sm
-                          ${
-                            currentView === subItem.view
-                              ? "bg-blue-100 text-blue-700 font-medium"
-                              : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                          }
-                        `}
-                          onClick={() => handleNavigation(subItem.view)}
+                <div key={section.title}>
+                  <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 px-2">
+                    {section.title}
+                  </h3>
+                  <div className="space-y-1">
+                    {section.items.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            onNavigate?.(item.id);
+                          }}
+                          className="w-full flex items-center p-2 hover:bg-gray-50 rounded transition-colors text-left group"
                         >
-                          <span className="text-[14px] font-medium text-gray-600 group-hover:text-gray-700">
-                            {subItem.label}
+                          <div
+                            className={`p-1 rounded bg-gray-100 mr-2 ${item.color} group-hover:bg-gray-200 transition-colors`}
+                          >
+                            <Icon className="w-3 h-3" />
+                          </div>
+                          <span className="text-xs font-medium text-gray-900 group-hover:text-gray-700">
+                            {item.label}
                           </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               );
             })}
@@ -534,46 +496,6 @@ const Sidebar: React.FC<SidebarProps> = ({
         </nav>
 
         {/* Footer */}
-        {!isSettingsMode && (
-          <div
-            className={`flex items-center justify-between p-4 mt-auto border-t border-gray-200 ${
-              isCollapsed ? "lg:hidden" : ""
-            }`}
-          >
-            <div className="flex items-center space-x-3">
-              <UserPlus className="w-4 h-4" />
-              <div className="">
-                <div className="font-semibold text-gray-900 text-sm">
-                  Invite
-                </div>
-
-                {/* <div className="text-xs text-gray-600 font-medium">
-                Procurement Manager
-              </div> */}
-              </div>
-            </div>
-            <div className="h-[20px] border-l border-gray-500"></div>
-            <div
-              className="flex items-center space-x-3 cursor-pointer"
-              onClick={() => {
-                setIsSettingsMode(true);
-                setCurrentView("profile");
-                handleNavigation("profile");
-              }}
-            >
-              <Settings className="w-4 h-4" />
-              <div className="">
-                <div className="font-semibold text-gray-900 text-sm">
-                  Settings
-                </div>
-
-                {/* <div className="text-xs text-gray-600 font-medium">
-                Procurement Manager
-              </div> */}
-              </div>
-            </div>
-          </div>
-        )}
       </aside>
     </>
   );

@@ -1,13 +1,13 @@
 import { User, Task, Supplier, ActivityLogEntry } from '@/types';
 
-export const mockUsers: User[] = [
+const mockUsers: User[] = [
   { id: '1', name: 'John Doe', email: 'john@purchasync.com' },
   { id: '2', name: 'Sara Smith', email: 'sara@purchasync.com' },
   { id: '3', name: 'Ali Rahman', email: 'ali@purchasync.com' },
   { id: '4', name: 'Emma Wilson', email: 'emma@purchasync.com' },
 ];
 
-export const mockTasks: Task[] = [
+const mockTasks: Task[] = [
   {
     id: '1',
     title: 'RFQ for Coffee Beans',
@@ -156,14 +156,14 @@ export const mockTasks: Task[] = [
   }
 ];
 
-export const mockSuppliers: Supplier[] = [
+const mockSuppliers: Supplier[] = [
   { id: '1', name: 'Global Coffee Co', email: 'contact@globalcoffee.com', category: 'Beverages', rating: 4.8, location: 'Colombia' },
   { id: '2', name: 'Fresh Greens Ltd', email: 'sales@freshgreens.com', category: 'Vegetables', rating: 4.6, location: 'California, USA' },
   { id: '3', name: 'Organic Pasta Masters', email: 'info@organicpasta.com', category: 'Food', rating: 4.7, location: 'Italy' },
   { id: '4', name: 'Premium Spices Inc', email: 'sales@premiumspices.com', category: 'Spices', rating: 4.5, location: 'India' },
 ];
 
-export const mockActivityLog: ActivityLogEntry[] = [
+const mockActivityLog: ActivityLogEntry[] = [
   {
     id: '1',
     type: 'task_created',
@@ -207,7 +207,7 @@ export const purchaseTypes = [
   'Consumables'
 ];
 
-export const categories = [
+const categories = [
   'Food & Beverages',
   'Electronics',
   'Textiles',
@@ -218,7 +218,7 @@ export const categories = [
   'Healthcare'
 ];
 
-export const paymentTerms = [
+const paymentTerms = [
   'Net 30',
   'Net 60',
   'Net 90',
@@ -228,7 +228,7 @@ export const paymentTerms = [
   'Advance Payment'
 ];
 
-export const contractCategories = [
+const contractCategories = [
   'Supply Agreement',
   'Service Contract',
   'NDA',
