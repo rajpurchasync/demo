@@ -34,6 +34,8 @@ import DashboardV2 from "./components/Dashboardv2";
 import TopNavigation from "./components/TopNavigation";
 import MobileDashboardBuyer from "./components/MobileDashboard/MobileDashboard";
 import MobileDashboardSeller from "./components/Seller/DashBoard/MobileDashboardSeller";
+import Workspace from "./features/Workspace";
+import NotificationsInterface from "./components/Buyer/NotificationsInterface";
 // import MobileDashboardSeller from "./components/Seller/DashBoard/MobileDashboardSeller";
 
 function App() {
@@ -89,19 +91,7 @@ function App() {
           <Route
             path="/seller-dashboard-v2"
             element={
-              <>
-                <div className="hidden md:block pt-[70px]">
-                  <TopNavigation
-                    onNotificationClick={() => {}}
-                    unreadNotificationCount={2}
-                    onProfileClick={() => {}}
-                  />
-                  <DashboardV2 />
-                </div>
-                <div className="md:hidden">
-                  <MobileDashboardSeller />
-                </div>
-              </>
+              <Workspace />
             }
           />
           <Route
@@ -131,7 +121,7 @@ function App() {
               </>
             }
           />
-          <Route
+          {/* <Route
             path="/buyer-dashboard"
             element={
               <>
@@ -148,7 +138,7 @@ function App() {
                 </div>
               </>
             }
-          />
+          /> */}
           {/* <Route
             path="/buyer-dashboard"
             element={
@@ -276,9 +266,9 @@ function App() {
           />
         </Routes>
         <Routes>
-          <Route path="/seller-dashboard" element={null} />
+          <Route path="/seller-dashboard" element={<Workspace />} />
           <Route path="/rfq-creation" element={null} />
-          <Route path="/buyer-dashboard" element={null} />
+          <Route path="/buyer-dashboard" element={<Workspace />} />
           <Route path="/marketplace" element={null} />
           <Route path="/smart-sourcing-tools" element={<Footer />} />
           <Route path="/learn" element={<Footer />} />

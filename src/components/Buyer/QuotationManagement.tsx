@@ -38,7 +38,7 @@ function App({ sidebarCollapsed }: any) {
     <div
       className={`
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      ${sidebarCollapsed ? "" : "lg:ml-60"}
       pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
     `}
     >

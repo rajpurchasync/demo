@@ -103,7 +103,7 @@ function BuyerDashboard() {
             <div
               className={`
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      ${sidebarCollapsed ? "" : "lg:ml-60"}
      pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
     `}
             >
@@ -117,7 +117,7 @@ function BuyerDashboard() {
             <div
               className={`
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      ${sidebarCollapsed ? "" : "lg:ml-60"}
        pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
     `}
             >
@@ -131,7 +131,7 @@ function BuyerDashboard() {
             <div
               className={`
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      ${sidebarCollapsed ? "" : "lg:ml-60"}
       pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
     `}
             >
@@ -144,7 +144,7 @@ function BuyerDashboard() {
           <div
             className={`
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      ${sidebarCollapsed ? "" : "lg:ml-60"}
       pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
     `}
           >
@@ -156,7 +156,7 @@ function BuyerDashboard() {
           <div
             className={`
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      ${sidebarCollapsed ? "" : "lg:ml-60"}
       pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
     `}
           >
@@ -168,7 +168,7 @@ function BuyerDashboard() {
           <div
             className={`
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      ${sidebarCollapsed ? "" : "lg:ml-60"}
       pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
     `}
           >
@@ -180,7 +180,7 @@ function BuyerDashboard() {
           <div
             className={`
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      ${sidebarCollapsed ? "" : "lg:ml-60"}
       pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
     `}
           >
@@ -192,7 +192,7 @@ function BuyerDashboard() {
           <div
             className={`
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      ${sidebarCollapsed ? "" : "lg:ml-60"}
       pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
     `}
           >
@@ -205,7 +205,7 @@ function BuyerDashboard() {
           <div
             className={`
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      ${sidebarCollapsed ? "" : "lg:ml-60"}
       pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden
     `}
           >
@@ -219,7 +219,7 @@ function BuyerDashboard() {
         return (
           <div
             className={`transition-all duration-300 ease-in-out ${
-              sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"
+              sidebarCollapsed ? "" : "lg:ml-60"
             } pt-4 lg:pt-8 px-4 lg:px-8 pb-8 min-h-screen bg-gray-50 rounded-[12px] overflow-hidden`}
           >
             <div className="mb-8 mt-12 lg:mt-0">

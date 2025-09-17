@@ -99,7 +99,7 @@ function DashboardV2() {
             className={`
               p-2
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      ${sidebarCollapsed ? "" : "lg:ml-60"}
       pb-8 min-h-screen bg-gray-50
     `}
           >
@@ -115,7 +115,7 @@ function DashboardV2() {
             <div
               className={`
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      ${sidebarCollapsed ? "" : "lg:ml-60"}
      pb-8 min-h-screen bg-gray-50
     `}
             >
@@ -129,7 +129,7 @@ function DashboardV2() {
             <div
               className={`
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      ${sidebarCollapsed ? "" : "lg:ml-60"}
        pb-8 min-h-screen bg-gray-50
     `}
             >
@@ -143,7 +143,7 @@ function DashboardV2() {
             <div
               className={`
       transition-all duration-300 ease-in-out
-      ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"}
+      ${sidebarCollapsed ? "" : "lg:ml-60"}
       pb-8 min-h-screen bg-gray-50
     `}
             >
@@ -161,7 +161,7 @@ function DashboardV2() {
         return (
           <div
             className={`transition-all duration-300 ease-in-out ${
-              sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"
+              sidebarCollapsed ? "" : "lg:ml-60"
             } pt-4 lg:pt-8 px-4 lg:px-8 pb-8 min-h-screen bg-gray-50`}
           >
             <div className="mb-8 mt-12 lg:mt-0">
@@ -182,7 +182,7 @@ function DashboardV2() {
         return (
           <div
             className={`transition-all duration-300 ease-in-out ${
-              sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"
+              sidebarCollapsed ? "" : "lg:ml-60"
             } pt-4 lg:pt-8 px-4 lg:px-8 pb-8 min-h-screen bg-gray-50`}
           >
             <Leads subSection="rfq" />
@@ -192,7 +192,7 @@ function DashboardV2() {
         return (
           <div
             className={`transition-all duration-300 ease-in-out ${
-              sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"
+              sidebarCollapsed ? "" : "lg:ml-60"
             } pt-4 lg:pt-8 px-4 lg:px-8 pb-8 min-h-screen bg-gray-50`}
           >
             <Leads subSection="sample" />
