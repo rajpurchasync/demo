@@ -36,6 +36,9 @@ import {
   Car,
   Phone,
   ChevronDown,
+  Camera,
+  Upload,
+  UserPlus,
 } from "lucide-react";
 import LandingPage from "./LandingPage";
 import { useNavigate } from "react-router-dom";
@@ -50,23 +53,43 @@ interface FormData {
 }
 
 interface OnboardingData {
-  role: "buyer" | "seller" | "service-provider" | "";
+  role: 'buyer' | 'seller' | 'service-provider' | '';
+  companyLegalName: string;
+  companyType: string;
   industry: string;
-  companyType: string | string[];
-  companyName: string;
+  position: string;
   country: string;
   state: string;
   city: string;
-  mainCustomers: string[];
-  categories: string[];
-  teamEmails: string[];
-  externalEmails: string[];
+  street: string;
 }
+
+
+interface BuyerOnboardingData extends OnboardingData {
+  role: 'buyer';
+  supplierName: string;
+  supplierCategory: string;
+  street: string;
+  supplierLabel: string;
+}
+
+interface SellerOnboardingData extends OnboardingData {
+  role: 'seller';
+  companyName: string;
+  customerCompanyType: string;
+  customerLabel: string;
+  customerTypeTag: string;
+  customerCountry: string;
+  customerState: string;
+  customerCity: string;
+}
+
 
 const MainLogin = ({ page = "login" }) => {
   const [currentView, setCurrentView] = useState<
-    "landing" | "login" | "signup" | "otp" | "onboarding" | "dashboard"
+    "landing" | "login" | "signup" | "otp" | "onboarding" | "dashboard" 
   >(page);
+
   const [currentStep, setCurrentStep] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -86,61 +109,57 @@ const MainLogin = ({ page = "login" }) => {
   });
 
   // Separate state for each role to ensure independence
-  const [buyerData, setBuyerData] = useState<OnboardingData>({
-    role: "buyer",
-    industry: "",
-    showOtherIndustry: false,
-    otherIndustry: "",
-    companyType: "",
-    showOtherCompanyType: false,
-    otherCompanyType: "",
-    companyName: "",
-    showSuggestions: false,
-    country: "",
-    state: "",
-    city: "",
-    teamMembers: [] as string[],
-    suppliers: [] as string[],
-    newSupplierEmail: "",
+  const [buyerData, setBuyerData] = useState<BuyerOnboardingData>({
+    role: 'buyer',
+    companyLegalName: '',
+    companyType: '',
+    industry: '',
+    position: '',
+    country: '',
+    state: '',
+    city: '',
+    street: '',
+    supplierName: '',
+    supplierCategory: '',
+    supplierLabel: ''
   });
 
-  const [sellerData, setSellerData] = useState<OnboardingData>({
-    role: "seller",
-    companyType: "",
-    showOtherCompanyType: false,
-    otherCompanyType: "",
-    customers: [] as string[],
-    companyName: "",
-    showSuggestions: false,
-    country: "",
-    states: [] as string[],
-    showStateDropdown: false,
-    categories: [] as string[],
-    teamMembers: [] as string[],
-    newTeamEmail: "",
-    customerEmails: [] as string[],
-    newCustomerEmail: "",
+
+  const [sellerData, setSellerData] = useState<SellerOnboardingData>({
+    role: 'seller',
+    companyLegalName: '',
+    companyType: '',
+    industry: '',
+    position: '',
+    country: '',
+    state: '',
+    city: '',
+    street: '',
+    companyName: '',
+    customerCompanyType: '',
+    customerLabel: '',
+    customerTypeTag: '',
+    customerCountry: '',
+    customerState: '',
+    customerCity: ''
   });
 
-  const [serviceProviderData, setServiceProviderData] =
-    useState<OnboardingData>({
-      role: "service-provider",
-      companyType: "",
-      showOtherCompanyType: false,
-      otherCompanyType: "",
-      companyName: "",
-      showSuggestions: false,
-      country: "",
-      services: [] as string[],
-      teamMembers: [] as string[],
-      newTeamEmail: "",
-      clientEmails: [] as string[],
-      newClientEmail: "",
-    });
-
-  const [currentOnboardingData, setCurrentOnboardingData] =
-    useState<OnboardingData>(buyerData);
-
+  const [currentOnboardingData, setCurrentOnboardingData] = useState<OnboardingData | BuyerOnboardingData | SellerOnboardingData>(buyerData);
+  const [showAddEntityModal, setShowAddEntityModal] = useState(false);
+  const [showAddEntityForm, setShowAddEntityForm] = useState(false);
+  const [isScanMode, setIsScanMode] = useState(false);
+  const [supplierFormData, setSupplierFormData] = useState({
+    companyName: '',
+    website: '',
+    phone: '',
+    person: '',
+    position: '',
+    mobile: '',
+    email: ''
+  });
+  const handleCompleteOnboarding = () => {
+    setCurrentView('dashboard');
+  };
   // Country codes for mobile registration
   const countryCodes = [
     { code: "+1", country: "US/CA" },
@@ -154,6 +173,19 @@ const MainLogin = ({ page = "login" }) => {
     { code: "+55", country: "BR" },
     { code: "+7", country: "RU" },
   ];
+
+    // Industry options
+    const industries = [
+      'Hospitality',
+      'Food Service',
+      'Retail',
+      'Manufacturing',
+      'Healthcare',
+      'Technology',
+      'Education',
+      'Government',
+      'Other'
+    ];
 
   // Password validation
   const validatePassword = (password: string) => {
@@ -197,7 +229,7 @@ const MainLogin = ({ page = "login" }) => {
 
   // OTP Timer
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: any;
     if (otpTimer > 0) {
       interval = setInterval(() => {
         setOtpTimer((prev) => prev - 1);
@@ -232,19 +264,18 @@ const MainLogin = ({ page = "login" }) => {
     setCurrentStep(1);
   };
 
-  const updateCurrentData = (updates: Partial<OnboardingData>) => {
+  const updateCurrentData = (updates: Partial<OnboardingData | BuyerOnboardingData | SellerOnboardingData>) => {
     const newData = { ...currentOnboardingData, ...updates };
     setCurrentOnboardingData(newData);
-
+    
     // Update the appropriate role-specific data
-    if (newData.role === "buyer") {
-      setBuyerData(newData);
-    } else if (newData.role === "seller") {
-      setSellerData(newData);
-    } else {
-      setServiceProviderData(newData);
+    if (newData.role === 'buyer') {
+      setBuyerData(newData as BuyerOnboardingData);
+    } else if (newData.role === 'seller') {
+      setSellerData(newData as SellerOnboardingData);
     }
   };
+
 
   const handleBack = () => {
     if (currentStep > 0) {
@@ -253,76 +284,42 @@ const MainLogin = ({ page = "login" }) => {
   };
 
   const handleNext = () => {
-    const maxSteps = getMaxSteps();
-    if (currentStep < maxSteps - 1) {
-      setCurrentStep((prev) => prev + 1);
-    } else {
-      setCurrentView("dashboard");
+    if (currentStep === 2) { // After welcome message, open the first modal
+      setShowAddEntityModal(true);
+    } else if (currentStep < getMaxSteps() - 1) {
+      setCurrentStep(prev => prev + 1);
     }
   };
 
   const getMaxSteps = () => {
-    if (currentOnboardingData.role === "buyer") return 7;
-    if (currentOnboardingData.role === "seller") return 8;
-    if (currentOnboardingData.role === "service-provider") return 8;
-    return 1;
+    // Steps are: 0 (Role), 1 (Organization), 2 (Welcome)
+    // Modals handle the subsequent flow, so currentStep won't go beyond 2
+    return 3; 
   };
 
   const canProceedToNext = () => {
     switch (currentStep) {
-      case 0:
-        return currentOnboardingData.role !== "";
-      case 1:
-        if (currentOnboardingData.role === "buyer") {
-          return currentOnboardingData.industry !== "";
-        }
-        return currentOnboardingData.companyType !== "";
-      case 2:
-        if (currentOnboardingData.role === "buyer") {
-          return currentOnboardingData.companyType !== "";
-        }
-        return currentOnboardingData.mainCustomers.length > 0;
-      case 3:
-        return (
-          currentOnboardingData.companyName
-            .trim()
-            .split(" ")
-            .filter((word) => word.length > 0).length >= 2
-        );
-      case 4:
-        if (currentOnboardingData.role === "buyer") {
-          return (
-            currentOnboardingData.country !== "" &&
-            currentOnboardingData.state !== "" &&
-            currentOnboardingData.city !== ""
-          );
-        }
-        return (
-          currentOnboardingData.country !== "" &&
-          currentOnboardingData.state !== ""
-        );
-      case 5:
-        if (currentOnboardingData.role === "buyer") {
-          return true; // Team step is optional
-        }
-        return currentOnboardingData.categories.length > 0;
-      case 6:
-        return true; // Team/External steps are optional
-      case 7:
-        return true;
-      default:
-        return false;
+      case 0: return currentOnboardingData.role !== '';
+      case 1: // Organization Setup
+        return currentOnboardingData.companyLegalName.trim() !== '' && 
+               currentOnboardingData.companyType.trim() !== '' &&
+               currentOnboardingData.industry.trim() !== '' && // Added industry validation
+               currentOnboardingData.position.trim() !== '' &&
+               currentOnboardingData.country !== '' &&
+               currentOnboardingData.state !== ''; // State is now mandatory
+      case 2: return true; // Welcome message, always proceed to modal
+      default: return false; // Should not happen with current step logic
     }
   };
 
   const addTeamEmail = () => {
     if (
       newEmail &&
-      validateEmail(newEmail) &&
-      !currentOnboardingData.teamEmails.includes(newEmail)
+      validateEmail(newEmail) 
+      // !currentOnboardingData.teamEmails.includes(newEmail)
     ) {
       updateCurrentData({
-        teamEmails: [...currentOnboardingData.teamEmails, newEmail],
+        // teamEmails: [...currentOnboardingData.teamEmails, newEmail],
       });
       setNewEmail("");
     }
@@ -330,21 +327,21 @@ const MainLogin = ({ page = "login" }) => {
 
   const removeTeamEmail = (email: string) => {
     updateCurrentData({
-      teamEmails: currentOnboardingData.teamEmails.filter((e) => e !== email),
+      // teamEmails: currentOnboardingData.teamEmails.filter((e) => e !== email),
     });
   };
 
   const addExternalEmail = () => {
     if (
       newExternalEmail &&
-      validateEmail(newExternalEmail) &&
-      !currentOnboardingData.externalEmails.includes(newExternalEmail)
+      validateEmail(newExternalEmail)
+      // !currentOnboardingData.externalEmails.includes(newExternalEmail)
     ) {
       updateCurrentData({
-        externalEmails: [
-          ...currentOnboardingData.externalEmails,
-          newExternalEmail,
-        ],
+        // externalEmails: [
+        //   ...currentOnboardingData.externalEmails,
+        //   newExternalEmail,
+        // ],
       });
       setNewExternalEmail("");
     }
@@ -352,9 +349,9 @@ const MainLogin = ({ page = "login" }) => {
   const navigate = useNavigate();
   const removeExternalEmail = (email: string) => {
     updateCurrentData({
-      externalEmails: currentOnboardingData.externalEmails.filter(
-        (e) => e !== email
-      ),
+      // externalEmails: currentOnboardingData.externalEmails.filter(
+      //   (e) => e !== email
+      // ),
     });
   };
 
@@ -362,12 +359,12 @@ const MainLogin = ({ page = "login" }) => {
     value: string,
     field: "mainCustomers" | "categories"
   ) => {
-    const currentValues = currentOnboardingData[field] as string[];
-    const newValues = currentValues.includes(value)
-      ? currentValues.filter((v) => v !== value)
-      : [...currentValues, value];
+    // const currentValues = currentOnboardingData[field] as string[];
+    // const newValues = currentValues.includes(value)
+    //   ? currentValues.filter((v) => v !== value)
+    //   : [...currentValues, value];
 
-    updateCurrentData({ [field]: newValues });
+    // updateCurrentData({ [field]: newValues });
   };
 
   const renderLogin = () => (
@@ -994,16 +991,40 @@ const MainLogin = ({ page = "login" }) => {
 
           {currentStep > 0 && (
             <div>
-              <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-800">
-                  Setup your profile
-                </h2>
-                <div className="text-sm text-gray-600">
-                  Step {currentStep} of {getMaxSteps() - 1}
-                </div>
+              <div className="text-center mb-6 sm:mb-8">
+                {currentStep === 1 && (
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+                    Organization Setup
+                  </h2>
+                )}
+                {currentStep === 2 && (
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+                    Welcome to Purchasync!
+                  </h2>
+                )}
               </div>
 
               {renderOnboardingStep()}
+
+              {/* Navigation */}
+              <div className="flex justify-between items-center mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200">
+                <button
+                  onClick={handleBack}
+                  disabled={currentStep === 1}
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 text-gray-600 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                >
+                  <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4" />
+                  Back
+                </button>
+
+                <button
+                  onClick={handleNext}
+                  disabled={!canProceedToNext()}
+                  className="px-4 sm:px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm sm:text-base"
+                >
+                  {currentStep === getMaxSteps() - 1 ? "Get Started" : "Next"}
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -1011,149 +1032,581 @@ const MainLogin = ({ page = "login" }) => {
     </div>
   );
 
-  const renderOnboardingStep = () => {
-    const role = currentOnboardingData.role;
-
-    // Buyer flow
-    if (role === "buyer") {
+  const renderAddEntityModal = () => {
+    const isBuyer = currentOnboardingData.role === 'buyer';
+    
+    // If showing the form (buyer only)
+    if (showAddEntityForm && isBuyer) {
       return (
-        <>
-          <BuyerOnboarding
-            onComplete={() => {}}
-            handlePrev={() => setCurrentStep(0)}
-          />
-              
-        </>
-      );
-    }
-
-    // Seller flow
-    if (role === "seller") {
-      return (
-        <>
-          <SellerOnboarding onComplete={() => {}} />
-              
-        </>
-      );
-    }
-
-    // Service Provider flow
-    if (role === "service-provider") {
-      switch (currentStep) {
-        case 1:
-          return (
-            <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-gray-800">
-                What type of services do you provide?
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {[
-                  "Consulting",
-                  "IT Services",
-                  "Marketing",
-                  "Legal",
-                  "Financial",
-                  "HR Services",
-                  "Other",
-                ].map((type) => (
-                  <label
-                    key={type}
-                    className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer hover:border-purple-300 hover:bg-purple-50"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={
-                        Array.isArray(currentOnboardingData.companyType)
-                          ? currentOnboardingData.companyType.includes(type)
-                          : currentOnboardingData.companyType === type
-                      }
-                      onChange={(e) => {
-                        const currentTypes = Array.isArray(
-                          currentOnboardingData.companyType
-                        )
-                          ? currentOnboardingData.companyType
-                          : currentOnboardingData.companyType
-                          ? [currentOnboardingData.companyType]
-                          : [];
-
-                        if (e.target.checked) {
-                          updateCurrentData({
-                            companyType: [...currentTypes, type],
-                          });
-                        } else {
-                          updateCurrentData({
-                            companyType: currentTypes.filter((t) => t !== type),
-                          });
-                        }
-                      }}
-                      className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                    />
-                    <span className="font-medium">{type}</span>
-                  </label>
-                ))}
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 text-center">
+              {isScanMode ? 'Scanned Business Card' : 'Add Supplier Manually'}
+            </h3>
+            
+            {/* Card Image Capture Section - Only show in scan mode */}
+            {isScanMode && (
+              <div className="mb-6">
+                <div className="w-full h-32 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center mb-4">
+                  <div className="text-center">
+                    <Camera className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-sm text-gray-500">Business Card Image</p>
+                  </div>
+                </div>
               </div>
-              {(Array.isArray(currentOnboardingData.companyType)
-                ? currentOnboardingData.companyType.includes("Other")
-                : currentOnboardingData.companyType === "Other") && (
+            )}
+            
+            <div className="space-y-6">
+              {/* Company Section */}
+              <div>
+                <h4 className="text-lg font-semibold text-gray-800 mb-4">Company</h4>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Company Name</label>
+                    <input
+                      type="text"
+                      value={supplierFormData.companyName}
+                      onChange={(e) => setSupplierFormData(prev => ({ ...prev, companyName: e.target.value }))}
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                      placeholder="Enter company name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Website</label>
+                    <input
+                      type="url"
+                      value={supplierFormData.website}
+                      onChange={(e) => setSupplierFormData(prev => ({ ...prev, website: e.target.value }))}
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                      placeholder="Enter website URL"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                    <input
+                      type="tel"
+                      value={supplierFormData.phone}
+                      onChange={(e) => setSupplierFormData(prev => ({ ...prev, phone: e.target.value }))}
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                      placeholder="Enter phone number"
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              {/* Contact Section */}
+              <div>
+                <h4 className="text-lg font-semibold text-gray-800 mb-4">Contact</h4>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Person</label>
+                    <input
+                      type="text"
+                      value={supplierFormData.person}
+                      onChange={(e) => setSupplierFormData(prev => ({ ...prev, person: e.target.value }))}
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                      placeholder="Enter contact person name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Position</label>
+                    <input
+                      type="text"
+                      value={supplierFormData.position}
+                      onChange={(e) => setSupplierFormData(prev => ({ ...prev, position: e.target.value }))}
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                      placeholder="Enter position/title"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Mobile</label>
+                    <input
+                      type="tel"
+                      value={supplierFormData.mobile}
+                      onChange={(e) => setSupplierFormData(prev => ({ ...prev, mobile: e.target.value }))}
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                      placeholder="Enter mobile number"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input
+                      type="email"
+                      value={supplierFormData.email}
+                      onChange={(e) => setSupplierFormData(prev => ({ ...prev, email: e.target.value }))}
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                      placeholder="Enter email address"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-between mt-6">
+              <button
+                onClick={() => setShowAddEntityForm(false)}
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-base"
+              >
+                Back
+              </button>
+              <button
+                onClick={() => {
+                  setShowAddEntityModal(false);
+                  setShowAddEntityForm(false);
+                  handleCompleteOnboarding();
+                }}
+                className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium text-base"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    // Initial modal view
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-md max-h-[90vh] overflow-y-auto">
+          <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 text-center">
+            {isBuyer ? 'Add your first Supplier' : 'Add your first Customer'}
+          </h3>
+          <p className="text-sm sm:text-base text-gray-600 mb-6 text-center">
+            {isBuyer ? 'Start building your supplier network.' : 'Begin connecting with your customers.'}
+          </p>
+
+          <div className="space-y-4">
+            {isBuyer ? (
+              <>
+                <button 
+                  onClick={() => {
+                    setShowAddEntityForm(true);
+                    setIsScanMode(true);
+                    // Auto-fill demo data for scan mode
+                    setSupplierFormData({
+                      companyName: 'Fresh Foods Inc.',
+                      website: 'www.freshfoods.com',
+                      phone: '+1 (555) 123-4567',
+                      person: 'John Smith',
+                      position: 'Sales Manager',
+                      mobile: '+1 (555) 987-6543',
+                      email: 'john.smith@freshfoods.com'
+                    });
+                  }}
+                  className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-base font-medium"
+                >
+                  <Camera className="w-5 h-5 text-gray-600" />
+                  Scan Business Card
+                </button>
+                <button 
+                  onClick={() => {
+                    setShowAddEntityForm(true);
+                    setIsScanMode(false);
+                    // Clear form data for manual mode
+                    setSupplierFormData({
+                      companyName: '',
+                      website: '',
+                      phone: '',
+                      person: '',
+                      position: '',
+                      mobile: '',
+                      email: ''
+                    });
+                  }}
+                  className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-base font-medium"
+                >
+                  <UserPlus className="w-5 h-5 text-gray-600" />
+                  Add Manually
+                </button>
+              </>
+            ) : (
+              <>
+                <button 
+                  onClick={() => {
+                    setShowAddEntityModal(false);
+                    handleCompleteOnboarding();
+                  }}
+                  className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-base font-medium"
+                >
+                  <UserPlus className="w-5 h-5 text-gray-600" />
+                  Add Manually
+                </button>
+                <button 
+                  onClick={() => {
+                    setShowAddEntityModal(false);
+                    handleCompleteOnboarding();
+                  }}
+                  className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-base font-medium"
+                >
+                  <Upload className="w-5 h-5 text-gray-600" />
+                  Import
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+
+  const renderOnboardingStep = () => {
+    // Common Organization Setup Step
+    if (currentStep === 1) {
+      return (
+        <div className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Company Legal Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={currentOnboardingData.companyLegalName}
+                onChange={(e) => updateCurrentData({ companyLegalName: e.target.value })}
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm sm:text-base"
+                placeholder="Enter legal company name"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Company Type <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={currentOnboardingData.companyType}
+                onChange={(e) => updateCurrentData({ companyType: e.target.value })}
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm sm:text-base"
+                placeholder="e.g., Restaurant, Hotel, Manufacturer"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Industry <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={currentOnboardingData.industry}
+                onChange={(e) => updateCurrentData({ industry: e.target.value })}
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm sm:text-base"
+              >
+                <option value="">Select Industry</option>
+                {industries.map((industry) => (
+                  <option key={industry} value={industry}>{industry}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Position/Title <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={currentOnboardingData.position}
+                onChange={(e) => updateCurrentData({ position: e.target.value })}
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm sm:text-base"
+                placeholder="Your position in the company"
+              />
+            </div>
+          </div>
+          
+          <div>
+            <h4 className="text-base sm:text-lg font-medium text-gray-800 mb-3 sm:mb-4">Primary Location</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Country <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={currentOnboardingData.country}
+                  onChange={(e) => updateCurrentData({ country: e.target.value, state: '', city: '' })}
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm sm:text-base"
+                >
+                  <option value="">Select Country</option>
+                  <option value="US">United States</option>
+                  <option value="CA">Canada</option>
+                  <option value="UK">United Kingdom</option>
+                  <option value="AU">Australia</option>
+                  <option value="IN">India</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  State/Region <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={currentOnboardingData.state}
+                  onChange={(e) => updateCurrentData({ state: e.target.value })}
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm sm:text-base"
+                  disabled={!currentOnboardingData.country}
+                >
+                  <option value="">Select State/Region</option>
+                  {currentOnboardingData.country === 'US' && (
+                    <>
+                      <option value="CA">California</option>
+                      <option value="NY">New York</option>
+                      <option value="TX">Texas</option>
+                      <option value="FL">Florida</option>
+                    </>
+                  )}
+                  {currentOnboardingData.country === 'CA' && (
+                    <>
+                      <option value="ON">Ontario</option>
+                      <option value="QC">Quebec</option>
+                      <option value="BC">British Columbia</option>
+                    </>
+                  )}
+                </select>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3 sm:mt-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  City
+                </label>
                 <input
                   type="text"
-                  placeholder="Please specify..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  onChange={(e) =>
-                    updateCurrentData({ otherCompanyType: e.target.value })
-                  }
+                  value={currentOnboardingData.city}
+                  onChange={(e) => updateCurrentData({ city: e.target.value })}
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm sm:text-base"
+                  placeholder="Enter city"
                 />
-              )}
-            </div>
-          );
-        // Add remaining service provider steps similar to other flows
-        default:
-          return <div>Step {currentStep} for service provider</div>;
-      }
-    }
-
-    return <div>Invalid role</div>;
-  };
-  const renderDashboard = () => (
-    <div className="min-h-screen bg-gray-100">
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">P</span>
               </div>
-              <h1 className="text-xl font-bold text-gray-800">Purchasync</h1>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="text-gray-600">
-                Welcome, {formData.fullName}!
-              </span>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Street Address
+                </label>
+                <input
+                  type="text"
+                  value={currentOnboardingData.street}
+                  onChange={(e) => updateCurrentData({ street: e.target.value })}
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm sm:text-base"
+                  placeholder="Enter street address"
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      );
+    }
+    
+    // Welcome Step
+    if (currentStep === 2) {
+      return (
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">
-            Welcome to Purchasync!
-          </h2>
-          <p className="text-gray-600 mb-8">
-            Your procurement journey starts here.
+          <p className="text-sm sm:text-base lg:text-lg text-gray-600 mb-6 sm:mb-8">
+            {currentOnboardingData.role === 'buyer'
+              ? 'Great! Your organization is set up. Streamline your procurement process and connect with verified suppliers.'
+              : 'Great! Your organization is set up. Expand your reach and manage customer relationships efficiently.'
+            }
           </p>
-          <div className="bg-white rounded-lg shadow p-8">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">
-              Getting Started
-            </h3>
-            <p className="text-gray-600">
-              Your account has been successfully created and verified.
-            </p>
+        </div>
+      );
+    }
+    
+    return null;
+  };
+
+
+  // const renderOnboardingStep = () => {
+  //   const role = currentOnboardingData.role;
+
+  //   // Buyer flow
+  //   if (role === "buyer") {
+  //     return (
+  //       <>
+  //         <BuyerOnboarding
+  //           onComplete={() => {}}
+  //           handlePrev={() => setCurrentStep(0)}
+  //         />
+  //             
+  //       </>
+  //     );
+  //   }
+
+  //   // Seller flow
+  //   if (role === "seller") {
+  //     return (
+  //       <>
+  //         <SellerOnboarding onComplete={() => {}} />
+  //             
+  //       </>
+  //     );
+  //   }
+
+  //   // Service Provider flow
+  //   if (role === "service-provider") {
+  //     switch (currentStep) {
+  //       case 1:
+  //         return (
+  //           <div className="space-y-6">
+  //             <h3 className="text-xl font-semibold text-gray-800">
+  //               What type of services do you provide?
+  //             </h3>
+  //             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+  //               {[
+  //                 "Consulting",
+  //                 "IT Services",
+  //                 "Marketing",
+  //                 "Legal",
+  //                 "Financial",
+  //                 "HR Services",
+  //                 "Other",
+  //               ].map((type) => (
+  //                 <label
+  //                   key={type}
+  //                   className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer hover:border-purple-300 hover:bg-purple-50"
+  //                 >
+  //                   <input
+  //                     type="checkbox"
+  //                     checked={
+  //                       Array.isArray(currentOnboardingData.companyType)
+  //                         ? currentOnboardingData.companyType.includes(type)
+  //                         : currentOnboardingData.companyType === type
+  //                     }
+  //                     onChange={(e) => {
+  //                       const currentTypes = Array.isArray(
+  //                         currentOnboardingData.companyType
+  //                       )
+  //                         ? currentOnboardingData.companyType
+  //                         : currentOnboardingData.companyType
+  //                         ? [currentOnboardingData.companyType]
+  //                         : [];
+
+  //                       if (e.target.checked) {
+  //                         updateCurrentData({
+  //                           companyType: [...currentTypes, type],
+  //                         });
+  //                       } else {
+  //                         updateCurrentData({
+  //                           companyType: currentTypes.filter((t) => t !== type),
+  //                         });
+  //                       }
+  //                     }}
+  //                     className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+  //                   />
+  //                   <span className="font-medium">{type}</span>
+  //                 </label>
+  //               ))}
+  //             </div>
+  //             {(Array.isArray(currentOnboardingData.companyType)
+  //               ? currentOnboardingData.companyType.includes("Other")
+  //               : currentOnboardingData.companyType === "Other") && (
+  //               <input
+  //                 type="text"
+  //                 placeholder="Please specify..."
+  //                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+  //                 onChange={(e) =>
+  //                   updateCurrentData({ otherCompanyType: e.target.value })
+  //                 }
+  //               />
+  //             )}
+  //           </div>
+  //         );
+  //       // Add remaining service provider steps similar to other flows
+  //       default:
+  //         return <div>Step {currentStep} for service provider</div>;
+  //     }
+  //   }
+
+  //   return <div>Invalid role</div>;
+  // };
+  const renderDashboard = () => {
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 flex flex-col">
+        {/* Header */}
+        {/* <div className="bg-white/80 shadow-md border-b sticky top-0 z-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center py-5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+                  <span className="text-white font-bold text-lg">P</span>
+                </div>
+                <h1 className="text-2xl font-extrabold text-gray-800 tracking-tight">Purchasync</h1>
+              </div>
+              <div className="flex items-center gap-4">
+                <span className="text-gray-700 font-medium text-base">
+                  Welcome, <span className="text-purple-600">{formData.fullName || "User"}</span>!
+                </span>
+              </div>
+            </div>
+          </div>
+        </div> */}
+
+        {/* Main Content */}
+        <div className="flex-1 flex items-center justify-center">
+          <div className="w-full max-w-2xl mx-auto">
+            <div className="bg-white/90 rounded-3xl shadow-2xl p-10 sm:p-14 flex flex-col items-center relative overflow-hidden">
+              {/* Decorative Confetti */}
+              <div className="absolute inset-0 pointer-events-none">
+                <svg className="absolute top-0 left-0 w-32 h-32 opacity-30" viewBox="0 0 100 100">
+                  <circle cx="20" cy="20" r="6" fill="#a78bfa" />
+                  <circle cx="80" cy="30" r="4" fill="#f472b6" />
+                  <circle cx="60" cy="80" r="5" fill="#38bdf8" />
+                  <circle cx="90" cy="60" r="3" fill="#fbbf24" />
+                </svg>
+                <svg className="absolute bottom-0 right-0 w-32 h-32 opacity-30" viewBox="0 0 100 100">
+                  <circle cx="80" cy="80" r="6" fill="#a78bfa" />
+                  <circle cx="20" cy="70" r="4" fill="#f472b6" />
+                  <circle cx="40" cy="20" r="5" fill="#38bdf8" />
+                  <circle cx="10" cy="40" r="3" fill="#fbbf24" />
+                </svg>
+              </div>
+              {/* Celebration Icon */}
+              <div className="mb-6">
+                <svg className="w-16 h-16 mx-auto animate-bounce" fill="none" viewBox="0 0 48 48">
+                  <circle cx="24" cy="24" r="24" fill="#a78bfa" opacity="0.15"/>
+                  <path d="M24 10v18m0 0l-6-6m6 6l6-6" stroke="#a78bfa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <circle cx="24" cy="34" r="2.5" fill="#a78bfa"/>
+                </svg>
+              </div>
+              <h2 className="text-4xl font-extrabold text-gray-800 mb-2 drop-shadow-sm">
+                Welcome to Purchasync!
+              </h2>
+              <p className="text-lg text-gray-600 mb-8">
+                Your procurement journey starts here. <br />
+                <span className="text-purple-600 font-semibold">Let’s get productive!</span>
+              </p>
+              <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl shadow-inner p-6 mb-8 w-full">
+                <h3 className="text-2xl font-bold text-purple-700 mb-2 flex items-center gap-2">
+                  <svg className="w-6 h-6 text-purple-500" fill="none" viewBox="0 0 24 24">
+                    <path d="M12 2v20m10-10H2" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Getting Started
+                </h3>
+                <p className="text-gray-700 text-base">
+                  Your account has been <span className="font-semibold text-green-600">successfully created and verified</span>.
+                  <br />
+                  Explore your dashboard to manage suppliers, orders, and more.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
+                {/* <button
+                  onClick={() => navigate("/dashboard")}
+                  className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold rounded-lg shadow-lg hover:from-purple-700 hover:to-pink-600 transition-all duration-200 text-lg"
+                >
+                  Go to Dashboard
+                </button> */}
+                <button
+                  onClick={() => navigate("/seller-dashboard-v2")}
+                  className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold rounded-lg shadow-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-200 text-lg"
+                >
+                  Go to Seller Dashboard
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen ">
@@ -1165,6 +1618,7 @@ const MainLogin = ({ page = "login" }) => {
       {currentView === "signup" && renderSignup()}
       {currentView === "otp" && renderOTP()}
       {currentView === "onboarding" && renderOnboarding()}
+      {showAddEntityModal && renderAddEntityModal()}
       {currentView === "dashboard" && renderDashboard()}
     </div>
   );
