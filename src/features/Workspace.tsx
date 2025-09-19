@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 // import TopBar from '../components/Workspace/Layout/TopBar';
 // import Sidebar from '../components/Workspace/Layout/Sidebar';
-import CentralHub from "../components/Workspace/Layout/CentralHub";
+// import CentralHub from "../components/Workspace/Layout/CentralHub";
 import RightSidebar from "../components/Workspace/Layout/RightSidebar";
 import { Supplier } from "../components/MobileDashboard/types/purchasync";
 import React from "react";
@@ -23,6 +23,7 @@ import { FloatingActionButton } from "../components/MobileView/components/UI/Flo
 import { CreateMenuModal } from "../components/MobileView/components/Modals/CreateMenuModal";
 import TopBar from "../components/Dashbord-v2/components/Layout/TopBar";
 import Sidebar from "../components/Dashbord-v2/components/Layout/Sidebar";
+import CentralHub from "../components/Dashbord-v2/components/Layout/CentralHub";
 
 type Screen =
   | "home"

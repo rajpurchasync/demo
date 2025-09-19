@@ -148,9 +148,11 @@ const TopBar = () => {
           )}
         </div>
         
+        <Link to="/marketplace">
         <button className="text-slate-200 hover:text-white text-sm font-medium transition-colors hidden lg:block border border-slate-500 px-3 py-1 rounded outline outline-1 outline-slate-400">
           Marketplace
         </button>
+        </Link>
 
         <button className="p-2 hover:bg-slate-600 rounded-lg transition-colors relative">
           <Bell className="w-5 h-5 text-slate-200" />
@@ -159,9 +161,11 @@ const TopBar = () => {
           </div>
         </button>
 
+<Link to="/messages"> 
         <button className="p-2 hover:bg-slate-600 rounded-lg transition-colors hidden md:block">
           <MessageSquare className="w-5 h-5 text-slate-200" />
         </button>
+        </Link>
 
         <div className="relative">
           <button 
@@ -176,14 +180,18 @@ const TopBar = () => {
           
           {profileDropdownOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-1 z-50">
+              <Link to="/profile">
               <button className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
                 <UserCircle className="w-4 h-4" />
                 <span>Profile</span>
               </button>
+              </Link>
+              <Link to="/settings"> 
               <button className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
                 <Settings className="w-4 h-4" />
                 <span>Settings</span>
               </button>
+              </Link>
               <hr className="my-1" />
               <button className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
                 <LogOut className="w-4 h-4" />

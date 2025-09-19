@@ -36,6 +36,12 @@ import MobileDashboardBuyer from "./components/MobileDashboard/MobileDashboard";
 import MobileDashboardSeller from "./components/Seller/DashBoard/MobileDashboardSeller";
 import Workspace from "./features/Workspace";
 import NotificationsInterface from "./components/Buyer/NotificationsInterface";
+import Messages from "./components/Seller/sections/Messages";
+import { ProfileScreen } from "./components/Seller/DashBoard/Screens/ProfileScreen";
+import { SettingsSection } from "./components/Seller/DashBoard/Profile/SettingsSection";
+import ProfileManagement from "./components/Buyer/ProfileManagement";
+import IntegrationMain from "./components/Integrations/IntegrationMain";
+import SecurityPrivacy from "./components/Buyer/SecurityPrivacy";
 // import MobileDashboardSeller from "./components/Seller/DashBoard/MobileDashboardSeller";
 
 function App() {
@@ -71,6 +77,21 @@ function App() {
             }
           />
           <Route
+            path="/profile"
+            element={
+              <ProfileManagement sidebarCollapsed={true} />
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <>
+             <SecurityPrivacy sidebarCollapsed={true} />;
+              </>
+            }
+          />
+
+          <Route
             path="/seller-dashboard"
             element={
               <>
@@ -88,6 +109,7 @@ function App() {
               </>
             }
           />
+          <Route path="/messages" element={<Messages />} />
           <Route
             path="/seller-dashboard-v2"
             element={
