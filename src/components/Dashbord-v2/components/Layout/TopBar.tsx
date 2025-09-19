@@ -20,6 +20,7 @@ import {
   X
 } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router';
 
 const TopBar = () => {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -99,11 +100,14 @@ const TopBar = () => {
     <>
       <div className="h-16 bg-[#27326D] border-b border-slate-700 flex items-center justify-between px-4 md:px-6">
       {/* Left Section */}
+      <Link to="/">
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-2">
           <span className="text-xl font-semibold text-white">Purchasync</span>
         </div>
       </div>
+      </Link>
+
 
       {/* Center Section - Search Bar */}
       <div className="flex-1 max-w-2xl mx-4 md:mx-8 hidden md:block">
