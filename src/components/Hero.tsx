@@ -248,7 +248,7 @@ const Hero = () => {
 
           <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-600 mb-6 sm:mb-8 lg:mb-10 px-4 sm:px-8 mx-auto leading-relaxed max-w-4xl">
             {/* {currentContent.description} */}
-            Where hospitality businesses connect and collaborate with each other as well as teams in a connected workspace. 
+            Where hospitality businesses connect and collaborate with each other as well as with internal team in a connected workspace. 
           </p>
 
           <div className="mb-8 sm:mb-8 flex flex-col gap-8 md:gap-5">
