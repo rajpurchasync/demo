@@ -238,7 +238,7 @@ const Hero = () => {
             <span>Procurement Collaboration Simplified</span>
           </div>
           <h1 className="text-[34px] md:text-[60px] font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-2">
-            The Smart
+            The smart
             <br className="block md:hidden" />{" "}
             <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
               {" "}
