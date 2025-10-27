@@ -293,7 +293,7 @@ const Hero = () => {
                         onClick={() => setShowExpandedForm(true)}
                         className="bg-gradient-to-r from-purple-400 to-purple-600 text-white px-4 sm:px-6 py-2 rounded-full hover:from-purple-500 hover:to-purple-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:scale-105 w-full sm:w-auto text-sm sm:text-base"
                       >
-                        Start Now. It's Free
+                        Get Started
                       </button>
                     </div>
                   </div>
