@@ -235,10 +235,10 @@ const Hero = () => {
           {/* Badge */}
           <div className="inline-flex items-center space-x-2 bg-blue-100 backdrop-blur-sm text-blue-600 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium mb-4 sm:mb-6 shadow-lg border border-blue-100">
             {/* <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" /> */}
-            <span>Hospitality Collaboration Simplified</span>
+            <span>Procurement Collaboration Simplified</span>
           </div>
           <h1 className="text-[34px] md:text-[60px] font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-2">
-            The smart
+            The smart B2B
             <br className="block md:hidden" />{" "}
             <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
               {" "}
