@@ -266,7 +266,7 @@ const Hero = () => {
                     <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 absolute top-0 left-0 -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200" />
                   </div>
                 </button>
-Start Now. It's Free
+
                 <button
                   onClick={() => router("/book-demo")}
                   className="w-max group flex items-center space-x-2 text-gray-700 hover:text-purple-600 transition-colors duration-200 text-sm sm:text-base font-medium"
@@ -293,7 +293,7 @@ Start Now. It's Free
                         onClick={() => setShowExpandedForm(true)}
                         className="bg-gradient-to-r from-purple-400 to-purple-600 text-white px-4 sm:px-6 py-2 rounded-full hover:from-purple-500 hover:to-purple-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:scale-105 w-full sm:w-auto text-sm sm:text-base"
                       >
-                        Get Started
+                        Start Now. It's Free
                       </button>
                     </div>
                   </div>
