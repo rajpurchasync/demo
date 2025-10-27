@@ -242,9 +242,8 @@ const Hero = () => {
             <br className="block md:hidden" />{" "}
             <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
               {" "}
-              procurement hub
+              procurement workspace
             </span>{" "}
-            for hospitality and food service
           </h1>
 
           <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-600 mb-6 sm:mb-8 lg:mb-10 px-4 sm:px-8 mx-auto leading-relaxed max-w-4xl">
