@@ -235,7 +235,7 @@ const Hero = () => {
           {/* Badge */}
           <div className="inline-flex items-center space-x-2 bg-blue-100 backdrop-blur-sm text-blue-600 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium mb-4 sm:mb-6 shadow-lg border border-blue-100">
             {/* <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" /> */}
-            <span>Hospitality Collaboration Simplified</span>
+            <span>Procurement Collaboration Simplified</span>
           </div>
           <h1 className="text-[34px] md:text-[60px] font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-2">
             The smart
@@ -244,14 +244,11 @@ const Hero = () => {
               {" "}
               procurement workspace
             </span>{" "}
-            for B2B
           </h1>
 
           <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-600 mb-6 sm:mb-8 lg:mb-10 px-4 sm:px-8 mx-auto leading-relaxed max-w-4xl">
             {/* {currentContent.description} */}
-            Hotels, restaurants, suppliers, and service providers connect,
-            collaborate, and grow together in one connected workspace and
-            marketplace.
+            Where hospitality businesses connect and collaborate with each other as well as teams in a connected workspace. 
           </p>
 
           <div className="mb-8 sm:mb-8 flex flex-col gap-8 md:gap-5">
